@@ -2,6 +2,7 @@
   "short_name": "React App",
   "name": "Paragon Wallet",
   "version": "1.0",
+  "default_locale": "zh_CN",
   "description": "Paragon Wallet",
   "manifest_version": 3,
   "background": {
@@ -10,7 +11,6 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "css": ["static/css/content.css"],
       "js": ["static/js/content.js"],
       "run_at": "document_end"
     }
@@ -37,23 +37,12 @@
     },
     "default_title": "Paragon Wallet"
   },
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+  "icons": {
+    "16": "/images/logo.png",
+    "32": "/images/logo.png",
+    "48": "/images/logo.png",
+    "128": "/images/logo.png"
+  },
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

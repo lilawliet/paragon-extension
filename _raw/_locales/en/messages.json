@@ -1,0 +1,9 @@
+{
+    "Get__Started": {
+      "message": "Get Started",
+      "description": "write your description"
+    },
+    "Create__new__wallet": {
+      "message": "Create new wallet"
+    }
+}

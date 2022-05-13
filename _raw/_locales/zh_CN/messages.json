@@ -1,0 +1,9 @@
+{
+    "Get__Started": {
+      "message": "开始使用",
+      "description": "这里可以写字段描述"
+    },
+    "Create__new__wallet": {
+      "message": "创建新的钱包"
+    }
+}
