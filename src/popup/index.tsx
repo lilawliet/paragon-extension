@@ -1,7 +1,7 @@
 import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
-import Home from '@/popup/pages/home';
-import Login from '@/popup/pages/login';
-import Welcome from './pages/welcome';
+import Home from '@/popup/pages/Home';
+import Login from '@/popup/pages/Login';
+import Welcome from './pages/Welcome';
 
 function Popup() {
     return(

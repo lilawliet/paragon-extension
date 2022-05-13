@@ -7,7 +7,7 @@ const Welcome = () => {
   const { t } = useTranslation();
   return (
     <div
-      className="pt-[150px] flex justify-center"
+      className="pt-[120px] flex justify-center"
       style={{
         // backgroundImage:
         //   'linear-gradient(0deg, #1c1919 0%, #000000 50%, #1c1919 90.78%)',
