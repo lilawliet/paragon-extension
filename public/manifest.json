@@ -1,6 +1,42 @@
 {
   "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Paragon Wallet",
+  "version": "1.0",
+  "description": "Paragon Wallet",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "static/js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["static/css/content.css"],
+      "js": ["static/js/content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["storage", "declarativeContent"],
+  "host_permissions": [],
+  "web_accessible_resources": [
+    {
+      "resources": ["/images/logo.png"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["insert.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "/images/logo.ico",
+      "32": "/images/logo.png",
+      "48": "/images/logo.png",
+      "128": "/images/logo.png"
+    },
+    "default_title": "Paragon Wallet"
+  },
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,12 +44,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
