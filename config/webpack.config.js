@@ -181,7 +181,11 @@ module.exports = function (webpackEnv) {
           // 自定义主题
           lessOptions: {
             modifyVars: {
-              "primary-color": '#fa701a'
+              "primary-color": "#fa701a",
+              "border-radius-base": "8px",
+              "checkbox-border-radius": "2px",
+              "text-color": "#ffffff",
+              "text-color-secondary": "#AAAAAA"
             },
             javascriptEnabled: true
           }

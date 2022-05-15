@@ -12,9 +12,17 @@ module.exports = {
       colors: {
         'primary': '#FA701A',
         'hard-black': '#1C1919',
-        'soft-black': '#231F1F'
-
+        'soft-black': '#231F1F',
+        'soft-white': '#AAAAAA',
+        'warn': '#FA701A',
+        'warning': '#FA701A'
       },
+      fontSize: {
+        main: '18px'
+      },
+      lineHeight: {
+        main: '22px'
+      }
     },
   },
   plugins: [],

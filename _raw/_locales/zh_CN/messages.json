@@ -5,5 +5,11 @@
     },
     "Create__new__wallet": {
       "message": "创建新的钱包"
+    },
+    "Continue": {
+      "message": "继续"
+    },
+    "Import__wallet": {
+      "message": "添加钱包"
     }
 }

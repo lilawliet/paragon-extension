@@ -5,5 +5,11 @@
     },
     "Create__new__wallet": {
       "message": "Create new wallet"
+    },
+    "Continue": {
+      "message": "Continue"
+    },
+    "Import__wallet": {
+      "message": "Import wallet"
     }
 }

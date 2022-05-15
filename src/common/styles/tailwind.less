@@ -1,0 +1,23 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+* {
+    font-family: 'Inter';
+    user-select: none;
+}
+
+.box.content {
+    @apply font-semibold text-main leading-main;
+}
+    
+.box.default {
+    @apply text-white border border-white rounded-lg bg-soft-black border-opacity-20;
+}
+
+.box.large{
+    @apply w-80 m-auto;
+}
