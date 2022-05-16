@@ -61,17 +61,15 @@ const CreatePassword = () => {
                     }} />
                 </div>
                 <div>
-                    <Link to="/repeat-recovery" replace>
-                        <Button
-                        disabled={disabled}
-                        size="large"
-                        type='primary'
-                        className="box large content"
-                        onClick={btnClick}
-                        >
-                        {t('Continue')}
-                        </Button>
-                    </Link>
+                    <Button
+                    disabled={disabled}
+                    size="large"
+                    type='primary'
+                    className="box large content"
+                    onClick={btnClick}
+                    >
+                    {t('Continue')}
+                    </Button>
                 </div>
             </div>
         </div>

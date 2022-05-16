@@ -29,7 +29,7 @@ const Welcome = () => {
                     {t('Create new wallet')}
                     </Button>
                 </Link>
-                <Link to="/r" replace>
+                <Link to="/login" replace>
                     <Button
                     size="large"
                     type='default'

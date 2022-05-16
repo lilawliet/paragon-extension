@@ -40,10 +40,10 @@ const Dashboard = () => {
                             title={''} 
                         />
                     </div>
-                    <div className='p-[10px] flex items-center font-bold text-[44px]'>
+                    <div className='p-[10px] flex items-center font-bold text-5xl'>
                         <span >$&nbsp;</span><Statistic className='text-white' value={112893} valueStyle={{fontSize: '44px'}} />
                     </div>
-                    <div className='grid grid-cols-2 gap-4 w-5/8 text-[18px]'>
+                    <div className='grid grid-cols-2 gap-4 text-lg w-5/8'>
                         <div className='box unit'>
                             <span><img src="./images/qrcode-solid.png" alt="" /></span>
                             &nbsp;Receive
