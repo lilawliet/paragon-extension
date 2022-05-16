@@ -1,13 +1,22 @@
 import { Button, Checkbox, Input } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 
 const RepeatRecovery = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const [keys, setKeys] = useState<Array<string>>(new Array(12).fill(""))
-    const [goon, setGoon] = useState(true)
+    const [disabled, setDisabled] = useState(true)
+
+    const verify = () => {
+        // to verify
+
+        console.log('verify')
+        // path move
+        navigate('/create-password')
+    }
  
     const onChange = (e: any, index: any) => {
         let newKeys = [...keys]
@@ -17,7 +26,7 @@ const RepeatRecovery = () => {
 
     useEffect(() => {
         // to verify key
-        setGoon(keys.filter( key => {return key == ""}).length > 0 )
+        setDisabled(keys.filter( key => {return key == ""}).length > 0 )
     }, [keys])
 
 
@@ -44,16 +53,15 @@ const RepeatRecovery = () => {
                     }
                 </div>
                 <div>
-                    <Link to="/repeat-recovery" replace>
-                        <Button
-                        disabled={goon}
-                        size="large"
-                        type='primary'
-                        className="box large content"
-                        >
-                        {t('Import wallet')}
-                        </Button>
-                    </Link>
+                    <Button
+                    disabled={disabled}
+                    size="large"
+                    type='primary'
+                    className="box large content"
+                    onClick={verify}
+                    >
+                    {t('Import wallet')}
+                    </Button>
                 </div>
             </div>
         </div>

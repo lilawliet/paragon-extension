@@ -11,5 +11,8 @@
     },
     "Import__wallet": {
       "message": "添加钱包"
+    },
+    "Unlock": {
+      "message": "解锁"
     }
 }

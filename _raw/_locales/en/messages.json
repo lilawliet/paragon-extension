@@ -11,5 +11,8 @@
     },
     "Import__wallet": {
       "message": "Import wallet"
+    },
+    "Unlock": {
+      "message": "Unlock"
     }
 }

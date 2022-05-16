@@ -182,8 +182,17 @@ module.exports = function (webpackEnv) {
           lessOptions: {
             modifyVars: {
               "primary-color": "#fa701a",
+              "component-background": "#1C1919",
+              "select-dropdown-bg": "#231F1F",
+              "select-item-selected-bg": "#332F2F",
+              "select-item-active-bg": "#332F2F",
+              "border-color-base": "rgba(255,255,255,0.2)",
+              "layout-header-background": "#231F1F",
+              "layout-header-padding": "0 30px",
               "border-radius-base": "8px",
+              "layout-footer-padding": "unset",
               "checkbox-border-radius": "2px",
+              "heading-color": "#ffffff",
               "text-color": "#ffffff",
               "text-color-secondary": "#AAAAAA"
             },
