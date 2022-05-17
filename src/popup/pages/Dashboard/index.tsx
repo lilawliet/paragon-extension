@@ -4,70 +4,29 @@ import { useTranslation } from 'react-i18next';
 import { Content, Footer, Header } from 'antd/lib/layout/layout';
 import CHeader from '@/popup/components/CHeader';
 import CFooter from '@/popup/components/CFooter';
-import AccountSelect from '@/popup/components/Account';
-import { Account } from '@/background/service/preference';
-import { useState } from 'react';
-
-interface Currency {
-    name: string
-    amount: string
-    value: string
-}
+import { useCallback, useEffect, useState } from 'react';
+import Home from './Home'
+import Transaction from './Transaction'
+import List from './List'
+import Settings from './Settings'
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const [active, setActive] = useState('home')
 
-    const [currencies, setCurrencies] = useState<Currency[]>([{
-        name: 'novo',
-        amount: '15000000000000 Novo',
-        value: '$5,245.01'
-    }]) 
+    useEffect(() => {
+    }, [active])
 
     return(
-        <Layout className='h-[600px]'>
-            <Header className='border-b border-white border-opacity-10'><CHeader/></Header>
-            <Content style={{backgroundColor: '#1C1919'}}>
-                <div className="flex flex-col items-center mt-4 justify-evenly">
-                    <div className='px-2 py-1 box black bg-opacity-20 middle'>
-                        <AccountSelect 
-                            onChange={function (account: Account): void {
-                                throw new Error('Function not implemented.');
-                            } } 
-                            onCancel={function (): void {
-                                throw new Error('Function not implemented.');
-                            } } 
-                            title={''} 
-                        />
-                    </div>
-                    <div className='p-[10px] flex items-center font-bold text-5xl'>
-                        <span >$&nbsp;</span><Statistic className='text-white' value={112893} valueStyle={{fontSize: '44px'}} />
-                    </div>
-                    <div className='grid grid-cols-2 gap-4 text-lg w-5/8'>
-                        <div className='box unit'>
-                            <span><img src="./images/qrcode-solid.png" alt="" /></span>
-                            &nbsp;Receive
-                        </div>
-                        <div className='box unit'>
-                            <span><img src="./images/arrow-right-arrow-left-solid.png" alt="" /></span>
-                            &nbsp;Send
-                        </div>
-                    </div>
-                    <div className="mt-6">
-                        {currencies.map((currency, index) => (
-                            <div className='box nobor' key={index}>
-                                <div className='w-[40px] h-[40px]'><img src={`./images/${currency.name}.svg`} alt="" /></div>
-                                <div className='flex flex-col flex-grow px-2'>
-                                    <div className='font-semibold'>{currency.name}</div>
-                                    <div className='text-soft-white'>{currency.amount}</div>
-                                </div>
-                                <div className='font-semibold'>{currency.value}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </Content>
-            <Footer style={{height: '60px'}}><CFooter ative={'1'}/></Footer>
+        <Layout className='h-full'>
+                <Header className='border-b border-white border-opacity-10'><CHeader/></Header>
+                <Content style={{backgroundColor: '#1C1919'}}>
+                    {
+                        active == 'home' ? <Home/> : active == 'transaction' ? <Transaction/> : <></>
+                    }
+                </Content>
+                <Footer style={{height: '60px'}}><CFooter active={active} setActive={setActive}/></Footer>
         </Layout>
     )
 }

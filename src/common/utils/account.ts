@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react';
 import { createContext, useContext } from 'react';
 import { Object } from 'ts-toolbelt';
 
@@ -15,16 +14,6 @@ const AccountContext = createContext<{
   account: AccountController;
 } | null>(null);
 
-const AccountProvider = ({
-  children,
-  account,
-}: {
-  children?: ReactNode;
-  account: AccountController;
-}) => (
-  <AccountContext.Provider value={{ account }}>{children}</AccountContext.Provider>
-);
-
 const useAccount = () => {
   const { account } = useContext(AccountContext) as {
     account: AccountController;
@@ -33,4 +22,16 @@ const useAccount = () => {
   return account;
 };
 
-export { AccountProvider, useAccount };
+export { AccountContext, useAccount };
+
+// const AccountProvider = ({
+//   children,
+//   account,
+// }: {
+//   children?: ReactNode;
+//   account: AccountController;
+// }) => (
+//   <AccountContext.Provider value={{ account }}>
+//   {children}
+//   </AccountContext.Provider>
+// );

@@ -4,7 +4,7 @@ const AsyncMainRoute = lazy(() => import('./MainRoute'));
 
 function Popup() {
     return(
-        <div className='h-[600px] w-[375px]  bg-hard-black'>
+        <div className='h-200 w-125 bg-hard-black'>
             <AsyncMainRoute/>
         </div>
     )

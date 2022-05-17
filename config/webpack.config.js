@@ -188,13 +188,16 @@ module.exports = function (webpackEnv) {
               "select-item-active-bg": "#332F2F",
               "border-color-base": "rgba(255,255,255,0.2)",
               "layout-header-background": "#231F1F",
-              "layout-header-padding": "0 30px",
-              "border-radius-base": "8px",
+              "layout-header-padding": "0 1.875rem",
+              "layout-header-height": "5.625rem",
               "layout-footer-padding": "unset",
-              "checkbox-border-radius": "2px",
+              "border-radius-base": "0.5rem",
+              "checkbox-border-radius": "0.125rem",
               "heading-color": "#ffffff",
+              "font-size-base": "1.125rem",
               "text-color": "#ffffff",
-              "text-color-secondary": "#AAAAAA"
+              "text-color-secondary": "#AAAAAA",
+              "height-lg": "3.875rem",
             },
             javascriptEnabled: true
           }

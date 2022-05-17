@@ -32,19 +32,19 @@ const RepeatRecovery = () => {
 
     return(
         <div
-          className="flex justify-center pt-12"
+          className="flex justify-center m-auto pt-15 w-95"
         >
-            <div className='flex flex-col justify-center gap-4 mx-8 text-center'>
+            <div className='flex flex-col justify-center gap-5 text-center'>
                 <div className='text-2xl text-white box large'>
                     Secret Recovery Phrase
                 </div>
                 <div className='text-sm text-soft-white box large'>Import an existing wallet with your 12-word secret recovery phrase
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-5">
                     {
                         keys.map((_, index) => {
                             return(
-                                <div key={index} className='flex items-center w-full p-2 text-left box default text-soft-white'>{index + 1}.
+                                <div key={index} className='flex items-center w-full px-2 py-4 text-left border border-white rounded-lg bg-soft-black border-opacity-20 text-soft-white'>{index + 1}.
                                 <Input className='text-white' bordered={false} value={_} onChange={ event => {
                                     onChange(event, index)
                                 }}/></div>

@@ -58,9 +58,9 @@ const CHeader = () => {
         <div className='flex items-center justify-between h-full'>
             <div className='flex items-center justify-center'>
                 <img 
-                    className="h-8 select-none"
+                    className="h-8 select-none w-9"
                     src='./images/Diamond.svg' />
-                <img src="./images/Paragon.svg" className='select-none' alt="" />
+                <img src="./images/Paragon.svg" className='ml-1 select-none' alt="" />
             </div>
             <div className='flex-grow-1'></div>
             {loading ? (

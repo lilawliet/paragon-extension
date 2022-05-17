@@ -6,25 +6,25 @@ const Welcome = () => {
   const { t } = useTranslation();
   return (
     <div
-      className="flex justify-center pt-36"
+      className="flex justify-center pt-60"
       style={{
         // backgroundImage:
         //   'linear-gradient(0deg, #1c1919 0%, #000000 50%, #1c1919 90.78%)',
       }}
     >
         <div className='flex-col'>
-            <div className='flex justify-center gap-2 mb-8'>
+            <div className='flex justify-center mb-8 gap-x-4'>
                 <img 
-                    className="h-12 select-none"
+                    className="select-none w-15 h-12_5"
                     src='./images/Diamond.svg' />
                 <img src="./images/Paragon.svg" className='select-none' alt="" />
             </div>
-            <div className='grid gap-4'>
+            <div className='grid gap-5'>
                 <Link to="/create-recovery" replace>
                     <Button
                     size="large"
                     type="primary"
-                    className="border-none bg-primary box large content"
+                    className="border-none bg-primary box large content h-15_5"
                     >
                     {t('Create new wallet')}
                     </Button>

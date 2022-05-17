@@ -6,8 +6,6 @@ import RepeatRecovery from './pages/Regist/RepeatRecovery';
 import CreatePassword from './pages/Regist/CreatePassword';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Transaction from './pages/Transaction';
-
 const Main = () => {
     return (
       <>
@@ -19,7 +17,6 @@ const Main = () => {
             <Route path="/create-password" element={<CreatePassword />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/transaction" element={<Transaction />} />
 
             </Routes>
         </HashRouter>

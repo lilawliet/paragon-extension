@@ -7,6 +7,7 @@ import Popup from '@/popup'
 
 // 全局公用样式
 import '@/common/styles/tailwind.less'
+import '@/common/styles/antd.less'
 
 import i18n, { addResourceBundle } from 'src/i18n';
 

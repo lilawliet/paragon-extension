@@ -43,19 +43,19 @@ const CreatePassword = () => {
 
     return(
         <div
-          className="flex justify-center pt-24"
+          className="flex justify-center pt-45"
         >
-            <div className='flex flex-col justify-center gap-4 mx-8 text-center'>
+            <div className='flex flex-col justify-center gap-5 text-center'>
                 <div className='text-2xl text-white box large'>
                     Create a password
                 </div>
                 <div className='text-sm text-soft-white box large'>You will use this to unlock your wallet</div>
-                <div className='mt-8'>
+                <div className='mt-12'>
                     <Input.Password placeholder="Password" onBlur={ event => {
                                     justify(event, 'password')
                     }} />
                 </div>
-                <div className='mb-4'>
+                <div>
                     <Input.Password placeholder="Confirm Password" onBlur={ event => {
                                     justify(event, 'password2')
                     }} />

@@ -15,16 +15,17 @@ const CreateRecovery = () => {
 
     return(
         <div
-          className="flex justify-center pt-24"
+          className="flex justify-center pt-33_75"
         >
-            <div className='flex flex-col justify-center gap-4 mx-8 text-center'>
+            <div className='flex flex-col justify-center gap-5 text-center'>
                 <div className='text-2xl text-white box large'>
                     Secret Recovery Phrase
                 </div>
-                <div className='text-warn box large'>
+                <div className='text-base text-warn box large'>
                     This phrase is the Only way to <br/>recover your wallet. Do NOT share it with anyone!
                 </div>
-                <div className='p-5 select-text box default content large'>
+                <div className='h-10'>{/* margin */} </div>
+                <div className='p-5 font-semibold select-text box default text-4_5 large leading-6_5'>
                     Let me write twelve mnemonics here Let me write twelve mnemonics here
                 </div>
                 <div>
