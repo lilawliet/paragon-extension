@@ -18,11 +18,15 @@ const Transaction = () => {
         time: 1652188199,
         address: 'sadfjkl2j343jlk',
         amount: '+1,224'
+    }, {
+        time: 1652188199,
+        address: 'sadfjkl2j343jlk',
+        amount: '+1,224'
     }]) 
 
     return(
-        <div className="flex flex-col items-center mt-4 justify-evenly">
-            <div className='px-2 py-1 box black bg-opacity-20 middle'>
+        <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
+            <div className='flex items-center px-2 h-13 box black bg-opacity-20 w340'>
                 <AccountSelect 
                     onChange={function (account: Account): void {
                         throw new Error('Function not implemented.');
@@ -33,9 +37,11 @@ const Transaction = () => {
                     title={''} 
                 />
             </div>
-            <div className="mt-6">
+            <div className="grid gap-5 mt-6">
                 {transactions.map((transaction, index) => (
-                    <div className='box nobor' key={index}>
+                    <div className='justify-between box nobor w440 text-soft-white' key={index}>
+                        <span>{transaction.address}</span>
+                        <span><span className='font-bold text-white'>{transaction.amount}</span> Novo</span>
                     </div>
                 ))}
             </div>

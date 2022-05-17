@@ -24,7 +24,7 @@ const Welcome = () => {
                     <Button
                     size="large"
                     type="primary"
-                    className="border-none bg-primary box large content h-15_5"
+                    className="border-none bg-primary box w380 content h-15_5"
                     >
                     {t('Create new wallet')}
                     </Button>
@@ -33,7 +33,7 @@ const Welcome = () => {
                     <Button
                     size="large"
                     type='default'
-                    className="box large default content"
+                    className="box w380 default content"
                     >
                     {t('I already have a wallet')}
                     </Button>

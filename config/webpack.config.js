@@ -195,9 +195,11 @@ module.exports = function (webpackEnv) {
               "checkbox-border-radius": "0.125rem",
               "heading-color": "#ffffff",
               "font-size-base": "1.125rem",
+              "line-height-base": "1.375rem",
               "text-color": "#ffffff",
               "text-color-secondary": "#AAAAAA",
               "height-lg": "3.875rem",
+              "checkbox-size": "1.5rem",
             },
             javascriptEnabled: true
           }

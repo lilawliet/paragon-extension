@@ -46,10 +46,10 @@ const CreatePassword = () => {
           className="flex justify-center pt-45"
         >
             <div className='flex flex-col justify-center gap-5 text-center'>
-                <div className='text-2xl text-white box large'>
+                <div className='text-2xl text-white box w380'>
                     Create a password
                 </div>
-                <div className='text-sm text-soft-white box large'>You will use this to unlock your wallet</div>
+                <div className='text-sm text-soft-white box w380'>You will use this to unlock your wallet</div>
                 <div className='mt-12'>
                     <Input.Password placeholder="Password" onBlur={ event => {
                                     justify(event, 'password')
@@ -65,7 +65,7 @@ const CreatePassword = () => {
                     disabled={disabled}
                     size="large"
                     type='primary'
-                    className="box large content"
+                    className="box w380 content"
                     onClick={btnClick}
                     >
                     {t('Continue')}

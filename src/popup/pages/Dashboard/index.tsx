@@ -23,10 +23,10 @@ const Dashboard = () => {
                 <Header className='border-b border-white border-opacity-10'><CHeader/></Header>
                 <Content style={{backgroundColor: '#1C1919'}}>
                     {
-                        active == 'home' ? <Home/> : active == 'transaction' ? <Transaction/> : <></>
+                        active == 'home' ? <Home/> : active == 'transaction' ? <Transaction/> : active == 'settings' ? <Settings/> : <Home/>
                     }
                 </Content>
-                <Footer style={{height: '60px'}}><CFooter active={active} setActive={setActive}/></Footer>
+                <Footer style={{height: '5.625rem'}}><CFooter active={active} setActive={setActive}/></Footer>
         </Layout>
     )
 }

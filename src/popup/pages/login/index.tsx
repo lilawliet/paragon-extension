@@ -42,7 +42,7 @@ const Login = () => {
                         src='./images/Diamond.svg' />
                     <img src="./images/Paragon.svg" className='select-none' alt="" />
                 </div>
-                <div className='text-2xl text-white box large'>
+                <div className='text-2xl text-white box w380'>
                     Enter your password
                 </div>
                 <div>
@@ -53,7 +53,7 @@ const Login = () => {
                     disabled={disabled}
                     size="large"
                     type='primary'
-                    className="box large content"
+                    className="box w380 content"
                     onClick={btnClick}
                     >
                     {t('Unlock')}

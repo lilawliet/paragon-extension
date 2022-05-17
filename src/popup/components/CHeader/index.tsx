@@ -1,8 +1,8 @@
 import { Badge, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Content, Footer } from 'antd/lib/layout/layout';
 import { Suspense, useEffect, useState } from 'react';
+import './index.less'
 
 const CHeader = () => {
     const { t } = useTranslation();
@@ -39,15 +39,15 @@ const CHeader = () => {
         // let result: any = useResource.read();
         if (status) {
             return (
-            <div className='flex items-center justify-center border border-custom-green bg-custom-green-rgba text-custom-green p-[10px] h-8 text-sm  rounded-lg border-opacity-20'
+            <div className='connected'
                 onClick={e=> {disconnect()}}>
-                <div className='bg-custom-green rounded-xl w-[10px] h-[10px] mr-2'></div>
+                <div className='mr-2 bg-custom-green rounded-xl w-2_5 h-2_5'></div>
                 Connected
             </div>
             )
         }
         return(
-            <div className='flex items-center justify-center p-[10px] h-8 text-sm box default'
+            <div className='flex items-center justify-center text-sm p-2_5 h-8_5 box default leading-5_5'
                 onClick={e=> {connect()}}>
                 <div className='bg-primary rounded-xl w-[10px] h-[10px]'></div>
             </div>
@@ -60,12 +60,12 @@ const CHeader = () => {
                 <img 
                     className="h-8 select-none w-9"
                     src='./images/Diamond.svg' />
-                <img src="./images/Paragon.svg" className='ml-1 select-none' alt="" />
+                <img src="./images/Paragon.svg" className='h-5 ml-3 select-none' alt="" />
             </div>
             <div className='flex-grow-1'></div>
             {loading ? (
-            <div className='flex items-center justify-center border border-custom-green bg-custom-green-rgba text-custom-green p-[10px] h-8 text-sm  rounded-lg border-opacity-20'>
-                <div className='bg-custom-green rounded-xl w-[10px] h-[10px] mr-2'></div>
+            <div className='connected'>
+                <div className='mr-2 bg-custom-green rounded-xl w-2_5 h-2_5'></div>
                 { status ? 'Disconnecting': 'Connecting'}
             </div>) :  (<StatusEl/>)}
         </div>

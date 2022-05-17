@@ -34,8 +34,8 @@ const CFooter = ({
             <div className={`cursor-pointer flex items-center justify-center h-full text-center ${active == 'transaction' ? 'text-primary': ''}`} onClick={e=>{setActive('transaction')}}>
                 <img src={`./images/clock-solid${ active == 'transaction' ? '-active': '' }.png`} alt="" />
             </div>
-            <div className={`cursor-pointer flex items-center justify-center h-full text-center ${active == 'setting' ? 'text-primary': ''}`} onClick={e=>{setActive('setting')}}>
-                <img src={`./images/gear-solid${ active == 'setting' ? '-active': '' }.png`} alt="" />
+            <div className={`cursor-pointer flex items-center justify-center h-full text-center ${active == 'settings' ? 'text-primary': ''}`} onClick={e=>{setActive('settings')}}>
+                <img src={`./images/gear-solid${ active == 'settings' ? '-active': '' }.png`} alt="" />
             </div>
         </div>
     )

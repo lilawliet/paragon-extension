@@ -18,20 +18,22 @@ const CreateRecovery = () => {
           className="flex justify-center pt-33_75"
         >
             <div className='flex flex-col justify-center gap-5 text-center'>
-                <div className='text-2xl text-white box large'>
+                <div className='text-2xl text-white box w380'>
                     Secret Recovery Phrase
                 </div>
-                <div className='text-base text-warn box large'>
+                <div className='text-base text-warn box w380'>
                     This phrase is the Only way to <br/>recover your wallet. Do NOT share it with anyone!
                 </div>
                 <div className='h-10'>{/* margin */} </div>
-                <div className='p-5 font-semibold select-text box default text-4_5 large leading-6_5'>
+                <div className='p-5 font-semibold select-text box default text-4_5 w380 leading-6_5'>
                     Let me write twelve mnemonics here Let me write twelve mnemonics here
                 </div>
                 <div>
-                <Checkbox onChange={onChange} checked={checked} >
-                    <span className="text-white">I saved My Secret Recovery Phrase</span>
-                </Checkbox>
+                <div className="flex items-center justify-center align-middle">
+                    <Checkbox onChange={onChange} checked={checked}  className="font-bold">
+                        <span className="font-bold text-white">I saved My Secret Recovery Phrase</span>
+                    </Checkbox>
+                </div>
                 </div>
                 <div>
                     <Link to="/repeat-recovery" replace>
@@ -39,7 +41,7 @@ const CreateRecovery = () => {
                         disabled={!checked}
                         size="large"
                         type='primary'
-                        className="box large content"
+                        className="box w380 content"
                         >
                         {t('Continue')}
                         </Button>

@@ -10,9 +10,13 @@
     user-select: none;
 }
 
-// html {
-//     font-size: 75%;
-// }
+html {
+    font-size: 75%;
+}
+
+.p0 {
+    padding: 0 !important;
+}
 
 .box.content {
     @apply font-semibold text-4_5 leading-5_5;
@@ -27,17 +31,21 @@
 }
 
 .box.nobor {
-    @apply flex items-center p-2 mb-4 bg-black rounded-lg w-80 bg-opacity-20;
+    @apply flex items-center p-5 mb-4 bg-black rounded-lg bg-opacity-20;
 }
 
-.box.large{
+.box.w440 {
+    @apply w-110 m-auto;
+}
+
+.box.w380{
     @apply w-95 m-auto;
 }
 
-.box.middle{
-    @apply w-60;
+.box.w340{
+    @apply w-85 m-auto;
 }
 
 .box.unit {
-    @apply flex px-4 py-2 bg-black border border-opacity-20 border-white bg-opacity-20 items-center justify-center rounded;
+    @apply flex w-36 h-13 bg-black border border-opacity-20 border-white bg-opacity-20 items-center justify-center rounded font-bold;
 }
