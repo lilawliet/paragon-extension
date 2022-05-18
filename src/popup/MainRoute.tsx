@@ -7,7 +7,7 @@ import CreatePassword from './pages/Regist/CreatePassword';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Dashboard/Home/Receive'
-import SendIndex from './pages/Dashboard/Home/Send'
+import SendPage from './pages/Send'
 
 const Main = () => {
     return (
@@ -21,7 +21,7 @@ const Main = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/receive" element={<Receive />} />
-              <Route path="/send/index" element={<SendIndex />} />
+              <Route path="/send/index" element={<SendPage />} />
             </Routes>
         </HashRouter>
       </>

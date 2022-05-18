@@ -21,8 +21,7 @@ const Receive = () => {
                     <Button size='large' type='default' className='box w440' onClick={e => {Javascript:window.history.go(-1)}}>
                         <div className='flex items-center justify-center text-lg'><ArrowLeftOutlined/>&nbsp;Back</div>
                     </Button>
-                    </Footer>
-                
+                </Footer>
         </Layout>
     )
 }

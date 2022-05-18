@@ -8,8 +8,11 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "consts": ["./src/constant/index"],
+      "consts/*": ["./src/constant/*"],
     },
+
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
