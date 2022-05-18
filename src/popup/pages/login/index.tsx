@@ -17,7 +17,7 @@ const Login = () => {
         navigate('/dashboard')
     }
 
-    const verify = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    const verify = (e: React.ChangeEvent<HTMLInputElement>) => {
         // to verify 
         setPassword(e.target.value)
     }
@@ -46,7 +46,7 @@ const Login = () => {
                     Enter your password
                 </div>
                 <div>
-                    <Input.Password placeholder="Password" onBlur={verify} />
+                    <Input.Password placeholder="Password" onChange={verify} />
                 </div>
                 <div>
                     <Button

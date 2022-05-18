@@ -18,7 +18,7 @@ const CreatePassword = () => {
         navigate('/dashboard')
     }
 
-    const justify = (e: React.FocusEvent<HTMLInputElement, Element>, type: string) => {
+    const justify = (e: React.ChangeEvent<HTMLInputElement> , type: string) => {
         if (e.target.value && /^.*(?=.{6,16})(?=.*\d)(?=.*[A-Z]{1,})(?=.*[a-z]{1,})(?=.*[!@#$%^&*?\(\)]).*$/.test(e.target.value)){
             message.warning('The value must be 6 to 16 letters, contains at least uppercase and lowercase, digits, and special characters');
             return;
@@ -38,6 +38,8 @@ const CreatePassword = () => {
     useEffect(() => {
         if (password && password2 && password == password2) {
             setDisabled(false)
+        }else {
+            setDisabled(true)
         }
     }, [password, password2])
 
@@ -51,12 +53,12 @@ const CreatePassword = () => {
                 </div>
                 <div className='text-sm text-soft-white box w380'>You will use this to unlock your wallet</div>
                 <div className='mt-12'>
-                    <Input.Password placeholder="Password" onBlur={ event => {
+                    <Input.Password placeholder="Password" onChange={ event => {
                                     justify(event, 'password')
                     }} />
                 </div>
                 <div>
-                    <Input.Password placeholder="Confirm Password" onBlur={ event => {
+                    <Input.Password placeholder="Confirm Password" onChange={ event => {
                                     justify(event, 'password2')
                     }} />
                 </div>

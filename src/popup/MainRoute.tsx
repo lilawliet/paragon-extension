@@ -20,7 +20,7 @@ const Main = () => {
               <Route path="/create-password" element={<CreatePassword />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/receive" element={<Receive />} />
+              <Route path="/receive" element={<Receive/>} />
               <Route path="/send/index" element={<SendPage />} />
             </Routes>
         </HashRouter>
