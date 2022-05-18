@@ -54,7 +54,7 @@ export default ({
     }, [result])
 
     return (
-        <div className="flex flex-col items-center h-full mx-auto mt-36 gap-2_5 w-110">
+        <div className="flex flex-col items-center mx-auto mt-36 gap-2_5 w-110">
             <img src="./images/Success.png" alt="" />
             <span className="mt-6 text-2xl">Payment Sent</span>
             <span className="text-soft-white">Your transaction has been succesfully sent</span>

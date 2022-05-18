@@ -5,7 +5,7 @@ import { ArrowLeftOutlined, CopyOutlined } from '@ant-design/icons';
 import CHeader from '@/popup/components/CHeader';
 import QRCode from 'qrcode.react';
 import { useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { copyToClipboard } from '@/common/utils';
 
 const Receive = () => {
@@ -13,6 +13,14 @@ const Receive = () => {
     const [searchParams] = useSearchParams();
 
     const address = searchParams?.get('address')?? '';
+    const [size ,setSize] = useState(210)
+
+    useEffect(() => {
+        let html = document.getElementsByTagName('html')[0]
+        if (html && getComputedStyle(html).fontSize) {
+            setSize(210 * parseFloat(getComputedStyle(html).fontSize) / 16)
+        }
+    }, [])
 
     function copy(str: string) {
         copyToClipboard(str).then(() => {
@@ -32,7 +40,7 @@ const Receive = () => {
                             Deposit Novo
                         </div>
                         <div className='flex items-center justify-center bg-white rounded-2xl h-60 w-60'>
-                            <QRCode value={address} renderAs="svg" size={210} ></QRCode>
+                            <QRCode value={address} renderAs="svg" size={size} ></QRCode>
                         </div>
                         <div className='flex flex-col w-full gap-5'>
                             <div className='grid w-full grid-cols-6 px-10 box default py-2_5' onClick={e => {copy('address')}}>
