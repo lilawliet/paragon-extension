@@ -25,7 +25,7 @@ const Receive = () => {
     function copy(str: string) {
         copyToClipboard(str).then(() => {
           message.success({
-              duration: 100,
+              duration: 3,
               content: `${str} copied`
           });
         });

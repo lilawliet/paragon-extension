@@ -32,32 +32,32 @@ const Login = () => {
 
 
     return(
-        <div
-          className="flex justify-center pt-36"
-        >
-            <div className='flex flex-col justify-center gap-4 mx-8 text-center'>
-                <div className='flex justify-center gap-2'>
+        <div className="flex justify-center pt-60">
+            <div className='flex-col'>
+                <div className='flex justify-center mb-8 gap-x-4'>
                     <img 
-                        className="h-12 select-none"
+                        className="select-none w-15 h-12_5"
                         src='./images/Diamond.svg' />
                     <img src="./images/Paragon.svg" className='select-none' alt="" />
                 </div>
-                <div className='text-2xl text-white box w380'>
-                    Enter your password
-                </div>
-                <div>
-                    <Input.Password placeholder="Password" onChange={verify} />
-                </div>
-                <div>
-                    <Button
-                    disabled={disabled}
-                    size="large"
-                    type='primary'
-                    className="box w380 content"
-                    onClick={btnClick}
-                    >
-                    {t('Unlock')}
-                    </Button>
+                <div className='grid gap-5'>
+                    <div className='text-2xl text-center text-white'>
+                        Enter your password
+                    </div>
+                    <div>
+                        <Input.Password placeholder="Password" onChange={verify} />
+                    </div>
+                    <div>
+                        <Button
+                        disabled={disabled}
+                        size="large"
+                        type='primary'
+                        className="box w380 content"
+                        onClick={btnClick}
+                        >
+                        {t('Unlock')}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
