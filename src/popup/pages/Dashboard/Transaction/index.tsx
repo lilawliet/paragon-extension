@@ -8,6 +8,7 @@ interface Transaction {
     time: number
     address: string
     amount: string
+    opt: string
 }
 
 const Transaction = () => {
@@ -16,12 +17,14 @@ const Transaction = () => {
 
     const [transactions, setTransactions] = useState<Transaction[]>([{
         time: 1652188199,
-        address: 'sadfjkl2j343jlk',
-        amount: '+1,224'
+        address: 'sadfjkl...2j343jlk',
+        amount: '1,224',
+        opt: '+'
     }, {
         time: 1652188199,
-        address: 'sadfjkl2j343jlk',
-        amount: '+1,224'
+        address: 'sadfjkl...2j343jlk',
+        amount: '1,224',
+        opt: '-'
     }]) 
 
     return(
@@ -37,11 +40,25 @@ const Transaction = () => {
                     title={''} 
                 />
             </div>
-            <div className="grid gap-5 mt-6">
+            <div className="grid mt-6 gap-2_5">
+                <div className='pl-2 font-bold text-soft-white'>May 5,2022</div>
                 {transactions.map((transaction, index) => (
                     <div className='justify-between mb-4 box nobor w440 text-soft-white' key={index}>
                         <span>{transaction.address}</span>
-                        <span><span className='font-bold text-white'>{transaction.amount}</span> Novo</span>
+                        <span>
+                            <span className={`font-bold ${transaction.opt == '+' ? 'text-custom-green': 'text-warn'}`}>{transaction.opt}</span>
+                            <span className='font-bold text-white'>{transaction.amount}</span> Novo
+                        </span>
+                    </div>
+                ))}
+                <div className='pl-2 font-bold text-soft-white'>May 4,2022</div>
+                {transactions.map((transaction, index) => (
+                    <div className='justify-between mb-4 box nobor w440 text-soft-white' key={index}>
+                        <span>{transaction.address}</span>
+                        <span>
+                            <span className={`font-bold ${transaction.opt == '+' ? 'text-custom-green': 'text-warn'}`}>{transaction.opt}</span>
+                            <span className='font-bold text-white'>{transaction.amount}</span> Novo
+                        </span>
                     </div>
                 ))}
             </div>

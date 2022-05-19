@@ -21,7 +21,7 @@ const Dashboard = () => {
     return(
         <Layout className='h-full'>
                 <Header className='border-b border-white border-opacity-10'><CHeader/></Header>
-                <Content style={{backgroundColor: '#1C1919'}}>
+                <Content style={{backgroundColor: '#1C1919', overflowY: 'auto'}}>
                     {
                         active == 'home' ? <Home/> : active == 'transaction' ? <Transaction/> : active == 'settings' ? <Settings/> : <Home/>
                     }

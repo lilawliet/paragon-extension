@@ -26,7 +26,7 @@ const CreateRecovery = () => {
                 </div>
                 <div className='h-10'>{/* margin */} </div>
                 <div className='p-5 font-semibold select-text box default text-4_5 w380 leading-6_5'>
-                    Let me write twelve mnemonics here Let me write twelve mnemonics here
+                glare  knee  able  beach  success comic  giant  aerobic  myself false  debris  attack
                 </div>
                 <div>
                 <div className="flex items-center justify-center align-middle">
