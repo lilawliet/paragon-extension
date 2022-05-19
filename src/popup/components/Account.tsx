@@ -51,7 +51,7 @@ const AccountSelect = ({
   
     return (
         <div className="flex items-center w-full">
-            <span><img src="./images/user-solid.png" alt="" /></span>
+            <span><img src="./images/user-solid.svg" alt="" /></span>
             <div className='flex-grow'>
                 <Select defaultValue={'jack'} style={{ width: '100%',  textAlign:'center', lineHeight: '2.5rem'}} bordered={false}
                     suffixIcon={<span className='text-white'><img src="./images/chevron-down-solid.png" alt="" /></span>}>

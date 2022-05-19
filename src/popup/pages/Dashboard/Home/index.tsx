@@ -38,11 +38,11 @@ const Home = () => {
                 <span >$</span><Statistic className='text-white' value={112893} valueStyle={{fontSize: '2.75rem'}} />
             </div>
             <div className='grid grid-cols-2 gap-4 leading-6_5 w-5/8'>
-                <div className='box unit' onClick={e => {navigate(`/receive?address=${'quires'}`)}}>
+                <div className='cursor-pointer box unit hover:border-primary hover:text-primary' onClick={e => {navigate(`/receive?address=${'quires'}`)}}>
                     <span><img src="./images/qrcode-solid.png" alt="" /></span>
                     &nbsp;Receive
                 </div>
-                <div className='box unit' onClick={e => {navigate('/send/index')}}>
+                <div className='cursor-pointer box unit' onClick={e => {navigate('/send/index')}}>
                     <span><img src="./images/arrow-right-arrow-left-solid.png" alt="" /></span>
                     &nbsp;Send
                 </div>
