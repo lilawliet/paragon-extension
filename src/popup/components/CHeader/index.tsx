@@ -1,20 +1,23 @@
-import { Badge, Layout } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Suspense, useEffect, useState } from 'react';
+import { useState } from 'react';
+import {
+    getConn,
+    setConn
+  } from '@/common/storages/stores/popup/slice';
+import { useAppDispatch, useAppSelector } from '@/common/storages/hooks';
+
 import './index.less'
 
 const CHeader = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const conn = useAppSelector(getConn);
+    const dispatch = useAppDispatch();
+    
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState(true);
 
     const connect = () => {
         return new Promise((resolve, reject) => {
             setLoading(true)
             setTimeout(() => {
-                setStatus(true)
+                dispatch(setConn(true))
                 setLoading(false)
             }, 3000);
         });
@@ -24,7 +27,7 @@ const CHeader = () => {
         return new Promise((resolve, reject) => {
             setLoading(true)
             setTimeout(() => {
-                setStatus(false)
+                dispatch(setConn(false))
                 setLoading(false)
             }, 3000);
         });
@@ -36,8 +39,7 @@ const CHeader = () => {
 
 
     const StatusEl = () => {
-        // let result: any = useResource.read();
-        if (status) {
+        if (conn) {
             return (
             <div className='connected'
                 onClick={e=> {disconnect()}}>
@@ -66,7 +68,7 @@ const CHeader = () => {
             {loading ? (
             <div className='connected'>
                 <div className='mr-2 bg-custom-green rounded-xl w-2_5 h-2_5'></div>
-                { status ? 'Disconnecting': 'Connecting'}
+                { conn ? 'Disconnecting': 'Connecting'}
             </div>) :  (<StatusEl/>)}
         </div>
     )
