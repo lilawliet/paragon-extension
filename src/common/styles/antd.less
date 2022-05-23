@@ -7,6 +7,25 @@
 .ant-input {
     font-size: 1.125rem !important;
     line-height: 1.375rem !important;
+    font-weight: 600;
+}
+
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover{
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.ant-input-affix-wrapper.active {
+    background: #383535 !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+}
+
+// .ant-input-password-icon.anticon:hover{
+//     color: white !important;
+// }
+
+.ant-input-affix-wrapper.active > input.ant-input:focus{
+    background: #383535 !important;
 }
 
 .ant-select-selection-item {
@@ -16,3 +35,45 @@
 .ant-btn-lg.btn-settings {
     height: 6.125rem;
 }
+
+.ant-btn-default:hover, .ant-btn-default:focus, .ant-btn-default:active {
+    color: white !important;
+    background: #383535 !important;
+    border-color: rgba(255,255,255,0.4) !important;
+}
+
+.ant-btn-primary[disabled], .ant-btn-primary[disabled]:hover, .ant-btn-primary[disabled]:focus, .ant-btn-primary[disabled]:active {
+    background: #964410 !important;
+    color: rgba(255,255,255, 0.8) !important;
+    border: none !important;
+}
+
+.ant-checkbox-inner {
+    background: unset !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background: #fa701a !important;
+}
+
+.ant-checkbox-inner {
+    background: unset !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner::after{
+    border-right: 4px solid #fff !important;
+    border-bottom: 4px solid #fff !important;
+}
+
+.ant-btn-primary {
+    border: unset !important;
+}
+
+.ant-btn-primary:hover, .ant-btn-primary:focus {
+    border-color: #CA5B15 !important;
+    background: #CA5B15 !important;
+}
+
+// .ant-checkbox-checked .ant-checkbox-inner::after {
+//     border: 3px solid #fff !important;
+// }

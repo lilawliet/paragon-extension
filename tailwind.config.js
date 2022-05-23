@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       colors: {
         'primary': '#FA701A',
+        'primary-active': '#383535',
         'hard-black': '#1C1919',
         'soft-black': '#231F1F',
         'soft-white': '#AAAAAA',
@@ -46,6 +47,7 @@ module.exports = {
         '110': '27.5rem',
         '95': '23.75rem',
         '85': '21.75rem',
+        '70': '17.5rem',
         '15': '3.75rem',
         '2_5': '0.625rem'
       },

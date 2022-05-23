@@ -63,7 +63,7 @@ const SettingList:Setting[] = [{
 const MyItem: React.ForwardRefRenderFunction<HTMLElement, Setting> = ( item: Setting) => {
     return (
         <Button size='large' type='default' className='box w-115 default btn-settings'>
-            <div className="flex items-center justify-between font-bold text-4_5">
+            <div className="flex items-center justify-between font-semibold text-4_5">
                 <div className='flex flex-col text-left gap-2_5'>
                     <span>{item.label}</span>
                     <span className='font-normal opacity-60'>{item.value}</span>
@@ -132,14 +132,14 @@ export default () => {
         <div className="flex flex-col items-center h-full gap-5justify-evenly">
             <div className='mt-5 '>
                 <Button size='large' type='default' className='grid grid-cols-6 p-5 h-15_5 box default w380' onClick={e =>{ navigate(`/settings/account`)}} >
-                    <div className="flex items-center justify-between font-bold text-4_5 opacity-60">
-                        <div className='col-span-5 font-bold p0' >{account}</div>
+                    <div className="flex items-center justify-between font-semibold text-4_5 opacity-60">
+                        <div className='col-span-5 font-semibold p0' >{account}</div>
                         <div className='flex items-center justify-center cursor-pointer' ><EditOutlined /></div>
                     </div>
                 </Button>
                 {/* <div className='grid grid-cols-6 p-5 h-15_5 box default w380'>
                     <Input 
-                        className='col-span-5 font-bold text-white p0' 
+                        className='col-span-5 font-semibold text-white p0' 
                         bordered={false}
                         disabled={!editable}
                         placeholder="Very Long Account Name" 
@@ -161,7 +161,7 @@ export default () => {
                         {
                             item => (
                             <Button size='large' type='default' className={`mt-3_75 box w-115 default ${item.right?'btn-settings': ''}`} onClick={e =>{ navigate(`/settings/${item.route}`)}} >
-                                <div className="flex items-center justify-between font-bold text-4_5">
+                                <div className="flex items-center justify-between font-semibold text-4_5">
                                     <div className='flex flex-col text-left gap-2_5'>
                                         <span>{item.label}</span>
                                         <span className='font-normal opacity-60'>{item.value}</span>

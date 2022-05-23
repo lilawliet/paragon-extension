@@ -32,9 +32,9 @@ const Login = () => {
 
 
     return(
-        <div className="flex justify-center pt-60">
-            <div className='flex-col'>
-                <div className='flex justify-center mb-8 gap-x-4'>
+        <div className="flex items-center justify-center h-full">
+            <div className='flex flex-col items-center'>
+                <div className='flex justify-center mb-15 gap-x-4 w-70'>
                     <img 
                         className="select-none w-15 h-12_5"
                         src='./images/Diamond.svg' />

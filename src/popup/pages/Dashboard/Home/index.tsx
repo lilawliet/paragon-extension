@@ -34,7 +34,7 @@ const Home = () => {
                     title={''} 
                 />
             </div>
-            <div className='flex items-center p-10 font-bold text-11'>
+            <div className='flex items-center p-10 font-semibold text-11'>
                 <span >$</span><Statistic className='text-white' value={112893} valueStyle={{fontSize: '2.75rem'}} />
             </div>
             <div className='grid grid-cols-2 gap-4 leading-6_5 w-5/8'>

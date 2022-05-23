@@ -28,7 +28,7 @@ export default ({
                 Create a new account
             </div>
             <Button size='large' type='default' className='mt-1_25 box w-115 default btn-settings' onClick={e => { setStatus('create')}} >
-                <div className="flex items-center justify-between font-bold text-4_5">
+                <div className="flex items-center justify-between font-semibold text-4_5">
                     <div className='flex flex-col text-left gap-2_5'>
                         <span>Create a new account</span>
                         <span className='font-normal opacity-60'>Generate a new address</span>
@@ -39,7 +39,7 @@ export default ({
             </Button>
             
             <Button size='large' type='default' className='box w-115 default btn-settings' onClick={e => { setStatus('import')}} >
-                <div className="flex items-center justify-between font-bold text-4_5">
+                <div className="flex items-center justify-between font-semibold text-4_5">
                     <div className='flex flex-col text-left gap-2_5'>
                         <span>Import Private Key</span>
                         <span className='font-normal opacity-60'>Import an existing account</span>

@@ -30,7 +30,7 @@ export default ({
                 Switch Account
             </div>
             <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(0)}} >
-                <div className="flex items-center justify-between text-base font-bold">
+                <div className="flex items-center justify-between text-base font-semibold">
                     <div className='flex-grow text-left'>
                         {account.name} <span className="font-normal opacity-60">({account.address})</span>
                     </div>
@@ -38,7 +38,7 @@ export default ({
                 </div>
             </Button>
             <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(1)}} >
-                <div className="flex items-center justify-between text-base font-bold">
+                <div className="flex items-center justify-between text-base font-semibold">
                     <div className='flex-grow text-left'>
                         Account 2  <span className="font-normal opacity-60">(1DpeW...48ztM)</span>
                     </div>

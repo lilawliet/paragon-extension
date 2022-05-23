@@ -12,7 +12,8 @@
       "consts": ["./src/constant/index"],
       "consts/*": ["./src/constant/*"],
     },
-
+    "noImplicitAny": false,
+    "downlevelIteration": true,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

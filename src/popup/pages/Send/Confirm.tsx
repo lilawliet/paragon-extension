@@ -38,13 +38,13 @@ export default ({
                 Recipient
             </div>
             <div className='justify-end w-full box nobor text-soft-white'>
-                <span><span className="font-bold text-white">{transaction.amount}</span> Novo</span>
+                <span><span className="font-semibold text-white">{transaction.amount}</span> Novo</span>
             </div>
             <div className='w-full text-left text-soft-white'>
                 Recipient
             </div>
             <div className='justify-end w-full box nobor text-soft-white'>
-                <span><span className="font-bold text-white">5000</span> Novo</span>
+                <span><span className="font-semibold text-white">5000</span> Novo</span>
             </div>
             
             <Button size='large' type='primary' className='box w380' onClick={e => {verify()}}>

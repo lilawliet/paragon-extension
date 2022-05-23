@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../index';
 import { fetchCount } from './api';
 
-export enum Panel  {'home' , 'nft' , 'transaction' , 'settings'}
+export type Panel = 'home' | 'nft' | 'transaction' | 'settings'
 
 export interface State {
   panel: Panel;     // main panel state
@@ -19,7 +19,7 @@ export const makeAsync = createAsyncThunk(
 );
 
 const initialState: State = {
-  panel: Panel.home,
+  panel: 'home',
   conn: false
 };
 

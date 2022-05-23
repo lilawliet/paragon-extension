@@ -48,7 +48,7 @@ const Receive = () => {
                                     <img src="./images/copy-solid.png" alt="" />
                                 </div>
                                 <div className='flex flex-col flex-grow col-span-5 items-begin'>
-                                    <span className='font-bold'>account name</span>
+                                    <span className='font-semibold'>account name</span>
                                     <span className='text-soft-white'>{address}</span>
                                 </div>
                             </div>

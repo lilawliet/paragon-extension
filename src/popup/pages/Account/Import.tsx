@@ -26,9 +26,9 @@ export default ({
             <div className='flex items-center px-2 text-2xl h-13'>
                 Import Private Key
             </div>
-            <div className='text-sm text-soft-white'>Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase.</div>
+            <div className='text-base text-soft-white'>Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase.</div>
             <div className='flex items-center w-full p-5 mt-1_25 h-15_5 box default'>
-                <Input className='font-bold text-white p0' bordered={false} status="error" placeholder="Private Key"/>
+                <Input className='font-semibold text-white p0' bordered={false} status="error" placeholder="Private Key"/>
             </div>
             <Button size='large' type='primary' className='box w380' onClick={e => {verify()}}>
                 <div className='flex items-center justify-center text-lg'>Import Private Key</div>

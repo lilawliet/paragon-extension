@@ -60,7 +60,7 @@ export default ({
             <span className="text-soft-white">Your transaction has been succesfully sent</span>
             <div className='justify-between w-full box nobor text-soft-white mt-2_5'>
                 <span>{transaction.address}</span>
-                <span><span className="font-bold text-white">{transaction.amount}</span> Novo</span>
+                <span><span className="font-semibold text-white">{transaction.amount}</span> Novo</span>
             </div>
             <div className="flex items-center text-soft-white"><EyeOutlined />&nbsp;View on Block Explorer</div>
         </div>

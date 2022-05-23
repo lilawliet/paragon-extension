@@ -8,8 +8,12 @@ const CreatePassword = () => {
     const navigate = useNavigate();
 
     const [password, setPassword] = useState("")
+    const [placeholder1, setPlaceholder1] = useState('Password')
     const [password2, setPassword2] = useState("")
+    const [placeholder2, setPlaceholder2] = useState('Confirm Password')
     const [disabled, setDisabled] = useState(true)
+    
+    const [active, setActive] = useState('')
 
     const btnClick = () => {
         // to create wallet 
@@ -43,6 +47,20 @@ const CreatePassword = () => {
         }
     }, [password, password2])
 
+    useEffect(() => {
+        setPlaceholder1('Password')
+        setPlaceholder2('Confirm Password')
+        
+        if ('password1' == active) {
+            setActive('password1')
+            setPlaceholder1('')
+        } else if  ('password2' == active) {
+            setActive('password2')
+            setPlaceholder2('')
+        }
+    }, [active])
+
+
     return(
         <div
           className="flex justify-center pt-45"
@@ -51,16 +69,20 @@ const CreatePassword = () => {
                 <div className='text-2xl text-white box w380'>
                     Create a password
                 </div>
-                <div className='text-sm text-soft-white box w380'>You will use this to unlock your wallet</div>
+                <div className='text-base text-soft-white box w380'>You will use this to unlock your wallet</div>
                 <div className='mt-12'>
-                    <Input.Password placeholder="Password" onChange={ event => {
+                    <Input.Password className={active == 'password1'? 'active': ''} placeholder={placeholder1} onChange={ event => {
                                     justify(event, 'password')
-                    }} />
+                    }}
+                    onFocus={e => { setActive('password1')}} 
+                    onBlur={e => { setActive('')}}/>
                 </div>
                 <div>
-                    <Input.Password placeholder="Confirm Password" onChange={ event => {
+                    <Input.Password className={active == 'password2'? 'active': ''} placeholder={placeholder2} onChange={ event => {
                                     justify(event, 'password2')
-                    }} />
+                    }} 
+                    onFocus={e => { setActive('password2')}} 
+                    onBlur={e => { setActive('')}}/>
                 </div>
                 <div>
                     <Button

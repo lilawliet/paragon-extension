@@ -20,7 +20,7 @@ export default () => {
                             Switch Account
                         </div>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(0)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     English 
                                 </div>
@@ -28,7 +28,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(1)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Chinese 
                                 </div>
@@ -36,7 +36,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(2)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Japanese 
                                 </div>
@@ -44,7 +44,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(3)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Spanish 
                                 </div>

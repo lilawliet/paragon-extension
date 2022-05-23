@@ -22,7 +22,7 @@ const CreateRecovery = () => {
                     Secret Recovery Phrase
                 </div>
                 <div className='text-base text-warn box w380'>
-                    This phrase is the Only way to <br/>recover your wallet. Do NOT share it with anyone!
+                    This phrase is the ONLY way to <br/>recover your wallet. Do NOT share it with anyone!
                 </div>
                 <div className='h-10'>{/* margin */} </div>
                 <div className='p-5 font-semibold select-text box default text-4_5 w380 leading-6_5'>
@@ -30,8 +30,8 @@ const CreateRecovery = () => {
                 </div>
                 <div>
                 <div className="flex items-center justify-center align-middle">
-                    <Checkbox onChange={onChange} checked={checked}  className="font-bold">
-                        <span className="font-bold text-white">I saved My Secret Recovery Phrase</span>
+                    <Checkbox onChange={onChange} checked={checked}  className="font-semibold">
+                        <span className="font-semibold text-white">I saved My Secret Recovery Phrase</span>
                     </Checkbox>
                 </div>
                 </div>

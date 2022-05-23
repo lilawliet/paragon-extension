@@ -20,13 +20,13 @@ export default () => {
                             Change Password
                         </div>
                         <div className='flex items-center w-full p-5 mt-1_25 h-15_5 box default'>
-                            <Input.Password className='font-bold text-white p0' bordered={false} status="error" placeholder="Current Password"/>
+                            <Input.Password className='font-semibold text-white p0' bordered={false} status="error" placeholder="Current Password"/>
                         </div>
                         <div className='flex items-center w-full p-5 mt-1_25 h-15_5 box default'>
-                            <Input.Password className='font-bold text-white p0' bordered={false} status="error" placeholder="New Password"/>
+                            <Input.Password className='font-semibold text-white p0' bordered={false} status="error" placeholder="New Password"/>
                         </div>
                         <div className='flex items-center w-full p-5 mt-1_25 h-15_5 box default'>
-                            <Input.Password className='font-bold text-white p0' bordered={false} status="error" placeholder="Confirm Password"/>
+                            <Input.Password className='font-semibold text-white p0' bordered={false} status="error" placeholder="Confirm Password"/>
                         </div>
                         <Button size='large' type='primary' className='box w380' >
                             <div className='flex items-center justify-center text-lg'>Change Password</div>

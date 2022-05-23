@@ -28,7 +28,7 @@ export default () => {
                         <div className='flex items-center px-2 text-2xl h-13'>
                             Export Private Key
                         </div>
-                        <div className='text-sm text-center text-soft-white'>If you ever change browsers or move computers, you will need this Private Key to access this account. Save it somewhere safe and secret.</div>
+                        <div className='text-base text-center text-soft-white'>If you ever change browsers or move computers, you will need this Private Key to access this account. Save it somewhere safe and secret.</div>
                         <div className='grid w-full grid-cols-6 p-5 box default mt-1_25' onClick={e => {copy('address')}}>
                             <div className="h-5_5">
                                 <img src="./images/copy-solid.png" alt="" />

@@ -27,7 +27,7 @@ export default ({
                 Create a new account
             </div>
             <div className='flex items-center w-full p-5 mt-1_25 h-15_5 box default'>
-                <Input className='font-bold text-white p0' bordered={false} status="error" placeholder="Account name"/>
+                <Input className='font-semibold text-white p0' bordered={false} status="error" placeholder="Account name"/>
             </div>
             <Button size='large' type='primary' className='box w380' onClick={e => {verify()}}>
                 <div className='flex items-center justify-center text-lg'>Create Account</div>

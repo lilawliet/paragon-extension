@@ -33,11 +33,6 @@ const CHeader = () => {
         });
     }
 
-    // useEffect(() => {
-    //     connect()
-    // }, [])
-
-
     const StatusEl = () => {
         if (conn) {
             return (
@@ -49,7 +44,7 @@ const CHeader = () => {
             )
         }
         return(
-            <div className='flex items-center justify-center text-sm p-2_5 h-8_5 box default leading-5_5'
+            <div className='flex items-center justify-center text-base p-2_5 h-8_5 box default leading-5_5'
                 onClick={e=> {connect()}}>
                 <div className='bg-primary rounded-xl w-[10px] h-[10px]'></div>
             </div>

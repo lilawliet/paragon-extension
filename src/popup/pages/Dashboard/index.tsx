@@ -8,7 +8,6 @@ import Transaction from './Transaction'
 import Settings from './Settings'
 
 import {
-    Panel,
     getPanel
   } from '@/common/storages/stores/popup/slice';
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks';
@@ -22,7 +21,7 @@ const Dashboard = () => {
                 <Header className='border-b border-white border-opacity-10'><CHeader/></Header>
                 <Content style={{backgroundColor: '#1C1919', overflowY: 'auto'}}>
                     {
-                        panel == Panel.home ? <Home/> : panel == Panel.transaction ? <Transaction/> : panel == Panel.settings ? <Settings/> : <Home/>
+                        panel == 'home' ? <Home/> : panel == 'transaction' ? <Transaction/> : panel == 'settings' ? <Settings/> : <Home/>
                     }
                 </Content>
                 <Footer style={{height: '5.625rem'}}><CFooter/></Footer>

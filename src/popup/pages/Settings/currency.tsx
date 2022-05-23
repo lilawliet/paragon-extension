@@ -20,7 +20,7 @@ export default () => {
                             Currency
                         </div>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(0)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     US Dollar (USD) 
                                 </div>
@@ -28,7 +28,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(1)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Euro (EUR) 
                                 </div>
@@ -36,7 +36,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(2)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Japanese Yen (JPY)
                                 </div>
@@ -44,7 +44,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(3)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     British Pound (GBP) 
                                 </div>
@@ -52,7 +52,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(4)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Swiss Franc (CHF) 
                                 </div>
@@ -60,7 +60,7 @@ export default () => {
                             </div>
                         </Button>
                         <Button size='large' type='default' className='box w-115 default' onClick={e => { setCurrency(5)}} >
-                            <div className="flex items-center justify-between text-base font-bold">
+                            <div className="flex items-center justify-between text-base font-semibold">
                                 <div className='flex-grow text-left'>
                                     Canadian Dollar (CAD)
                                 </div>
