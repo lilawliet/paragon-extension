@@ -1,4 +1,6 @@
 export * from "./WalletContext"
+export * from './hooks'
+
 const UI_TYPE = {
   Tab: "index",
   Pop: "popup",

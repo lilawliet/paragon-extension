@@ -1,9 +1,31 @@
 import { Button } from "antd"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useWallet } from "@/ui/utils"
+import { useEffect, useState } from "react"
+import { Account } from 'background/service/preference';
 
 const Welcome = () => {
   const { t } = useTranslation()
+  const wallet = useWallet()
+  const navigate = useNavigate()
+  const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
+
+  const getCurrentAccount = async () => {
+    const account = await wallet.getCurrentAccount();
+    if (account) {
+      navigate('/login');
+      return;
+    }
+    setCurrentAccount(account);
+  };
+
+  useEffect(() => {
+    if (!currentAccount) {
+      getCurrentAccount();
+    }
+  }, []);
+
   return (
     <div
       className="flex items-center justify-center h-full"
@@ -20,7 +42,7 @@ const Welcome = () => {
           <img src="./images/Paragon.svg" className="select-none" alt="" />
         </div>
         <div className="grid gap-5">
-          <Link to="/create-recovery" replace>
+          <Link to="/create-password" replace>
             <Button size="large" type="primary" className="border-none bg-primary box w380 content h-15_5">
               {t("Create new wallet")}
             </Button>

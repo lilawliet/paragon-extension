@@ -80,6 +80,7 @@ class KeyringService extends EventEmitter {
 
   async boot(password: string) {
     this.password = password
+    console.log(password)
     const encryptBooted = await this.encryptor.encrypt(password, "true")
     this.store.updateState({ booted: encryptBooted })
     this.memStore.updateState({ isUnlocked: true })

@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import AccountSelect from "@/popup/components/Account"
-import { Account } from "@/background/service/preference"
 import { forwardRef, UIEventHandler, useEffect, useRef, useState } from "react"
 import { Avatar, Button, Input, List } from "antd"
 import VirtualList from "rc-virtual-list"
@@ -131,6 +129,7 @@ export default () => {
 
   const onScroll = (e: any) => {
     if (e.target.scrollHeight - e.target.scrollTop === ContainerHeight) {
+      // do something
     }
   }
 

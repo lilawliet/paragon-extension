@@ -121,6 +121,8 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         lessOptions: {
           modifyVars: {
             "primary-color": "#fa701a",
+            "primary-color-active": "#383535",
+            "input-icon-hover-color": "#FFFFFF",
             "component-background": "#1C1919",
             "select-dropdown-bg": "#231F1F",
             "select-item-selected-bg": "#332F2F",
@@ -139,6 +141,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
             "text-color-secondary": "#AAAAAA",
             "height-lg": "3.875rem",
             "checkbox-size": "1.5rem",
+            "btn-text-hover-bg": "#383535"
           },
           javascriptEnabled: true
         }

@@ -20,13 +20,23 @@
     color: white !important;
 }
 
-// .ant-input-password-icon.anticon:hover{
-//     color: white !important;
-// }
+.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper, .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover{
+    border-color: #ff4d4f !important;
+}
 
-.ant-input-affix-wrapper.active > input.ant-input:focus{
+.ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused {
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: unset !important;
     background: #383535 !important;
 }
+
+.ant-input-affix-wrapper.active > input.ant-input, .ant-input-affix-wrapper.active > input.ant-input:focus, .ant-input-affix-wrapper:focus > input.ant-input:focus, .ant-input-affix-wrapper-focused > input.ant-input:focus{
+    background: #383535 !important;
+}
+
+// .ant-input-password-icon.anticon:hover {
+//     color: white !important;
+// }
 
 .ant-select-selection-item {
     font-weight: bold !important;
@@ -61,8 +71,8 @@
 }
 
 .ant-checkbox-checked .ant-checkbox-inner::after{
-    border-right: 4px solid #fff !important;
-    border-bottom: 4px solid #fff !important;
+    border-right: 3px solid #fff !important;
+    border-bottom: 3px solid #fff !important;
 }
 
 .ant-btn-primary {

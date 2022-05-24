@@ -4,7 +4,7 @@ import { Object } from "ts-toolbelt"
 
 export type WalletController = Object.Merge<
     {
-        openapi: {
+        openapi?: {
             [key: string]: (...params: any) => Promise<any>
         }
     },
