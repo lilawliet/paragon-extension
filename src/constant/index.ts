@@ -3,8 +3,8 @@ import { Chain } from "@/background/service/openapi"
 // import IconNovoLogo from "./images/novo.svg";
 
 export enum CHAINS_ENUM {
-  NOVO = "NOVO",
-  BSV = "BSV"
+    NOVO = "NOVO",
+    BSV = "BSV"
 }
 
 export const CHAINS: Record<string, Chain> = {
@@ -104,7 +104,7 @@ export const CHECK_METAMASK_INSTALLED_URL = {
 export const MINIMUM_GAS_LIMIT = 21000
 
 export enum WATCH_ADDRESS_CONNECT_TYPE {
-  WalletConnect = "WalletConnect"
+    WalletConnect = "WalletConnect"
 }
 
 export const WALLETCONNECT_STATUS_MAP = {

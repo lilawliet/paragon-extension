@@ -5,10 +5,10 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 interface AccountSelectDrawerProps {
-  onChange(account: Account): void
-  onCancel(): void
-  title: string
-  isLoading?: boolean
+    onChange(account: Account): void
+    onCancel(): void
+    title: string
+    isLoading?: boolean
 }
 
 const AccountSelect = ({ onChange, title, onCancel, isLoading = false }: AccountSelectDrawerProps) => {

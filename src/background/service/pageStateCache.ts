@@ -1,14 +1,14 @@
 import { createPersistStore } from "background/utils"
 
 export interface CacheState {
-  path: string
-  params: Record<string, string>
-  states: Record<string, any>
+    path: string
+    params: Record<string, string>
+    states: Record<string, any>
 }
 
 interface CacheStore {
-  cache: CacheState | null
-  hasCache: boolean
+    cache: CacheState | null
+    hasCache: boolean
 }
 
 class PageStateCacheService {

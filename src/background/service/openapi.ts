@@ -4,447 +4,447 @@ import { createPersistStore } from "background/utils"
 import { CHAINS_ENUM, INITIAL_OPENAPI_URL } from "consts"
 
 interface OpenApiConfigValue {
-  path: string
-  method: Method
-  params?: string[]
+    path: string
+    method: Method
+    params?: string[]
 }
 
 interface OpenApiStore {
-  host: string
-  config: Record<string, OpenApiConfigValue>
+    host: string
+    config: Record<string, OpenApiConfigValue>
 }
 
 export interface Chain {
-  name: string
-  logo: string
-  enum: CHAINS_ENUM
-  network: string
-  nativeTokenSymbol: string
-  nativeTokenLogo: string
-  nativeTokenAddress: string
-  scanLink: string
-  nativeTokenDecimals: number
+    name: string
+    logo: string
+    enum: CHAINS_ENUM
+    network: string
+    nativeTokenSymbol: string
+    nativeTokenLogo: string
+    nativeTokenAddress: string
+    scanLink: string
+    nativeTokenDecimals: number
 }
 
 export interface ServerChain {
-  id: string
-  community_id: number
-  name: string
-  native_token_id: string
-  logo_url: string
-  wrapped_token_id: string
-  symbol: string
+    id: string
+    community_id: number
+    name: string
+    native_token_id: string
+    logo_url: string
+    wrapped_token_id: string
+    symbol: string
 }
 
 export interface ChainWithBalance extends ServerChain {
-  usd_value: number
+    usd_value: number
 }
 
 export interface ChainWithPendingCount extends ServerChain {
-  pending_tx_count: number
+    pending_tx_count: number
 }
 
 export type SecurityCheckDecision = "pass" | "warning" | "danger" | "forbidden" | "loading" | "pending"
 
 export interface SecurityCheckItem {
-  alert: string
-  id: number
+    alert: string
+    id: number
 }
 
 export interface SecurityCheckResponse {
-  decision: SecurityCheckDecision
-  alert: string
-  danger_list: SecurityCheckItem[]
-  warning_list: SecurityCheckItem[]
-  forbidden_list: SecurityCheckItem[]
-  trace_id: string
+    decision: SecurityCheckDecision
+    alert: string
+    danger_list: SecurityCheckItem[]
+    warning_list: SecurityCheckItem[]
+    forbidden_list: SecurityCheckItem[]
+    trace_id: string
 }
 
 export interface Tx {
-  chainId: number
-  data: string
-  from: string
-  gas?: string
-  gasLimit?: string
-  maxFeePerGas?: string
-  maxPriorityFeePerGas?: string
-  gasPrice?: string
-  nonce: string
-  to: string
-  value: string
-  r?: string
-  s?: string
-  v?: string
+    chainId: number
+    data: string
+    from: string
+    gas?: string
+    gasLimit?: string
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+    gasPrice?: string
+    nonce: string
+    to: string
+    value: string
+    r?: string
+    s?: string
+    v?: string
 }
 
 export interface Eip1559Tx {
-  chainId: number
-  data: string
-  from: string
-  gas: string
-  maxFeePerGas: string
-  maxPriorityFeePerGas: string
-  nonce: string
-  to: string
-  value: string
-  r?: string
-  s?: string
-  v?: string
+    chainId: number
+    data: string
+    from: string
+    gas: string
+    maxFeePerGas: string
+    maxPriorityFeePerGas: string
+    nonce: string
+    to: string
+    value: string
+    r?: string
+    s?: string
+    v?: string
 }
 
 export interface TotalBalanceResponse {
-  total_usd_value: number
-  chain_list: ChainWithBalance[]
+    total_usd_value: number
+    chain_list: ChainWithBalance[]
 }
 
 export interface TokenItem {
-  content_type?: "image" | "image_url" | "video_url" | "audio_url" | undefined
-  content?: string | undefined
-  inner_id?: any
-  amount: number
-  chain: string
-  decimals: number
-  display_symbol: string | null
-  id: string
-  is_core: boolean
-  is_verified: boolean
-  is_wallet: boolean
-  is_infinity?: boolean
-  logo_url: string
-  name: string
-  optimized_symbol: string
-  price: number
-  symbol: string
-  time_at: number
-  usd_value?: number
-  raw_amount?: number
-  raw_amount_hex_str?: string
+    content_type?: "image" | "image_url" | "video_url" | "audio_url" | undefined
+    content?: string | undefined
+    inner_id?: any
+    amount: number
+    chain: string
+    decimals: number
+    display_symbol: string | null
+    id: string
+    is_core: boolean
+    is_verified: boolean
+    is_wallet: boolean
+    is_infinity?: boolean
+    logo_url: string
+    name: string
+    optimized_symbol: string
+    price: number
+    symbol: string
+    time_at: number
+    usd_value?: number
+    raw_amount?: number
+    raw_amount_hex_str?: string
 }
 
 export interface TokenApproval {
-  id: string
-  name: string
-  symbol: string
-  logo_url: string
-  chain: string
-  price: number
-  balance: number
-  spenders: Spender[]
-  sum_exposure_usd: number
-  exposure_balance: number
-}
-
-export interface Spender {
-  id: string
-  value: number
-  exposure_usd: number
-  protocol: {
-    id: string
-    name: string
-    logo_url: string
-    chain: string
-  }
-  is_contract: boolean
-  is_open_source: boolean
-  is_hacked: boolean
-  is_abandoned: boolean
-}
-
-export interface AssetItem {
-  id: string
-  chain: string
-  name: string
-  site_url: string
-  logo_url: string
-  has_supported_portfolio: boolean
-  tvl: number
-  net_usd_value: number
-  asset_usd_value: number
-  debt_usd_value: number
-}
-export interface NFTCollection {
-  create_at: string
-  id: string
-  is_core: boolean
-  name: string
-  price: number
-  chain: string
-  tokens: NFTItem[]
-}
-
-export interface UserCollection {
-  collection: Collection
-  list: NFTItem[]
-}
-export interface NFTItem {
-  chain: string
-  id: string
-  contract_id: string
-  inner_id: string
-  token_id: string
-  name: string
-  contract_name: string
-  description: string
-  usd_price: number
-  amount: number
-  collection_id?: string
-  pay_token: {
     id: string
     name: string
     symbol: string
-    amount: number
     logo_url: string
-    time_at: number
-    date_at?: string
-    price?: number
-  }
-  content_type: "image" | "image_url" | "video_url" | "audio_url"
-  content: string
-  detail_url: string
-  total_supply?: string
-  collection?: Collection | null
-  is_erc1155?: boolean
-  is_erc721: boolean
+    chain: string
+    price: number
+    balance: number
+    spenders: Spender[]
+    sum_exposure_usd: number
+    exposure_balance: number
+}
+
+export interface Spender {
+    id: string
+    value: number
+    exposure_usd: number
+    protocol: {
+        id: string
+        name: string
+        logo_url: string
+        chain: string
+    }
+    is_contract: boolean
+    is_open_source: boolean
+    is_hacked: boolean
+    is_abandoned: boolean
+}
+
+export interface AssetItem {
+    id: string
+    chain: string
+    name: string
+    site_url: string
+    logo_url: string
+    has_supported_portfolio: boolean
+    tvl: number
+    net_usd_value: number
+    asset_usd_value: number
+    debt_usd_value: number
+}
+export interface NFTCollection {
+    create_at: string
+    id: string
+    is_core: boolean
+    name: string
+    price: number
+    chain: string
+    tokens: NFTItem[]
+}
+
+export interface UserCollection {
+    collection: Collection
+    list: NFTItem[]
+}
+export interface NFTItem {
+    chain: string
+    id: string
+    contract_id: string
+    inner_id: string
+    token_id: string
+    name: string
+    contract_name: string
+    description: string
+    usd_price: number
+    amount: number
+    collection_id?: string
+    pay_token: {
+        id: string
+        name: string
+        symbol: string
+        amount: number
+        logo_url: string
+        time_at: number
+        date_at?: string
+        price?: number
+    }
+    content_type: "image" | "image_url" | "video_url" | "audio_url"
+    content: string
+    detail_url: string
+    total_supply?: string
+    collection?: Collection | null
+    is_erc1155?: boolean
+    is_erc721: boolean
 }
 
 export interface Collection {
-  id: string
-  name: string
-  description: null | string
-  logo_url: string
-  is_core: boolean
-  contract_uuids: string[]
-  create_at: number
+    id: string
+    name: string
+    description: null | string
+    logo_url: string
+    is_core: boolean
+    contract_uuids: string[]
+    create_at: number
 }
 
 export interface TxDisplayItem extends TxHistoryItem {
-  projectDict: TxHistoryResult["project_dict"]
-  cateDict: TxHistoryResult["cate_dict"]
-  tokenDict: TxHistoryResult["token_dict"]
+    projectDict: TxHistoryResult["project_dict"]
+    cateDict: TxHistoryResult["cate_dict"]
+    tokenDict: TxHistoryResult["token_dict"]
 }
 export interface TxHistoryItem {
-  cate_id: string | null
-  chain: string
-  debt_liquidated: null
-  id: string
-  other_addr: string
-  project_id: null | string
-  receives: {
-    amount: number
-    from_addr: string
-    token_id: string
-  }[]
-  sends: {
-    amount: number
-    to_addr: string
-    token_id: string
-  }[]
-  time_at: number
-  token_approve: {
-    spender: string
-    token_id: string
-    value: number
-  } | null
-  tx: {
-    eth_gas_fee: number
-    from_addr: string
-    name: string
-    params: any[]
-    status: number
-    to_addr: string
-    usd_gas_fee: number
-    value: number
-  } | null
+    cate_id: string | null
+    chain: string
+    debt_liquidated: null
+    id: string
+    other_addr: string
+    project_id: null | string
+    receives: {
+        amount: number
+        from_addr: string
+        token_id: string
+    }[]
+    sends: {
+        amount: number
+        to_addr: string
+        token_id: string
+    }[]
+    time_at: number
+    token_approve: {
+        spender: string
+        token_id: string
+        value: number
+    } | null
+    tx: {
+        eth_gas_fee: number
+        from_addr: string
+        name: string
+        params: any[]
+        status: number
+        to_addr: string
+        usd_gas_fee: number
+        value: number
+    } | null
 }
 export interface TxHistoryResult {
-  cate_dict: Record<string, { id: string; name: string }>
-  history_list: TxHistoryItem[]
-  project_dict: Record<
-    string,
-    {
-      chain: string
-      id: string
-      logo_url: string
-      name: string
-    }
-  >
-  token_dict: Record<string, TokenItem>
+    cate_dict: Record<string, { id: string; name: string }>
+    history_list: TxHistoryItem[]
+    project_dict: Record<
+        string,
+        {
+            chain: string
+            id: string
+            logo_url: string
+            name: string
+        }
+    >
+    token_dict: Record<string, TokenItem>
 }
 export interface GasResult {
-  estimated_gas_cost_usd_value: number
-  estimated_gas_cost_value: number
-  estimated_gas_used: number
-  estimated_seconds: number
-  front_tx_count: number
-  max_gas_cost_usd_value: number
-  max_gas_cost_value: number
-  fail?: boolean
-}
-
-export interface GasLevel {
-  level: string
-  price: number
-  front_tx_count: number
-  estimated_seconds: number
-  base_fee: number
-}
-
-export interface BalanceChange {
-  err_msg: string
-  receive_token_list: TokenItem[]
-  send_token_list: TokenItem[]
-  success: boolean
-  usd_value_change: number
-}
-interface NFTContractItem {
-  id: string
-  chain: string
-  name: string
-  symbol: string
-  is_core: boolean
-  time_at: number
-  collection: {
-    id: string
-    name: string
-    create_at: number
-  }
-}
-export interface ExplainTxResponse {
-  abi?: {
-    func: string
-    params: Array<string[] | number | string>
-  }
-  abiStr?: string
-  balance_change: BalanceChange
-  gas: {
     estimated_gas_cost_usd_value: number
     estimated_gas_cost_value: number
     estimated_gas_used: number
     estimated_seconds: number
-  }
-  native_token: TokenItem
-  pre_exec: {
-    success: boolean
+    front_tx_count: number
+    max_gas_cost_usd_value: number
+    max_gas_cost_value: number
+    fail?: boolean
+}
+
+export interface GasLevel {
+    level: string
+    price: number
+    front_tx_count: number
+    estimated_seconds: number
+    base_fee: number
+}
+
+export interface BalanceChange {
     err_msg: string
-  }
-  recommend: {
-    gas: string
-    nonce: string
-  }
-  support_balance_change: true
-  type_call?: {
-    action: string
-    contract: string
-    contract_protocol_logo_url: string
-    contract_protocol_name: string
-  }
-  type_send?: {
-    to_addr: string
-    token_symbol: string
-    token_amount: number
-    token: TokenItem
-  }
-  type_token_approval?: {
-    spender: string
-    spender_protocol_logo_url: string
-    spender_protocol_name: string
-    token_symbol: string
-    token_amount: number
-    is_infinity: boolean
-    token: TokenItem
-  }
-  type_cancel_token_approval?: {
-    spender: string
-    spender_protocol_logo_url: string
-    spender_protocol_name: string
-    token_symbol: string
-  }
-  type_cancel_tx?: any // TODO
-  type_deploy_contract?: any // TODO
-  is_gnosis?: boolean
-  gnosis?: ExplainTxResponse
-  type_cancel_single_nft_approval?: {
-    spender: string
-    spender_protocol_name: null
-    spender_protocol_logo_url: string
-    token_symbol: null
-    is_nft: boolean
-    nft: NFTItem
-  }
-  type_cancel_nft_collection_approval?: {
-    spender: string
-    spender_protocol_name: string
-    spender_protocol_logo_url: string
-    token_symbol: string
-    is_nft: boolean
-    nft_contract: NFTContractItem
-    token: TokenItem
-  }
-  type_nft_collection_approval?: {
-    spender: string
-    spender_protocol_name: string
-    spender_protocol_logo_url: string
-    token_symbol: string
-    is_nft: boolean
-    nft_contract: NFTContractItem
-    token: TokenItem
-    token_amount: number
-    is_infinity: boolean
-  }
-  type_single_nft_approval?: {
-    spender: string
-    spender_protocol_name: string
-    spender_protocol_logo_url: string
-    token_symbol: string
-    is_nft: boolean
-    nft: NFTItem
-    token: TokenItem
-    token_amount: number
-    is_infinity: boolean
-  }
-  type_nft_send?: {
-    spender: string
-    spender_protocol_name: null
-    spender_protocol_logo_url: string
-    token_symbol: string
-    token_amount: number
-    is_infinity: boolean
-    is_nft: boolean
-    nft: NFTItem
-  }
+    receive_token_list: TokenItem[]
+    send_token_list: TokenItem[]
+    success: boolean
+    usd_value_change: number
+}
+interface NFTContractItem {
+    id: string
+    chain: string
+    name: string
+    symbol: string
+    is_core: boolean
+    time_at: number
+    collection: {
+        id: string
+        name: string
+        create_at: number
+    }
+}
+export interface ExplainTxResponse {
+    abi?: {
+        func: string
+        params: Array<string[] | number | string>
+    }
+    abiStr?: string
+    balance_change: BalanceChange
+    gas: {
+        estimated_gas_cost_usd_value: number
+        estimated_gas_cost_value: number
+        estimated_gas_used: number
+        estimated_seconds: number
+    }
+    native_token: TokenItem
+    pre_exec: {
+        success: boolean
+        err_msg: string
+    }
+    recommend: {
+        gas: string
+        nonce: string
+    }
+    support_balance_change: true
+    type_call?: {
+        action: string
+        contract: string
+        contract_protocol_logo_url: string
+        contract_protocol_name: string
+    }
+    type_send?: {
+        to_addr: string
+        token_symbol: string
+        token_amount: number
+        token: TokenItem
+    }
+    type_token_approval?: {
+        spender: string
+        spender_protocol_logo_url: string
+        spender_protocol_name: string
+        token_symbol: string
+        token_amount: number
+        is_infinity: boolean
+        token: TokenItem
+    }
+    type_cancel_token_approval?: {
+        spender: string
+        spender_protocol_logo_url: string
+        spender_protocol_name: string
+        token_symbol: string
+    }
+    type_cancel_tx?: any // TODO
+    type_deploy_contract?: any // TODO
+    is_gnosis?: boolean
+    gnosis?: ExplainTxResponse
+    type_cancel_single_nft_approval?: {
+        spender: string
+        spender_protocol_name: null
+        spender_protocol_logo_url: string
+        token_symbol: null
+        is_nft: boolean
+        nft: NFTItem
+    }
+    type_cancel_nft_collection_approval?: {
+        spender: string
+        spender_protocol_name: string
+        spender_protocol_logo_url: string
+        token_symbol: string
+        is_nft: boolean
+        nft_contract: NFTContractItem
+        token: TokenItem
+    }
+    type_nft_collection_approval?: {
+        spender: string
+        spender_protocol_name: string
+        spender_protocol_logo_url: string
+        token_symbol: string
+        is_nft: boolean
+        nft_contract: NFTContractItem
+        token: TokenItem
+        token_amount: number
+        is_infinity: boolean
+    }
+    type_single_nft_approval?: {
+        spender: string
+        spender_protocol_name: string
+        spender_protocol_logo_url: string
+        token_symbol: string
+        is_nft: boolean
+        nft: NFTItem
+        token: TokenItem
+        token_amount: number
+        is_infinity: boolean
+    }
+    type_nft_send?: {
+        spender: string
+        spender_protocol_name: null
+        spender_protocol_logo_url: string
+        token_symbol: string
+        token_amount: number
+        is_infinity: boolean
+        is_nft: boolean
+        nft: NFTItem
+    }
 }
 
 interface RPCResponse<T> {
-  result: T
-  id: number
-  jsonrpc: string
-  error?: {
-    code: number
-    message: string
-  }
+    result: T
+    id: number
+    jsonrpc: string
+    error?: {
+        code: number
+        message: string
+    }
 }
 
 interface GetTxResponse {
-  blockHash: string
-  blockNumber: string
-  from: string
-  gas: string
-  gasPrice: string
-  hash: string
-  input: string
-  nonce: string
-  to: string
-  transactionIndex: string
-  value: string
-  type: string
-  v: string
-  r: string
-  s: string
-  front_tx_count: number
-  code: 0 | -1 // 0: success, -1: failed
-  status: -1 | 0 | 1 // -1: failed, 0: pending, 1: success
-  gas_used: number
-  token: TokenItem
+    blockHash: string
+    blockNumber: string
+    from: string
+    gas: string
+    gasPrice: string
+    hash: string
+    input: string
+    nonce: string
+    to: string
+    transactionIndex: string
+    value: string
+    type: string
+    v: string
+    r: string
+    s: string
+    front_tx_count: number
+    code: 0 | -1 // 0: success, -1: failed
+    status: -1 | 0 | 1 // -1: failed, 0: pending, 1: success
+    gas_used: number
+    token: TokenItem
 }
 
 const maxRPS = 100
@@ -532,9 +532,9 @@ export class OpenApiService {
   }
 
   async getAddressBalance(address: string): Promise<{
-    confirmed: number
-    unconfirmed: number
-  }> {
+        confirmed: number
+        unconfirmed: number
+    }> {
     const { status, data } = await this.request.get("/address/balance", {
       params: {
         address
@@ -553,14 +553,14 @@ export class OpenApiService {
   }
 
   async getAddressRecentHistory(address: string): Promise<
-    {
-      txid: string
-      time: number
-      assets_transferred: { amount: string; symbol: string }[]
-      from_addrs: string[]
-      to_addrs: string[]
-    }[]
-  > {
+        {
+            txid: string
+            time: number
+            assets_transferred: { amount: string; symbol: string }[]
+            from_addrs: string[]
+            to_addrs: string[]
+        }[]
+    > {
     const { status, data } = await this.request.get("/address/recent-history", {
       params: {
         address

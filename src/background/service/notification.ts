@@ -6,16 +6,16 @@ import Events from "events"
 import preferenceService from "./preference"
 
 interface Approval {
-  data: {
-    state: number
-    params?: any
-    origin?: string
-    approvalComponent: string
-    requestDefer?: Promise<any>
-    approvalType: string
-  }
-  resolve(params?: any): void
-  reject(err: EthereumProviderError<any>): void
+    data: {
+        state: number
+        params?: any
+        origin?: string
+        approvalComponent: string
+        requestDefer?: Promise<any>
+        approvalType: string
+    }
+    resolve(params?: any): void
+    reject(err: EthereumProviderError<any>): void
 }
 
 // something need user approval in window
@@ -38,10 +38,7 @@ class NotificationService extends Events {
       const account = preferenceService.getCurrentAccount()!
       if (this.notifiWindowId && winId !== this.notifiWindowId) {
         if (process.env.NODE_ENV === "production") {
-          if (
-            (IS_CHROME && winId === chrome.windows.WINDOW_ID_NONE && IS_LINUX) ||
-            account?.type === KEYRING_TYPE.WalletConnectKeyring
-          ) {
+          if ((IS_CHROME && winId === chrome.windows.WINDOW_ID_NONE && IS_LINUX) || account?.type === KEYRING_TYPE.WalletConnectKeyring) {
             // Wired issue: When notification popuped, will focus to -1 first then focus on notification
             return
           }

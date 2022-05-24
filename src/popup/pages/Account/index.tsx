@@ -11,8 +11,8 @@ import AccountCreate from "./Create"
 import AccountImport from "./Import"
 
 export interface Account {
-  name: string
-  address: string
+    name: string
+    address: string
 }
 
 export type Status = "switch" | "add" | "import" | "create"
@@ -78,7 +78,7 @@ const SendIndex = () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            &nbsp;Back
+                        &nbsp;Back
           </div>
         </Button>
       </Footer>

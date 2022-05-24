@@ -6,9 +6,9 @@ const UI_TYPE = {
 }
 
 type UiTypeCheck = {
-  isTab: boolean
-  isNotification: boolean
-  isPop: boolean
+    isTab: boolean
+    isNotification: boolean
+    isPop: boolean
 }
 
 export const getUiType = (): UiTypeCheck => {

@@ -7,16 +7,12 @@ const persistStorage = (name: string, obj: object) => {
 }
 
 interface CreatePersistStoreParams<T> {
-  name: string
-  template?: T
-  fromStorage?: boolean
+    name: string
+    template?: T
+    fromStorage?: boolean
 }
 
-const createPersistStore = async <T extends object>({
-  name,
-  template = Object.create(null),
-  fromStorage = true
-}: CreatePersistStoreParams<T>): Promise<T> => {
+const createPersistStore = async <T extends object>({ name, template = Object.create(null), fromStorage = true }: CreatePersistStoreParams<T>): Promise<T> => {
   let tpl = template
 
   if (fromStorage) {

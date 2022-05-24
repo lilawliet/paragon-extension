@@ -10,42 +10,42 @@ import { TotalBalanceResponse } from "./openapi"
 const version = process.env.release || "0"
 
 export interface Account {
-  type: string
-  address: string
-  brandName: string
-  alianName?: string
-  displayBrandName?: string
-  index?: number
-  balance?: number
+    type: string
+    address: string
+    brandName: string
+    alianName?: string
+    displayBrandName?: string
+    index?: number
+    balance?: number
 }
 
 export interface ChainGas {
-  gasPrice?: number | null // custom cached gas price
-  gasLevel?: string | null // cached gasLevel
-  lastTimeSelect?: "gasLevel" | "gasPrice" // last time selection, 'gasLevel' | 'gasPrice'
+    gasPrice?: number | null // custom cached gas price
+    gasLevel?: string | null // cached gasLevel
+    lastTimeSelect?: "gasLevel" | "gasPrice" // last time selection, 'gasLevel' | 'gasPrice'
 }
 
 export interface GasCache {
-  [chainId: string]: ChainGas
+    [chainId: string]: ChainGas
 }
 
 export interface addedToken {
-  [address: string]: string[]
+    [address: string]: string[]
 }
 
 export interface PreferenceStore {
-  currentAccount: Account | undefined | null
-  externalLinkAck: boolean
-  balanceMap: {
-    [address: string]: TotalBalanceResponse
-  }
-  locale: string
-  watchAddressPreference: Record<string, number>
-  walletSavedList: []
-  alianNames?: Record<string, string>
-  initAlianNames: boolean
-  currentVersion: string
-  firstOpen: boolean
+    currentAccount: Account | undefined | null
+    externalLinkAck: boolean
+    balanceMap: {
+        [address: string]: TotalBalanceResponse
+    }
+    locale: string
+    watchAddressPreference: Record<string, number>
+    walletSavedList: []
+    alianNames?: Record<string, string>
+    initAlianNames: boolean
+    currentVersion: string
+    firstOpen: boolean
 }
 
 const SUPPORT_LOCALES = ["en"]
@@ -100,10 +100,10 @@ class PreferenceService {
   }
 
   /**
-   * If current account be hidden or deleted
-   * call this function to reset current account
-   * to the first address in address list
-   */
+     * If current account be hidden or deleted
+     * call this function to reset current account
+     * to the first address in address list
+     */
   resetCurrentAccount = async () => {
     const [account] = await keyringService.getAllVisibleAccountsArray()
     this.setCurrentAccount(account)

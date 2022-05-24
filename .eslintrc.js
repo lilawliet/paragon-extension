@@ -34,13 +34,13 @@ module.exports = {
     ///
     // 代码风格及规范限制.相关 //
     ///
-    "quotes": [2, "single"], // 单引号
-    "no-console": 0, // 不禁用console
-    "no-debugger": 2, // 禁用debugger
+    // "quotes": [2, "single"], // 单引号
+    "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // 不禁用console
+    "no-debugger": process.env.NODE_ENV === 'production' ? 2 : 0, // 禁用debugger
     "semi": 0, // 不强制使用分号
     "no-control-regex": 2, // 禁止在正则表达式中使用控制字符 ：new RegExp("\x1f")
     "linebreak-style": [0, "error", "windows"], // 强制使用一致的换行风格
-    "indent": ["error", 4, { "SwitchCase": 1 }], // 空格4个
+    "indent": ["error", 2, { "SwitchCase": 1 }], // 空格4个
     "array-bracket-spacing": [2, "never"], // 指定数组的元素之间要以空格隔开(,后面)
     "brace-style": [2, "1tbs", { "allowSingleLine": true }], // if while function 后面的{必须与if在同一行，java风格。
     "no-irregular-whitespace": 0, // 不规则的空白不允许
@@ -71,8 +71,10 @@ module.exports = {
     //
     // React.相关 //
     //
+    "react/display-name": 0, // 防止在React组件定义中丢失displayName
+    "react/react-in-jsx-scope": 0, // 使用JSX时防止丢失React
+    "react/no-unescaped-entities": 0,
     // "jsx-quotes": [2, "prefer-double"], // 强制在JSX属性（jsx-quotes）中一致使用双引号
-    // "react/display-name": 0, // 防止在React组件定义中丢失displayName
     // "react/forbid-prop-types": [2, { "forbid": ["any"] }], // 禁止某些propTypes
     // "react/jsx-boolean-value": 2, // 在JSX中强制布尔属性符号
     // "react/jsx-closing-bracket-location": 1, // 在JSX中验证右括号位置
@@ -95,7 +97,6 @@ module.exports = {
     // "react/no-unknown-property": 2, // 防止使用未知的DOM属性
     // "react/prefer-es6-class": 2, // 为React组件强制执行ES5或ES6类
     // "react/prop-types": 0, // 防止在React组件定义中丢失props验证
-    "react/react-in-jsx-scope": 2, // 使用JSX时防止丢失React
     // "react/self-closing-comp": 0, // 防止没有children的组件的额外结束标签
     // "react/sort-comp": 1, // 强制组件方法顺序
     // "no-extra-boolean-cast": 0, // 禁止不必要的bool转换

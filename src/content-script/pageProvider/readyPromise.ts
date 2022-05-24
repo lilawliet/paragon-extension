@@ -1,9 +1,9 @@
 class ReadyPromise {
   private _allCheck: boolean[] = []
   private _tasks: {
-    resolve(value: unknown): void
-    fn(): Promise<any>
-  }[] = []
+        resolve(value: unknown): void
+        fn(): Promise<any>
+    }[] = []
 
   constructor(count) {
     this._allCheck = [...Array(count)]

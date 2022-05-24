@@ -4,19 +4,19 @@ import { CHAINS_ENUM, INTERNAL_REQUEST_ORIGIN } from "consts"
 import { max } from "lodash"
 
 export interface ConnectedSite {
-  origin: string
-  icon: string
-  name: string
-  chain: CHAINS_ENUM
-  e?: number
-  isSigned: boolean
-  isTop: boolean
-  order?: number
-  isConnected: boolean
+    origin: string
+    icon: string
+    name: string
+    chain: CHAINS_ENUM
+    e?: number
+    isSigned: boolean
+    isTop: boolean
+    order?: number
+    isConnected: boolean
 }
 
 export type PermissionStore = {
-  dumpCache: ReadonlyArray<LRU.Entry<string, ConnectedSite>>
+    dumpCache: ReadonlyArray<LRU.Entry<string, ConnectedSite>>
 }
 
 class PermissionService {

@@ -43,17 +43,7 @@ export class WalletController extends BaseController {
   resolveApproval = notificationService.resolveApproval
   rejectApproval = notificationService.rejectApproval
 
-  transferNFT = async ({
-    to,
-    contractId,
-    tokenId,
-    amount
-  }: {
-    to: string
-    contractId: string
-    tokenId: string
-    amount?: number
-  }) => {
+  transferNFT = async ({ to, contractId, tokenId, amount }: { to: string; contractId: string; tokenId: string; amount?: number }) => {
     const account = await preferenceService.getCurrentAccount()
     if (!account) throw new Error("no current account")
     throw new Error("not implemented")
@@ -105,9 +95,7 @@ export class WalletController extends BaseController {
     }
     if (contacts.length !== 0 && keyrings.length !== 0) {
       const allAccounts = keyrings.map((item) => item.accounts).flat()
-      const sameAddressList = contacts.filter((item) =>
-        allAccounts.find((contact) => isSameAddress(contact.address, item.address))
-      )
+      const sameAddressList = contacts.filter((item) => allAccounts.find((contact) => isSameAddress(contact.address, item.address)))
       if (sameAddressList.length > 0) {
         sameAddressList.forEach((item) => this.updateAlianName(item.address, item.name))
       }
@@ -313,9 +301,7 @@ export class WalletController extends BaseController {
     const keyringType = KEYRING_CLASS.WALLETCONNECT
     const keyring: WalletConnectKeyring = this._getKeyringByType(keyringType)
     if (keyring) {
-      const target = keyring.accounts.find(
-        (account) => account.address.toLowerCase() === address.toLowerCase() && brandName === account.brandName
-      )
+      const target = keyring.accounts.find((account) => account.address.toLowerCase() === address.toLowerCase() && brandName === account.brandName)
 
       if (target) return target.bridge
 
@@ -536,11 +522,7 @@ export class WalletController extends BaseController {
   }
 
   getTypedAccounts = async (type) => {
-    return Promise.all(
-      keyringService.keyrings
-        .filter((keyring) => !type || keyring.type === type)
-        .map((keyring) => keyringService.displayForKeyring(keyring))
-    )
+    return Promise.all(keyringService.keyrings.filter((keyring) => !type || keyring.type === type).map((keyring) => keyringService.displayForKeyring(keyring)))
   }
 
   getAllVisibleAccounts: () => Promise<DisplayedKeryring[]> = async () => {

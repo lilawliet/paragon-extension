@@ -10,25 +10,21 @@ declare const channelName
 
 const log = (event, ...args) => {
   if (process.env.NODE_ENV !== "production") {
-    console.log(
-      `%c [rabby] (${new Date().toTimeString().substr(0, 8)}) ${event}`,
-      "font-weight: bold; background-color: #7d6ef9; color: white;",
-      ...args
-    )
+    console.log(`%c [rabby] (${new Date().toTimeString().substr(0, 8)}) ${event}`, "font-weight: bold; background-color: #7d6ef9; color: white;", ...args)
   }
 }
 
 export interface Interceptor {
-  onRequest?: (data: any) => any
-  onResponse?: (res: any, data: any) => any
+    onRequest?: (data: any) => any
+    onResponse?: (res: any, data: any) => any
 }
 
 interface StateProvider {
-  accounts: string[] | null
-  isConnected: boolean
-  isUnlocked: boolean
-  initialized: boolean
-  isPermanentlyDisconnected: boolean
+    accounts: string[] | null
+    isConnected: boolean
+    isUnlocked: boolean
+    initialized: boolean
+    isPermanentlyDisconnected: boolean
 }
 
 export class ParagonProvider extends EventEmitter {
@@ -73,9 +69,7 @@ export class ParagonProvider extends EventEmitter {
     this._bcm.connect().on("message", this._handleBackgroundMessage)
     domReadyCall(() => {
       const origin = window.top?.location.origin
-      const icon =
-        ($('head > link[rel~="icon"]') as HTMLLinkElement)?.href ||
-        ($('head > meta[itemprop="image"]') as HTMLMetaElement)?.content
+      const icon = ($('head > link[rel~="icon"]') as HTMLLinkElement)?.href || ($('head > meta[itemprop="image"]') as HTMLMetaElement)?.content
 
       const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin
 
@@ -168,9 +162,9 @@ export class ParagonProvider extends EventEmitter {
 }
 
 declare global {
-  interface Window {
-    paragon: ParagonProvider
-  }
+    interface Window {
+        paragon: ParagonProvider
+    }
 }
 
 const provider = new ParagonProvider()

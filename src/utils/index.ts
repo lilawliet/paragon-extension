@@ -10,7 +10,7 @@ const Message = {
 }
 
 declare global {
-  const langLocales: Record<string, Record<"message", string>>
+    const langLocales: Record<string, Record<"message", string>>
 }
 
 const t = (name) => browser.i18n.getMessage(name)

@@ -1,15 +1,15 @@
 import { createPersistStore } from "background/utils"
 
 export interface ContactBookItem {
-  name: string
-  address: string
-  isAlias: boolean
-  isContact: boolean
+    name: string
+    address: string
+    isAlias: boolean
+    isContact: boolean
 }
 
 export interface UIContactBookItem {
-  name: string
-  address: string
+    name: string
+    address: string
 }
 
 export type ContactBookStore = Record<string, ContactBookItem | undefined>
@@ -92,9 +92,9 @@ class ContactBook {
     const key = address.toLowerCase()
     if (!this.store[key]) return
     if (this.store[key]!.isContact) {
-      this.store[key]! = Object.assign({}, this.store[key], {
-        isAlias: false
-      })
+            this.store[key]! = Object.assign({}, this.store[key], {
+              isAlias: false
+            })
     } else {
       delete this.store[key]
     }

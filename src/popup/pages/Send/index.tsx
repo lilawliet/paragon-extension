@@ -11,9 +11,9 @@ import Sending from "./Sending"
 import Success from "./Success"
 
 export interface Transaction {
-  time: number
-  address: string
-  amount: string
+    time: number
+    address: string
+    amount: string
 }
 
 export type Status = "create" | "confirm" | "sending" | "success" | "error"
@@ -70,7 +70,7 @@ const SendIndex = () => {
           >
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
-              &nbsp;Back
+                            &nbsp;Back
             </div>
           </Button>
         </Footer>

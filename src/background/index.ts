@@ -8,14 +8,7 @@ import "reflect-metadata"
 import { Message } from "utils"
 import { browser } from "webextension-polyfill-ts"
 import { walletController } from "./controller"
-import {
-  contactBookService,
-  keyringService,
-  openapiService,
-  pageStateCacheService,
-  permissionService,
-  preferenceService
-} from "./service"
+import { contactBookService, keyringService, openapiService, pageStateCacheService, permissionService, preferenceService } from "./service"
 import i18n from "./service/i18n"
 import rpcCache from "./utils/rpcCache"
 import { storage } from "./webapi"
@@ -118,9 +111,9 @@ browser.runtime.onConnect.addListener((port) => {
 })
 
 declare global {
-  interface Window {
-    wallet: WalletController
-  }
+    interface Window {
+        wallet: WalletController
+    }
 }
 
 // for popup operate

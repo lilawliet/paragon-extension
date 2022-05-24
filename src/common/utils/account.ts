@@ -2,22 +2,22 @@ import { createContext, useContext } from "react"
 import { Object } from "ts-toolbelt"
 
 export type AccountController = Object.Merge<
-  {
-    openapi: {
-      [key: string]: (...params: any) => Promise<any>
-    }
-  },
-  Record<string, (...params: any) => Promise<any>>
+    {
+        openapi: {
+            [key: string]: (...params: any) => Promise<any>
+        }
+    },
+    Record<string, (...params: any) => Promise<any>>
 >
 
 const AccountContext = createContext<{
-  account: AccountController
+    account: AccountController
 } | null>(null)
 
 const useAccount = () => {
   const { account } = useContext(AccountContext) as {
-    account: AccountController
-  }
+        account: AccountController
+    }
 
   return account
 }

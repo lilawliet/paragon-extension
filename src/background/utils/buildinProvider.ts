@@ -2,11 +2,11 @@
 import { EventEmitter } from "events"
 
 interface StateProvider {
-  accounts: string[] | null
-  isConnected: boolean
-  isUnlocked: boolean
-  initialized: boolean
-  isPermanentlyDisconnected: boolean
+    accounts: string[] | null
+    isConnected: boolean
+    isUnlocked: boolean
+    initialized: boolean
+    isPermanentlyDisconnected: boolean
 }
 
 export class EthereumProvider extends EventEmitter {
@@ -16,9 +16,9 @@ export class EthereumProvider extends EventEmitter {
   chainId: string | null = null
   selectedAddress: string | null = null
   /**
-   * The network ID of the currently connected Ethereum chain.
-   * @deprecated
-   */
+     * The network ID of the currently connected Ethereum chain.
+     * @deprecated
+     */
   networkVersion: string | null = null
   isRabby = true
   isMetaMask = true

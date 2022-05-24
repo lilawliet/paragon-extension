@@ -6,9 +6,9 @@ import { useEffect, useState } from "react"
 import { Transaction, Status } from "./index"
 
 interface Props {
-  transaction: Transaction
-  setTransaction(transaction: Transaction): void
-  setStatus(status: Status): void
+    transaction: Transaction
+    setTransaction(transaction: Transaction): void
+    setStatus(status: Status): void
 }
 
 export default ({ transaction, setTransaction, setStatus }: Props) => {
