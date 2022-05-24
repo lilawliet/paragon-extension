@@ -1,12 +1,31 @@
-import { Button, Checkbox } from "antd"
-import { Link } from "react-router-dom"
+import { Button, Checkbox, message } from "antd"
+import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import React, { useState } from "react"
+import { useState } from "react"
 import { CheckboxChangeEvent } from "antd/lib/checkbox"
+import { useWallet, useWalletRequest } from "@/ui/utils"
+import { KEYRING_TYPE } from "@/constant"
 
 const CreateRecovery = () => {
   const { t } = useTranslation()
+  const wallet = useWallet();
+  const navigate = useNavigate()
 
+  const [run, loading] = useWalletRequest(wallet.generateKeyringWithMnemonic, {
+    onSuccess(stashKeyringId) {
+      navigate('/dashboard', {
+        state: {
+          keyring: KEYRING_TYPE.HdKeyring,
+          keyringId: stashKeyringId,
+          isMnemonics: true,
+        }
+      })
+    },
+    onError(err) {
+      message.error(err)
+    },
+  });
+  
   const [checked, setChecked] = useState(false)
 
   const onChange = (e: CheckboxChangeEvent) => {

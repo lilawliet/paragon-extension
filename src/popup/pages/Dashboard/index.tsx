@@ -9,10 +9,22 @@ import Settings from "./Settings"
 
 import { getPanel } from "@/common/storages/stores/popup/slice"
 import { useAppDispatch, useAppSelector } from "@/common/storages/hooks"
+import { useLocation } from "react-router-dom"
+import { getUiType } from "@/ui/utils"
+
+interface State {
+  keyring: string;
+  isMnemonics?: boolean;
+  isWebHID?: boolean;
+  path?: string;
+  keyringId?: number | null;
+  ledgerLive?: boolean;
+}
 
 const Dashboard = () => {
   const { t } = useTranslation()
   const panel = useAppSelector(getPanel)
+  const { state } = useLocation()
 
   return (
     <Layout className="h-full">

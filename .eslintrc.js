@@ -34,7 +34,7 @@ module.exports = {
     ///
     // 代码风格及规范限制.相关 //
     ///
-    // "quotes": [2, "single"], // 单引号
+    "quotes": [2, "single"], // 单引号
     "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // 不禁用console
     "no-debugger": process.env.NODE_ENV === 'production' ? 2 : 0, // 禁用debugger
     "semi": 0, // 不强制使用分号

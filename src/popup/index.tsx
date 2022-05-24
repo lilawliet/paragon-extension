@@ -51,9 +51,9 @@ function Popup() {
   return (
     <WalletProvider wallet={wallet}>
       <Provider store={store}>
-            <div className="h-200 w-125 bg-hard-black">
-              <AsyncMainRoute />
-            </div>
+        <div className="h-200 w-125 bg-hard-black">
+          <AsyncMainRoute />
+        </div>
       </Provider>
     </WalletProvider>
   )

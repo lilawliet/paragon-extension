@@ -23,7 +23,7 @@ export const useApproval = () => {
       return;
     }
     setTimeout(() => {
-        navigate('/');
+      navigate('/');
     });
   };
 
@@ -33,7 +33,7 @@ export const useApproval = () => {
       await wallet.rejectApproval(err, stay, isInternal);
     }
     if (!stay) {
-        navigate('/');
+      navigate('/');
     }
   };
 
