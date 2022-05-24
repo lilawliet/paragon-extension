@@ -1,28 +1,28 @@
-import { createContext, useContext } from 'react';
-import { Object } from 'ts-toolbelt';
+import { createContext, useContext } from "react"
+import { Object } from "ts-toolbelt"
 
 export type AccountController = Object.Merge<
   {
     openapi: {
-      [key: string]: (...params: any) => Promise<any>;
-    };
+      [key: string]: (...params: any) => Promise<any>
+    }
   },
   Record<string, (...params: any) => Promise<any>>
->;
+>
 
 const AccountContext = createContext<{
-  account: AccountController;
-} | null>(null);
+  account: AccountController
+} | null>(null)
 
 const useAccount = () => {
   const { account } = useContext(AccountContext) as {
-    account: AccountController;
-  };
+    account: AccountController
+  }
 
-  return account;
-};
+  return account
+}
 
-export { AccountContext, useAccount };
+export { AccountContext, useAccount }
 
 // const AccountProvider = ({
 //   children,

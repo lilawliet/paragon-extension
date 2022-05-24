@@ -1,3 +1,3 @@
-const List = () => (<></>)
+const List = () => <></>
 
 export default List
