@@ -1,101 +1,101 @@
 /// fork from https://github.com/MetaMask/KeyringController/blob/master/index.js
 
-import eventBus from "@/eventBus";
-import { ObservableStore } from "@metamask/obs-store";
-import HdKeyring from "@rabby-wallet/eth-hd-keyring";
-import SimpleKeyring from "@rabby-wallet/eth-simple-keyring";
-import WalletConnectKeyring from "@rabby-wallet/eth-walletconnect-keyring";
-import WatchKeyring from "@rabby-wallet/eth-watch-keyring";
+import eventBus from "@/eventBus"
+import { ObservableStore } from "@metamask/obs-store"
+import HdKeyring from "@rabby-wallet/eth-hd-keyring"
+import SimpleKeyring from "@rabby-wallet/eth-simple-keyring"
+import WalletConnectKeyring from "@rabby-wallet/eth-walletconnect-keyring"
+import WatchKeyring from "@rabby-wallet/eth-watch-keyring"
 import {
   hasWalletConnectPageStateCache,
   isSameAddress,
   normalizeAddress,
-  setPageStateCacheWhenPopupClose,
-} from "background/utils";
-import * as bip39 from "bip39";
-import encryptor from "browser-passworder";
-import { EVENTS, KEYRING_TYPE } from "consts";
-import * as ethUtil from "ethereumjs-util";
-import { EventEmitter } from "events";
-import log from "loglevel";
-import i18n from "../i18n";
-import preference from "../preference";
-import DisplayKeyring from "./display";
+  setPageStateCacheWhenPopupClose
+} from "background/utils"
+import * as bip39 from "bip39"
+import encryptor from "browser-passworder"
+import { EVENTS, KEYRING_TYPE } from "consts"
+import * as ethUtil from "ethereumjs-util"
+import { EventEmitter } from "events"
+import log from "loglevel"
+import i18n from "../i18n"
+import preference from "../preference"
+import DisplayKeyring from "./display"
 
 export const KEYRING_SDK_TYPES = {
   SimpleKeyring,
   HdKeyring,
   WatchKeyring,
-  WalletConnectKeyring,
-};
+  WalletConnectKeyring
+}
 
 export const KEYRING_CLASS = {
   PRIVATE_KEY: SimpleKeyring.type,
   MNEMONIC: HdKeyring.type,
   WATCH: WatchKeyring.type,
-  WALLETCONNECT: WalletConnectKeyring.type,
-};
+  WALLETCONNECT: WalletConnectKeyring.type
+}
 
 interface MemStoreState {
-  isUnlocked: boolean;
-  keyringTypes: any[];
-  keyrings: any[];
-  preMnemonics: string;
+  isUnlocked: boolean
+  keyringTypes: any[]
+  keyrings: any[]
+  preMnemonics: string
 }
 
 export interface DisplayedKeryring {
-  type: string;
+  type: string
   accounts: {
-    address: string;
-    brandName: string;
-    type?: string;
-    keyring?: DisplayKeyring;
-    alianName?: string;
-  }[];
-  keyring: DisplayKeyring;
+    address: string
+    brandName: string
+    type?: string
+    keyring?: DisplayKeyring
+    alianName?: string
+  }[]
+  keyring: DisplayKeyring
 }
 
 class KeyringService extends EventEmitter {
   //
   // PUBLIC METHODS
   //
-  keyringTypes: any[];
-  store!: ObservableStore<any>;
-  memStore: ObservableStore<MemStoreState>;
-  keyrings: any[];
-  encryptor: typeof encryptor = encryptor;
-  password: string | null = null;
+  keyringTypes: any[]
+  store!: ObservableStore<any>
+  memStore: ObservableStore<MemStoreState>
+  keyrings: any[]
+  encryptor: typeof encryptor = encryptor
+  password: string | null = null
 
   constructor() {
-    super();
-    this.keyringTypes = Object.values(KEYRING_SDK_TYPES);
+    super()
+    this.keyringTypes = Object.values(KEYRING_SDK_TYPES)
     this.memStore = new ObservableStore({
       isUnlocked: false,
       keyringTypes: this.keyringTypes.map((krt) => krt.type),
       keyrings: [],
-      preMnemonics: "",
-    });
+      preMnemonics: ""
+    })
 
-    this.keyrings = [];
+    this.keyrings = []
   }
 
   loadStore(initState) {
-    this.store = new ObservableStore(initState);
+    this.store = new ObservableStore(initState)
   }
 
   async boot(password: string) {
-    this.password = password;
-    const encryptBooted = await this.encryptor.encrypt(password, "true");
-    this.store.updateState({ booted: encryptBooted });
-    this.memStore.updateState({ isUnlocked: true });
+    this.password = password
+    const encryptBooted = await this.encryptor.encrypt(password, "true")
+    this.store.updateState({ booted: encryptBooted })
+    this.memStore.updateState({ isUnlocked: true })
   }
 
   isBooted() {
-    return !!this.store.getState().booted;
+    return !!this.store.getState().booted
   }
 
   hasVault() {
-    return !!this.store.getState().vault;
+    return !!this.store.getState().vault
   }
 
   /**
@@ -111,8 +111,8 @@ class KeyringService extends EventEmitter {
    * @returns {Object} The controller state.
    */
   fullUpdate(): MemStoreState {
-    this.emit("update", this.memStore.getState());
-    return this.memStore.getState();
+    this.emit("update", this.memStore.getState())
+    return this.memStore.getState()
   }
 
   /**
@@ -123,57 +123,54 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
   importPrivateKey(privateKey: string): Promise<any> {
-    let keyring;
+    let keyring
 
     return this.persistAllKeyrings()
       .then(this.addNewKeyring.bind(this, "Simple Key Pair", [privateKey]))
       .then((_keyring) => {
-        keyring = _keyring;
-        return this.persistAllKeyrings.bind(this);
+        keyring = _keyring
+        return this.persistAllKeyrings.bind(this)
       })
       .then(this.setUnlocked.bind(this))
       .then(this.fullUpdate.bind(this))
-      .then(() => keyring);
+      .then(() => keyring)
   }
 
   private generateMnemonic(): string {
-    return bip39.generateMnemonic();
+    return bip39.generateMnemonic()
   }
 
   async generatePreMnemonic(): Promise<string> {
     if (!this.password) {
-      throw new Error(i18n.t("you need to unlock wallet first"));
+      throw new Error(i18n.t("you need to unlock wallet first"))
     }
-    const mnemonic = this.generateMnemonic();
-    const preMnemonics = await this.encryptor.encrypt(this.password, mnemonic);
-    this.memStore.updateState({ preMnemonics });
+    const mnemonic = this.generateMnemonic()
+    const preMnemonics = await this.encryptor.encrypt(this.password, mnemonic)
+    this.memStore.updateState({ preMnemonics })
 
-    return mnemonic;
+    return mnemonic
   }
 
   getKeyringByType(type: string) {
-    const keyring = this.keyrings.find((keyring) => keyring.type === type);
+    const keyring = this.keyrings.find((keyring) => keyring.type === type)
 
-    return keyring;
+    return keyring
   }
 
   removePreMnemonics() {
-    this.memStore.updateState({ preMnemonics: "" });
+    this.memStore.updateState({ preMnemonics: "" })
   }
 
   async getPreMnemonics(): Promise<any> {
     if (!this.memStore.getState().preMnemonics) {
-      return "";
+      return ""
     }
 
     if (!this.password) {
-      throw new Error(i18n.t("you need to unlock wallet first"));
+      throw new Error(i18n.t("you need to unlock wallet first"))
     }
 
-    return await this.encryptor.decrypt(
-      this.password,
-      this.memStore.getState().preMnemonics
-    );
+    return await this.encryptor.decrypt(this.password, this.memStore.getState().preMnemonics)
   }
 
   /**
@@ -188,48 +185,48 @@ class KeyringService extends EventEmitter {
    */
   createKeyringWithMnemonics(seed: string): Promise<any> {
     if (!bip39.validateMnemonic(seed)) {
-      return Promise.reject(new Error(i18n.t("mnemonic phrase is invalid")));
+      return Promise.reject(new Error(i18n.t("mnemonic phrase is invalid")))
     }
 
-    let keyring;
+    let keyring
     return this.persistAllKeyrings()
       .then(() => {
         return this.addNewKeyring("HD Key Tree", {
           mnemonic: seed,
-          activeIndexes: [0],
-        });
+          activeIndexes: [0]
+        })
       })
       .then((firstKeyring) => {
-        keyring = firstKeyring;
-        return firstKeyring.getAccounts();
+        keyring = firstKeyring
+        return firstKeyring.getAccounts()
       })
       .then(([firstAccount]) => {
         if (!firstAccount) {
-          throw new Error("KeyringController - First Account not found.");
+          throw new Error("KeyringController - First Account not found.")
         }
-        return null;
+        return null
       })
       .then(this.persistAllKeyrings.bind(this))
       .then(this.setUnlocked.bind(this))
       .then(this.fullUpdate.bind(this))
-      .then(() => keyring);
+      .then(() => keyring)
   }
 
   addKeyring(keyring) {
     return keyring
       .getAccounts()
       .then((accounts) => {
-        return this.checkForDuplicate(keyring.type, accounts);
+        return this.checkForDuplicate(keyring.type, accounts)
       })
       .then(() => {
-        this.keyrings.push(keyring);
-        return this.persistAllKeyrings();
+        this.keyrings.push(keyring)
+        return this.persistAllKeyrings()
       })
       .then(() => this._updateMemStoreKeyrings())
       .then(() => this.fullUpdate())
       .then(() => {
-        return keyring;
-      });
+        return keyring
+      })
   }
 
   /**
@@ -241,13 +238,13 @@ class KeyringService extends EventEmitter {
    */
   async setLocked(): Promise<MemStoreState> {
     // set locked
-    this.password = null;
-    this.memStore.updateState({ isUnlocked: false });
+    this.password = null
+    this.memStore.updateState({ isUnlocked: false })
     // remove keyrings
-    this.keyrings = [];
-    await this._updateMemStoreKeyrings();
-    this.emit("lock");
-    return this.fullUpdate();
+    this.keyrings = []
+    await this._updateMemStoreKeyrings()
+    this.emit("lock")
+    return this.fullUpdate()
   }
 
   /**
@@ -264,17 +261,17 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
   async submitPassword(password: string): Promise<MemStoreState> {
-    await this.verifyPassword(password);
-    this.password = password;
+    await this.verifyPassword(password)
+    this.password = password
     try {
-      this.keyrings = await this.unlockKeyrings(password);
+      this.keyrings = await this.unlockKeyrings(password)
     } catch {
       //
     } finally {
-      this.setUnlocked();
+      this.setUnlocked()
     }
 
-    return this.fullUpdate();
+    return this.fullUpdate()
   }
 
   /**
@@ -286,11 +283,11 @@ class KeyringService extends EventEmitter {
    * @param {string} password
    */
   async verifyPassword(password: string): Promise<void> {
-    const encryptedBooted = this.store.getState().booted;
+    const encryptedBooted = this.store.getState().booted
     if (!encryptedBooted) {
-      throw new Error(i18n.t("Cannot unlock without a previous vault"));
+      throw new Error(i18n.t("Cannot unlock without a previous vault"))
     }
-    await this.encryptor.decrypt(password, encryptedBooted);
+    await this.encryptor.decrypt(password, encryptedBooted)
   }
 
   /**
@@ -307,9 +304,9 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Keyring>} The new keyring.
    */
   addNewKeyring(type: string, opts?: unknown): Promise<any> {
-    const Keyring = this.getKeyringClassForType(type);
-    const keyring = new Keyring(opts);
-    return this.addKeyring(keyring);
+    const Keyring = this.getKeyringClassForType(type)
+    const keyring = new Keyring(opts)
+    return this.addKeyring(keyring)
   }
 
   /**
@@ -319,7 +316,7 @@ class KeyringService extends EventEmitter {
    * (usually after removing the last / only account) from a keyring
    */
   async removeEmptyKeyrings(): Promise<undefined> {
-    const validKeyrings: unknown[] = [];
+    const validKeyrings: unknown[] = []
 
     // Since getAccounts returns a Promise
     // We need to wait to hear back form each keyring
@@ -327,14 +324,14 @@ class KeyringService extends EventEmitter {
 
     await Promise.all(
       this.keyrings.map(async (keyring) => {
-        const accounts = await keyring.getAccounts();
+        const accounts = await keyring.getAccounts()
         if (accounts.length > 0) {
-          validKeyrings.push(keyring);
+          validKeyrings.push(keyring)
         }
       })
-    );
-    this.keyrings = validKeyrings;
-    return;
+    )
+    this.keyrings = validKeyrings
+    return
   }
 
   /**
@@ -347,30 +344,19 @@ class KeyringService extends EventEmitter {
    * @param {Array<string>} newAccountArray - Array of new accounts.
    * @returns {Promise<Array<string>>} The account, if no duplicate is found.
    */
-  async checkForDuplicate(
-    type: string,
-    newAccountArray: string[]
-  ): Promise<string[]> {
-    const keyrings = this.getKeyringsByType(type);
-    const _accounts = await Promise.all(
-      keyrings.map((keyring) => keyring.getAccounts())
-    );
+  async checkForDuplicate(type: string, newAccountArray: string[]): Promise<string[]> {
+    const keyrings = this.getKeyringsByType(type)
+    const _accounts = await Promise.all(keyrings.map((keyring) => keyring.getAccounts()))
 
     const accounts: string[] = _accounts
       .reduce((m, n) => m.concat(n), [] as string[])
-      .map((address) => normalizeAddress(address).toLowerCase());
+      .map((address) => normalizeAddress(address).toLowerCase())
 
     const isIncluded = newAccountArray.some((account) => {
-      return accounts.find(
-        (key) =>
-          key === account.toLowerCase() ||
-          key === ethUtil.stripHexPrefix(account)
-      );
-    });
+      return accounts.find((key) => key === account.toLowerCase() || key === ethUtil.stripHexPrefix(account))
+    })
 
-    return isIncluded
-      ? Promise.reject(new Error(i18n.t("duplicateAccount")))
-      : Promise.resolve(newAccountArray);
+    return isIncluded ? Promise.reject(new Error(i18n.t("duplicateAccount"))) : Promise.resolve(newAccountArray)
   }
 
   /**
@@ -383,19 +369,19 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
   addNewAccount(selectedKeyring: any): Promise<string[]> {
-    let _accounts;
+    let _accounts
     return selectedKeyring
       .addAccounts(1)
       .then((accounts) => {
         accounts.forEach((hexAccount) => {
-          this.emit("newAccount", hexAccount);
-        });
-        _accounts = accounts;
+          this.emit("newAccount", hexAccount)
+        })
+        _accounts = accounts
       })
       .then(this.persistAllKeyrings.bind(this))
       .then(this._updateMemStoreKeyrings.bind(this))
       .then(this.fullUpdate.bind(this))
-      .then(() => _accounts);
+      .then(() => _accounts)
   }
 
   /**
@@ -412,10 +398,10 @@ class KeyringService extends EventEmitter {
   exportAccount(address: string): Promise<string> {
     try {
       return this.getKeyringForAccount(address).then((keyring) => {
-        return keyring.exportAccount(normalizeAddress(address));
-      });
+        return keyring.exportAccount(normalizeAddress(address))
+      })
     } catch (e) {
-      return Promise.reject(e);
+      return Promise.reject(e)
     }
   }
 
@@ -434,29 +420,25 @@ class KeyringService extends EventEmitter {
       .then((keyring) => {
         // Not all the keyrings support this, so we have to check
         if (typeof keyring.removeAccount === "function") {
-          keyring.removeAccount(address, brand);
-          this.emit("removedAccount", address);
-          return keyring.getAccounts();
+          keyring.removeAccount(address, brand)
+          this.emit("removedAccount", address)
+          return keyring.getAccounts()
         }
-        return Promise.reject(
-          new Error(
-            `Keyring ${keyring.type} doesn't support account removal operations`
-          )
-        );
+        return Promise.reject(new Error(`Keyring ${keyring.type} doesn't support account removal operations`))
       })
       .then((accounts) => {
         // Check if this was the last/only account
         if (accounts.length === 0) {
-          return this.removeEmptyKeyrings();
+          return this.removeEmptyKeyrings()
         }
-        return undefined;
+        return undefined
       })
       .then(this.persistAllKeyrings.bind(this))
       .then(this._updateMemStoreKeyrings.bind(this))
       .then(this.fullUpdate.bind(this))
       .catch((e) => {
-        return Promise.reject(e);
-      });
+        return Promise.reject(e)
+      })
   }
 
   //
@@ -474,8 +456,8 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} The signed transactio object.
    */
   signTransaction(keyring, ethTx, _fromAddress, opts = {}) {
-    const fromAddress = normalizeAddress(_fromAddress);
-    return keyring.signTransaction(fromAddress, ethTx, opts);
+    const fromAddress = normalizeAddress(_fromAddress)
+    return keyring.signTransaction(fromAddress, ethTx, opts)
   }
 
   /**
@@ -487,10 +469,10 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Buffer>} The raw signature.
    */
   signMessage(msgParams, opts = {}) {
-    const address = normalizeAddress(msgParams.from);
+    const address = normalizeAddress(msgParams.from)
     return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.signMessage(address, msgParams.data, opts);
-    });
+      return keyring.signMessage(address, msgParams.data, opts)
+    })
   }
 
   /**
@@ -503,8 +485,8 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Buffer>} The raw signature.
    */
   signPersonalMessage(keyring, msgParams, opts = {}) {
-    const address = normalizeAddress(msgParams.from);
-    return keyring.signPersonalMessage(address, msgParams.data, opts);
+    const address = normalizeAddress(msgParams.from)
+    return keyring.signPersonalMessage(address, msgParams.data, opts)
   }
 
   /**
@@ -515,8 +497,8 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Buffer>} The raw signature.
    */
   signTypedMessage(keyring, msgParams, opts = { version: "V1" }) {
-    const address = normalizeAddress(msgParams.from);
-    return keyring.signTypedData(address, msgParams.data, opts);
+    const address = normalizeAddress(msgParams.from)
+    return keyring.signTypedData(address, msgParams.data, opts)
   }
 
   /**
@@ -528,10 +510,10 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Buffer>} The public key.
    */
   getEncryptionPublicKey(_address, opts = {}) {
-    const address = normalizeAddress(_address);
+    const address = normalizeAddress(_address)
     return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.getEncryptionPublicKey(address, opts);
-    });
+      return keyring.getEncryptionPublicKey(address, opts)
+    })
   }
 
   /**
@@ -543,10 +525,10 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Buffer>} The raw decryption result.
    */
   decryptMessage(msgParams, opts = {}) {
-    const address = normalizeAddress(msgParams.from);
+    const address = normalizeAddress(msgParams.from)
     return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.decryptMessage(address, msgParams.data, opts);
-    });
+      return keyring.decryptMessage(address, msgParams.data, opts)
+    })
   }
 
   /**
@@ -557,9 +539,9 @@ class KeyringService extends EventEmitter {
    * @returns {string} The app key address.
    */
   async getAppKeyAddress(_address, origin) {
-    const address = normalizeAddress(_address);
-    const keyring = await this.getKeyringForAccount(address);
-    return keyring.getAppKeyAddress(address, origin);
+    const address = normalizeAddress(_address)
+    const keyring = await this.getKeyringForAccount(address)
+    return keyring.getAppKeyAddress(address, origin)
   }
 
   /**
@@ -570,14 +552,12 @@ class KeyringService extends EventEmitter {
    * @returns {string} The app key private key.
    */
   async exportAppKeyForAddress(_address, origin) {
-    const address = normalizeAddress(_address);
-    const keyring = await this.getKeyringForAccount(address);
+    const address = normalizeAddress(_address)
+    const keyring = await this.getKeyringForAccount(address)
     if (!("exportAccount" in keyring)) {
-      throw new Error(
-        `The keyring for address ${_address} does not support exporting.`
-      );
+      throw new Error(`The keyring for address ${_address} does not support exporting.`)
     }
-    return keyring.exportAccount(address, { withAppKeyOrigin: origin });
+    return keyring.exportAccount(address, { withAppKeyOrigin: origin })
   }
 
   //
@@ -597,19 +577,19 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<void>} - A promise that resovles if the operation was successful.
    */
   createFirstKeyTree() {
-    this.clearKeyrings();
+    this.clearKeyrings()
     return this.addNewKeyring("HD Key Tree", { activeIndexes: [0] })
       .then((keyring) => {
-        return keyring.getAccounts();
+        return keyring.getAccounts()
       })
       .then(([firstAccount]) => {
         if (!firstAccount) {
-          throw new Error("KeyringController - No account found on keychain.");
+          throw new Error("KeyringController - No account found on keychain.")
         }
-        const hexAccount = normalizeAddress(firstAccount);
-        this.emit("newVault", hexAccount);
-        return null;
-      });
+        const hexAccount = normalizeAddress(firstAccount)
+        this.emit("newVault", hexAccount)
+        return null
+      })
   }
 
   /**
@@ -625,34 +605,27 @@ class KeyringService extends EventEmitter {
    */
   persistAllKeyrings(): Promise<boolean> {
     if (!this.password || typeof this.password !== "string") {
-      return Promise.reject(
-        new Error("KeyringController - password is not a string")
-      );
+      return Promise.reject(new Error("KeyringController - password is not a string"))
     }
 
     return Promise.all(
       this.keyrings.map((keyring) => {
-        return Promise.all([keyring.type, keyring.serialize()]).then(
-          (serializedKeyringArray) => {
-            // Label the output values on each serialized Keyring:
-            return {
-              type: serializedKeyringArray[0],
-              data: serializedKeyringArray[1],
-            };
+        return Promise.all([keyring.type, keyring.serialize()]).then((serializedKeyringArray) => {
+          // Label the output values on each serialized Keyring:
+          return {
+            type: serializedKeyringArray[0],
+            data: serializedKeyringArray[1]
           }
-        );
+        })
       })
     )
       .then((serializedKeyrings) => {
-        return this.encryptor.encrypt(
-          this.password as string,
-          serializedKeyrings as unknown as Buffer
-        );
+        return this.encryptor.encrypt(this.password as string, serializedKeyrings as unknown as Buffer)
       })
       .then((encryptedString) => {
-        this.store.updateState({ vault: encryptedString });
-        return true;
-      });
+        this.store.updateState({ vault: encryptedString })
+        return true
+      })
   }
 
   /**
@@ -665,17 +638,17 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Array<Keyring>>} The keyrings.
    */
   async unlockKeyrings(password: string): Promise<any[]> {
-    const encryptedVault = this.store.getState().vault;
+    const encryptedVault = this.store.getState().vault
     if (!encryptedVault) {
-      throw new Error(i18n.t("Cannot unlock without a previous vault"));
+      throw new Error(i18n.t("Cannot unlock without a previous vault"))
     }
 
-    await this.clearKeyrings();
-    const vault = await this.encryptor.decrypt(password, encryptedVault);
+    await this.clearKeyrings()
+    const vault = await this.encryptor.decrypt(password, encryptedVault)
     // TODO: FIXME
-    await Promise.all(Array.from(vault).map(this._restoreKeyring.bind(this)));
-    await this._updateMemStoreKeyrings();
-    return this.keyrings;
+    await Promise.all(Array.from(vault).map(this._restoreKeyring.bind(this)))
+    await this._updateMemStoreKeyrings()
+    return this.keyrings
   }
 
   /**
@@ -689,9 +662,9 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Keyring>} The deserialized keyring.
    */
   async restoreKeyring(serialized) {
-    const keyring = await this._restoreKeyring(serialized);
-    await this._updateMemStoreKeyrings();
-    return keyring;
+    const keyring = await this._restoreKeyring(serialized)
+    await this._updateMemStoreKeyrings()
+    return keyring
   }
 
   /**
@@ -704,38 +677,35 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Keyring>} The deserialized keyring.
    */
   async _restoreKeyring(serialized: any): Promise<any> {
-    const { type, data } = serialized;
-    const Keyring = this.getKeyringClassForType(type);
-    const keyring = new Keyring();
-    await keyring.deserialize(data);
+    const { type, data } = serialized
+    const Keyring = this.getKeyringClassForType(type)
+    const keyring = new Keyring()
+    await keyring.deserialize(data)
     if (keyring.type === KEYRING_CLASS.WALLETCONNECT) {
-      eventBus.addEventListener(
-        EVENTS.WALLETCONNECT.INIT,
-        ({ address, brandName }) => {
-          (keyring as WalletConnectKeyring).init(address, brandName);
-        }
-      );
-      (keyring as WalletConnectKeyring).on("inited", (uri) => {
+      eventBus.addEventListener(EVENTS.WALLETCONNECT.INIT, ({ address, brandName }) => {
+        ;(keyring as WalletConnectKeyring).init(address, brandName)
+      })
+      ;(keyring as WalletConnectKeyring).on("inited", (uri) => {
         eventBus.emit(EVENTS.broadcastToUI, {
           method: EVENTS.WALLETCONNECT.INITED,
-          params: { uri },
-        });
-      });
+          params: { uri }
+        })
+      })
       keyring.on("statusChange", (data) => {
         if (!preference.getPopupOpen() && hasWalletConnectPageStateCache()) {
-          setPageStateCacheWhenPopupClose(data);
+          setPageStateCacheWhenPopupClose(data)
         }
         eventBus.emit(EVENTS.broadcastToUI, {
           method: EVENTS.WALLETCONNECT.STATUS_CHANGED,
-          params: data,
-        });
-      });
+          params: data
+        })
+      })
     }
 
     // getAccounts also validates the accounts for some keyrings
-    await keyring.getAccounts();
-    this.keyrings.push(keyring);
-    return keyring;
+    await keyring.getAccounts()
+    this.keyrings.push(keyring)
+    return keyring
   }
 
   /**
@@ -750,7 +720,7 @@ class KeyringService extends EventEmitter {
    * @returns {Keyring|undefined} The class, if it exists.
    */
   getKeyringClassForType(type: string): any {
-    return this.keyringTypes.find((kr) => kr.type === type);
+    return this.keyringTypes.find((kr) => kr.type === type)
   }
 
   /**
@@ -762,7 +732,7 @@ class KeyringService extends EventEmitter {
    * @returns {Array<Keyring>} The keyrings.
    */
   getKeyringsByType(type: string): any[] {
-    return this.keyrings.filter((keyring) => keyring.type === type);
+    return this.keyrings.filter((keyring) => keyring.type === type)
   }
 
   /**
@@ -774,15 +744,13 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Array<string>>} The array of accounts.
    */
   async getAccounts(): Promise<string[]> {
-    const keyrings = this.keyrings || [];
-    const addrs = await Promise.all(
-      keyrings.map((kr) => kr.getAccounts())
-    ).then((keyringArrays) => {
+    const keyrings = this.keyrings || []
+    const addrs = await Promise.all(keyrings.map((kr) => kr.getAccounts())).then((keyringArrays) => {
       return keyringArrays.reduce((res, arr) => {
-        return res.concat(arr);
-      }, []);
-    });
-    return addrs.map(normalizeAddress);
+        return res.concat(arr)
+      }, [])
+    })
+    return addrs.map(normalizeAddress)
   }
 
   /**
@@ -801,32 +769,28 @@ class KeyringService extends EventEmitter {
     end?: number,
     includeWatchKeyring = true
   ): Promise<any> {
-    const hexed = normalizeAddress(address).toLowerCase();
-    log.debug(`KeyringController - getKeyringForAccount: ${hexed}`);
-    let keyrings = type
-      ? this.keyrings.filter((keyring) => keyring.type === type)
-      : this.keyrings;
+    const hexed = normalizeAddress(address).toLowerCase()
+    log.debug(`KeyringController - getKeyringForAccount: ${hexed}`)
+    let keyrings = type ? this.keyrings.filter((keyring) => keyring.type === type) : this.keyrings
     if (!includeWatchKeyring) {
-      keyrings = keyrings.filter(
-        (keyring) => keyring.type !== KEYRING_TYPE.WatchAddressKeyring
-      );
+      keyrings = keyrings.filter((keyring) => keyring.type !== KEYRING_TYPE.WatchAddressKeyring)
     }
     return Promise.all(
       keyrings.map((keyring) => {
-        return Promise.all([keyring, keyring.getAccounts()]);
+        return Promise.all([keyring, keyring.getAccounts()])
       })
     ).then((candidates) => {
       const winners = candidates.filter((candidate) => {
         const accounts = candidate[1].map((addr) => {
-          return normalizeAddress(addr).toLowerCase();
-        });
-        return accounts.includes(hexed);
-      });
+          return normalizeAddress(addr).toLowerCase()
+        })
+        return accounts.includes(hexed)
+      })
       if (winners && winners.length > 0) {
-        return winners[0][0];
+        return winners[0][0]
       }
-      throw new Error("No keyring found for the requested account.");
-    });
+      throw new Error("No keyring found for the requested account.")
+    })
   }
 
   /**
@@ -837,78 +801,69 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A keyring display object, with type and accounts properties.
    */
   displayForKeyring(keyring, includeHidden = true): Promise<DisplayedKeryring> {
-    const accounts: Promise<
-      ({ address: string; brandName: string } | string)[]
-    > = keyring.getAccountsWithBrand
+    const accounts: Promise<({ address: string; brandName: string } | string)[]> = keyring.getAccountsWithBrand
       ? keyring.getAccountsWithBrand()
-      : keyring.getAccounts();
+      : keyring.getAccounts()
 
     return accounts.then((accounts) => {
       const allAccounts = accounts.map((account) => ({
-        address: normalizeAddress(
-          typeof account === "string" ? account : account.address
-        ),
-        brandName:
-          typeof account === "string" ? keyring.type : account.brandName,
-      }));
+        address: normalizeAddress(typeof account === "string" ? account : account.address),
+        brandName: typeof account === "string" ? keyring.type : account.brandName
+      }))
 
       return {
         type: keyring.type,
         accounts: allAccounts,
 
-        keyring,
-      };
-    });
+        keyring
+      }
+    })
   }
 
   getAllTypedAccounts(): Promise<DisplayedKeryring[]> {
-    return Promise.all(
-      this.keyrings.map((keyring) => this.displayForKeyring(keyring))
-    );
+    return Promise.all(this.keyrings.map((keyring) => this.displayForKeyring(keyring)))
   }
 
   async getAllTypedVisibleAccounts(): Promise<DisplayedKeryring[]> {
-    const keyrings = await Promise.all(
-      this.keyrings.map((keyring) => this.displayForKeyring(keyring, false))
-    );
-    return keyrings.filter((keyring) => keyring.accounts.length > 0);
+    const keyrings = await Promise.all(this.keyrings.map((keyring) => this.displayForKeyring(keyring, false)))
+    return keyrings.filter((keyring) => keyring.accounts.length > 0)
   }
 
   async getAllVisibleAccountsArray() {
-    const typedAccounts = await this.getAllTypedVisibleAccounts();
-    const result: { address: string; type: string; brandName: string }[] = [];
+    const typedAccounts = await this.getAllTypedVisibleAccounts()
+    const result: { address: string; type: string; brandName: string }[] = []
     typedAccounts.forEach((accountGroup) => {
       result.push(
         ...accountGroup.accounts.map((account) => ({
           address: account.address,
           brandName: account.brandName,
-          type: accountGroup.type,
+          type: accountGroup.type
         }))
-      );
-    });
+      )
+    })
 
-    return result;
+    return result
   }
 
   async getAllAdresses() {
-    const keyrings = await this.getAllTypedAccounts();
-    const result: { address: string; type: string; brandName: string }[] = [];
+    const keyrings = await this.getAllTypedAccounts()
+    const result: { address: string; type: string; brandName: string }[] = []
     keyrings.forEach((accountGroup) => {
       result.push(
         ...accountGroup.accounts.map((account) => ({
           address: account.address,
           brandName: account.brandName,
-          type: accountGroup.type,
+          type: accountGroup.type
         }))
-      );
-    });
+      )
+    })
 
-    return result;
+    return result
   }
 
   async hasAddress(address: string) {
-    const addresses = await this.getAllAdresses();
-    return !!addresses.find((item) => isSameAddress(item.address, address));
+    const addresses = await this.getAllAdresses()
+    return !!addresses.find((item) => isSameAddress(item.address, address))
   }
 
   /**
@@ -920,10 +875,10 @@ class KeyringService extends EventEmitter {
   /* eslint-disable require-await */
   async clearKeyrings(): Promise<void> {
     // clear keyrings from memory
-    this.keyrings = [];
+    this.keyrings = []
     this.memStore.updateState({
-      keyrings: [],
-    });
+      keyrings: []
+    })
   }
 
   /**
@@ -932,10 +887,8 @@ class KeyringService extends EventEmitter {
    * Updates the in-memory keyrings, without persisting.
    */
   async _updateMemStoreKeyrings(): Promise<void> {
-    const keyrings = await Promise.all(
-      this.keyrings.map((keyring) => this.displayForKeyring(keyring))
-    );
-    return this.memStore.updateState({ keyrings });
+    const keyrings = await Promise.all(this.keyrings.map((keyring) => this.displayForKeyring(keyring)))
+    return this.memStore.updateState({ keyrings })
   }
 
   /**
@@ -946,9 +899,9 @@ class KeyringService extends EventEmitter {
    * @emits KeyringController#unlock
    */
   setUnlocked(): void {
-    this.memStore.updateState({ isUnlocked: true });
-    this.emit("unlock");
+    this.memStore.updateState({ isUnlocked: true })
+    this.emit("unlock")
   }
 }
 
-export default new KeyringService();
+export default new KeyringService()

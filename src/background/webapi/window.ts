@@ -1,81 +1,83 @@
-import { browser, Windows } from 'webextension-polyfill-ts';
-import { EventEmitter } from 'events';
-import { IS_WINDOWS } from 'consts';
+import { browser, Windows } from "webextension-polyfill-ts"
+import { EventEmitter } from "events"
+import { IS_WINDOWS } from "consts"
 
-const event = new EventEmitter();
+const event = new EventEmitter()
 
 // if focus other windows, then reject the approval
 browser.windows.onFocusChanged.addListener((winId) => {
-  event.emit('windowFocusChange', winId);
-});
+  event.emit("windowFocusChange", winId)
+})
 
 browser.windows.onRemoved.addListener((winId) => {
-  event.emit('windowRemoved', winId);
-});
+  event.emit("windowRemoved", winId)
+})
 
-const BROWSER_HEADER = 80;
+const BROWSER_HEADER = 80
 const WINDOW_SIZE = {
   width: 400 + (IS_WINDOWS ? 14 : 0), // idk why windows cut the width.
-  height: 600,
-};
+  height: 600
+}
 
 const create = async ({ url, ...rest }): Promise<number | undefined> => {
-  const { top: cTop, left: cLeft, width } = await browser.windows.getCurrent({
-    windowTypes: ['normal'],
-  } as Windows.GetInfo);
+  const {
+    top: cTop,
+    left: cLeft,
+    width
+  } = await browser.windows.getCurrent({
+    windowTypes: ["normal"]
+  } as Windows.GetInfo)
 
-  const top = cTop! + BROWSER_HEADER;
-  const left = cLeft! + width! - WINDOW_SIZE.width;
+  const top = cTop! + BROWSER_HEADER
+  const left = cLeft! + width! - WINDOW_SIZE.width
 
-  const currentWindow = await browser.windows.getCurrent();
-  let win;
-  if (currentWindow.state === 'fullscreen') {
+  const currentWindow = await browser.windows.getCurrent()
+  let win
+  if (currentWindow.state === "fullscreen") {
     // browser.windows.create not pass state to chrome
     win = await chrome.windows.create({
       focused: true,
       url,
-      type: 'popup',
+      type: "popup",
       ...rest,
       width: undefined,
       height: undefined,
       left: undefined,
       top: undefined,
-      state: 'fullscreen',
-    });
+      state: "fullscreen"
+    })
   } else {
     win = await browser.windows.create({
       focused: true,
       url,
-      type: 'popup',
+      type: "popup",
       top,
       left,
       ...WINDOW_SIZE,
-      ...rest,
-    });
+      ...rest
+    })
   }
 
   // shim firefox
   if (win.left !== left) {
-    await browser.windows.update(win.id!, { left, top });
+    await browser.windows.update(win.id!, { left, top })
   }
 
-  return win.id;
-};
+  return win.id
+}
 
 const remove = async (winId) => {
-  return browser.windows.remove(winId);
-};
+  return browser.windows.remove(winId)
+}
 
-const openNotification = ({ route = '', ...rest } = {}): Promise<
-  number | undefined
-> => {
-  const url = `notification.html${route && `#${route}`}`;
+const openNotification = ({ route = "", ...rest } = {}): Promise<number | undefined> => {
+  const url = `notification.html${route && `#${route}`}`
 
-  return create({ url, ...rest });
-};
+  return create({ url, ...rest })
+}
 
 export default {
   openNotification,
   event,
-  remove,
-};
+  remove
+}

@@ -1,34 +1,23 @@
-type CacheState = Map<
-  string,
-  { timeoutId: number; result: any; expireTime: number }
->;
+type CacheState = Map<string, { timeoutId: number; result: any; expireTime: number }>
 
 class RpcCache {
-  state: CacheState = new Map();
+  state: CacheState = new Map()
 
   start() {}
 
   async loadBlockNumber() {}
 
-  set(
-    address: string,
-    data: { method: string; chainId: string; params: any; result: any },
-    expireTime = 150000
-  ) {}
+  set(address: string, data: { method: string; chainId: string; params: any; result: any }, expireTime = 150000) {}
 
   has(address: string, data: { method: string; params: any; chainId: string }) {
-    return false;
+    return false
   }
 
   get(address: string, data: { method: string; params: any; chainId: string }) {
-    return false;
+    return false
   }
 
-  updateExpire(
-    address: string,
-    data: { method: string; params: any; chainId: string },
-    expireTime = 10000
-  ) {}
+  updateExpire(address: string, data: { method: string; params: any; chainId: string }, expireTime = 10000) {}
 
   canCache(data: { method: string; params: any }) {
     switch (data.method) {
@@ -57,17 +46,17 @@ class RpcCache {
       case "eth_estimateGas":
       case "eth_getFilterLogs":
       case "eth_getLogs":
-        return true;
+        return true
 
       default:
-        return false;
+        return false
     }
   }
 
   private getIfExist(key: string) {
-    if (this.state.has(key)) return this.state.get(key);
-    return null;
+    if (this.state.has(key)) return this.state.get(key)
+    return null
   }
 }
 
-export default new RpcCache();
+export default new RpcCache()

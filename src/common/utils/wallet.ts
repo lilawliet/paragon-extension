@@ -1,14 +1,13 @@
-const DUMMY_MNEMONICS =
-  "danger come provide title interest cupboard skate shoe speak program hope hill";
-const DUMMY_ADDRESS = "1BAU9S4yY6khNWxCSQfQQR7BNLRhRT1aHY";
-const DUMMY_PRIVKEY = "L4xaZzEW1b4BMw7oFaRP1X9vSqUCgM5R3qXBteApfQE2vQmSSyfq";
+const DUMMY_MNEMONICS = "danger come provide title interest cupboard skate shoe speak program hope hill"
+const DUMMY_ADDRESS = "1BAU9S4yY6khNWxCSQfQQR7BNLRhRT1aHY"
+const DUMMY_PRIVKEY = "L4xaZzEW1b4BMw7oFaRP1X9vSqUCgM5R3qXBteApfQE2vQmSSyfq"
 export enum CURRENCY {
   USD,
   EUR,
   JPY,
   GBP,
   CHF,
-  CAD,
+  CAD
 }
 const CURRENCY_NAMES = [
   "US Dollar(USD)",
@@ -16,15 +15,15 @@ const CURRENCY_NAMES = [
   "Japanese Yen(JPY)",
   "British Pound(GBP)",
   "Swiss Franc(CHF)",
-  "Canadian Dollar(CAD)",
-];
+  "Canadian Dollar(CAD)"
+]
 
 export class ParagonAccount {
-  private privateKey: string;
-  currency!: CURRENCY;
-  name!: string;
+  private privateKey: string
+  currency!: CURRENCY
+  name!: string
   constructor(privateKey: string) {
-    this.privateKey = privateKey;
+    this.privateKey = privateKey
   }
 
   /**
@@ -32,7 +31,7 @@ export class ParagonAccount {
    * @returns
    */
   getAddress() {
-    return DUMMY_ADDRESS;
+    return DUMMY_ADDRESS
   }
 
   /**
@@ -40,7 +39,7 @@ export class ParagonAccount {
    * @returns
    */
   getPrivateKey() {
-    return this.privateKey;
+    return this.privateKey
   }
 
   /**
@@ -48,8 +47,8 @@ export class ParagonAccount {
    * @returns
    */
   getAssets() {
-    let assets = [{ name: "Novo", amount: "13,000 NOVO", value: "$6.748.29" }];
-    return assets;
+    const assets = [{ name: "Novo", amount: "13,000 NOVO", value: "$6.748.29" }]
+    return assets
   }
 
   /**
@@ -57,10 +56,8 @@ export class ParagonAccount {
    * @returns
    */
   getActivities() {
-    let activities = [
-      { time: 1652188199, address: DUMMY_ADDRESS, amount: "+150" },
-    ];
-    return activities;
+    const activities = [{ time: 1652188199, address: DUMMY_ADDRESS, amount: "+150" }]
+    return activities
   }
 
   /**
@@ -68,45 +65,45 @@ export class ParagonAccount {
    * @returns
    */
   getCurrencies() {
-    return CURRENCY_NAMES;
+    return CURRENCY_NAMES
   }
 
   /**
    * 设置货币
    */
   setCurrency(currency: CURRENCY) {
-    this.currency = currency;
+    this.currency = currency
   }
 
   async sendNovo(receiver: string, amount: string) {}
 }
 export class ParagonWallet {
-  mnemonics!: string;
-  accounts!: ParagonAccount[];
-  derivedIndex: number = 0;
-  currentAccountIndex: number = 0;
+  mnemonics!: string
+  accounts!: ParagonAccount[]
+  derivedIndex = 0
+  currentAccountIndex = 0
 
   constructor(mnemonics?: string) {}
 
   static create(mnemonics?: string) {
-    let wallet = new ParagonWallet(mnemonics);
-    return wallet;
+    const wallet = new ParagonWallet(mnemonics)
+    return wallet
   }
 
   /**
    * 创建一个新的钱包，产生12个助记词
    */
   createNewAccount(name: string, importedPrivateKey?: string) {
-    let account: ParagonAccount;
+    let account: ParagonAccount
     if (importedPrivateKey) {
-      account = new ParagonAccount(importedPrivateKey);
+      account = new ParagonAccount(importedPrivateKey)
     } else {
-      account = new ParagonAccount(DUMMY_PRIVKEY);
-      this.derivedIndex++;
+      account = new ParagonAccount(DUMMY_PRIVKEY)
+      this.derivedIndex++
     }
-    account.name = name;
-    this.accounts.push(account);
-    return account;
+    account.name = name
+    this.accounts.push(account)
+    return account
   }
 
   /**
@@ -116,9 +113,9 @@ export class ParagonWallet {
    */
   checkMnemonics(words: string) {
     if (words == this.mnemonics) {
-      return true;
+      return true
     } else {
-      return false;
+      return false
     }
   }
 
@@ -127,7 +124,7 @@ export class ParagonWallet {
    * @returns
    */
   getAccounts() {
-    return this.accounts;
+    return this.accounts
   }
 
   /**
@@ -135,7 +132,7 @@ export class ParagonWallet {
    * @returns
    */
   getCurrentAccount() {
-    return this.accounts[this.currentAccountIndex];
+    return this.accounts[this.currentAccountIndex]
   }
 
   /**
@@ -143,7 +140,7 @@ export class ParagonWallet {
    * @param index
    */
   switchAccount(index: number) {
-    this.currentAccountIndex = index;
+    this.currentAccountIndex = index
   }
 
   exportData() {}
@@ -154,6 +151,6 @@ export class ParagonWallet {
   unserialize(data: string) {}
 
   serialize() {
-    return "";
+    return ""
   }
 }

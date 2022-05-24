@@ -1,20 +1,20 @@
-import "@/common/styles/antd.less";
+import "@/common/styles/antd.less"
 // 全局公用样式
-import "@/common/styles/tailwind.less";
-import eventBus from "@/eventBus";
-import Popup from "@/popup";
-import { Message } from "@/utils";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
-import en from "antd/es/locale/en_US";
-import { EVENTS } from "consts";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import i18n, { addResourceBundle } from "src/i18n";
-import { getUITypeName, WalletProvider } from "./utils";
+import "@/common/styles/tailwind.less"
+import eventBus from "@/eventBus"
+import Popup from "@/popup"
+import { Message } from "@/utils"
+import * as Sentry from "@sentry/react"
+import { Integrations } from "@sentry/tracing"
+import en from "antd/es/locale/en_US"
+import { EVENTS } from "consts"
+import React from "react"
+import ReactDOM from "react-dom/client"
+import i18n, { addResourceBundle } from "src/i18n"
+import { getUITypeName, WalletProvider } from "./utils"
 const antdConfig = {
-  locale: en,
-};
+  locale: en
+}
 
 if (process.env.NODE_ENV === "production") {
   Sentry.init({
@@ -25,8 +25,8 @@ if (process.env.NODE_ENV === "production") {
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  });
+    tracesSampleRate: 1.0
+  })
 }
 
 // For fix chrome extension render problem in external screen
@@ -39,7 +39,7 @@ if (
 ) {
   chrome.runtime.getPlatformInfo(function (info) {
     if (info.os === "mac") {
-      const fontFaceSheet = new CSSStyleSheet();
+      const fontFaceSheet = new CSSStyleSheet()
       fontFaceSheet.insertRule(`
         @keyframes redraw {
           0% {
@@ -49,43 +49,40 @@ if (
             opacity: .99;
           }
         }
-      `);
+      `)
       fontFaceSheet.insertRule(`
         html {
           animation: redraw 1s linear infinite;
         }
-      `);
-      (document as any).adoptedStyleSheets = [
-        ...(document as any).adoptedStyleSheets,
-        fontFaceSheet,
-      ];
+      `)
+      ;(document as any).adoptedStyleSheets = [...(document as any).adoptedStyleSheets, fontFaceSheet]
     }
-  });
+  })
 }
 
 function initAppMeta() {
-  const head = document.querySelector("head");
-  const icon = document.createElement("link");
-  icon.href = "https://rabby.io/assets/images/logo-128.png";
-  icon.rel = "icon";
-  head?.appendChild(icon);
-  const name = document.createElement("meta");
-  name.name = "name";
-  name.content = "Rabby";
-  head?.appendChild(name);
-  const description = document.createElement("meta");
-  description.name = "description";
-  description.content = i18n.t("appDescription");
-  head?.appendChild(description);
+  const head = document.querySelector("head")
+  const icon = document.createElement("link")
+  icon.href = "https://rabby.io/assets/images/logo-128.png"
+  icon.rel = "icon"
+  head?.appendChild(icon)
+  const name = document.createElement("meta")
+  name.name = "name"
+  name.content = "Rabby"
+  head?.appendChild(name)
+  const description = document.createElement("meta")
+  description.name = "description"
+  description.content = i18n.t("appDescription")
+  head?.appendChild(description)
 }
 
-initAppMeta();
+initAppMeta()
 
-const { PortMessage } = Message;
+const { PortMessage } = Message
 
-const portMessageChannel = new PortMessage();
+const portMessageChannel = new PortMessage()
 
-portMessageChannel.connect(getUITypeName());
+portMessageChannel.connect(getUITypeName())
 
 const wallet: Record<string, any> = new Proxy(
   {},
@@ -101,54 +98,52 @@ const wallet: Record<string, any> = new Proxy(
                   return portMessageChannel.request({
                     type: "openapi",
                     method: key,
-                    params,
-                  });
-                };
-              },
+                    params
+                  })
+                }
+              }
             }
-          );
-          break;
+          )
+          break
         default:
           return function (...params: any) {
             return portMessageChannel.request({
               type: "controller",
               method: key,
-              params,
-            });
-          };
+              params
+            })
+          }
       }
-    },
+    }
   }
-);
+)
 
 portMessageChannel.listen((data) => {
   if (data.type === "broadcast") {
-    eventBus.emit(data.method, data.params);
+    eventBus.emit(data.method, data.params)
   }
-});
+})
 
 eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
   portMessageChannel.request({
     type: "broadcast",
     method: data.method,
-    params: data.data,
-  });
-});
-console.log("herere");
+    params: data.data
+  })
+})
+console.log("herere")
 wallet.getLocale().then((locale) => {
-  console.log("locale", locale);
+  console.log("locale", locale)
   addResourceBundle(locale).then(() => {
-    i18n.changeLanguage(locale);
+    i18n.changeLanguage(locale)
     // ReactDOM.render(<Views wallet={wallet} />, document.getElementById('root'));
-    const root = ReactDOM.createRoot(
-      document.getElementById("root") as HTMLElement
-    );
-    console.log("render");
+    const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
+    console.log("render")
 
     root.render(
       <WalletProvider {...antdConfig} wallet={wallet as any}>
         <Popup />
       </WalletProvider>
-    );
-  });
-});
+    )
+  })
+})

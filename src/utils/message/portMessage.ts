@@ -1,58 +1,58 @@
-import { Runtime, browser } from 'webextension-polyfill-ts';
-import Message from './index';
+import { Runtime, browser } from "webextension-polyfill-ts"
+import Message from "./index"
 class PortMessage extends Message {
-  port: Runtime.Port | null = null;
-  listenCallback: any;
+  port: Runtime.Port | null = null
+  listenCallback: any
 
   constructor(port?: Runtime.Port) {
-    super();
+    super()
 
     if (port) {
-      this.port = port;
+      this.port = port
     }
   }
 
   connect = (name?: string) => {
-    this.port = browser.runtime.connect(undefined, name ? { name } : undefined);
+    this.port = browser.runtime.connect(undefined, name ? { name } : undefined)
     this.port.onMessage.addListener(({ _type_, data }) => {
       if (_type_ === `${this._EVENT_PRE}message`) {
-        this.emit('message', data);
-        return;
+        this.emit("message", data)
+        return
       }
 
       if (_type_ === `${this._EVENT_PRE}response`) {
-        this.onResponse(data);
+        this.onResponse(data)
       }
-    });
+    })
 
-    return this;
-  };
+    return this
+  }
 
   listen = (listenCallback: any) => {
-    if (!this.port) return;
-    this.listenCallback = listenCallback;
+    if (!this.port) return
+    this.listenCallback = listenCallback
     this.port.onMessage.addListener(({ _type_, data }) => {
       if (_type_ === `${this._EVENT_PRE}request`) {
-        this.onRequest(data);
+        this.onRequest(data)
       }
-    });
+    })
 
-    return this;
-  };
+    return this
+  }
 
   send = (type, data) => {
-    if (!this.port) return;
+    if (!this.port) return
     try {
-      this.port.postMessage({ _type_: `${this._EVENT_PRE}${type}`, data });
+      this.port.postMessage({ _type_: `${this._EVENT_PRE}${type}`, data })
     } catch (e) {
       // DO NOTHING BUT CATCH THIS ERROR
     }
-  };
+  }
 
   dispose = () => {
-    this._dispose();
-    this.port?.disconnect();
-  };
+    this._dispose()
+    this.port?.disconnect()
+  }
 }
 
-export default PortMessage;
+export default PortMessage

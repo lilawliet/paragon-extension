@@ -1,110 +1,103 @@
-import eventBus from "@/eventBus";
-import {
-  keyringService,
-  notificationService,
-  permissionService,
-} from "background/service";
-import { PromiseFlow, underline2Camelcase } from "background/utils";
-import { CHAINS, EVENTS } from "consts";
-import { ethErrors } from "eth-rpc-errors";
-import "reflect-metadata";
-import providerController from "./controller";
+import eventBus from "@/eventBus"
+import { keyringService, notificationService, permissionService } from "background/service"
+import { PromiseFlow, underline2Camelcase } from "background/utils"
+import { CHAINS, EVENTS } from "consts"
+import { ethErrors } from "eth-rpc-errors"
+import "reflect-metadata"
+import providerController from "./controller"
 
 const isSignApproval = (type: string) => {
-  const SIGN_APPROVALS = ["SignText", "SignTypedData", "SignTx"];
-  return SIGN_APPROVALS.includes(type);
-};
+  const SIGN_APPROVALS = ["SignText", "SignTypedData", "SignTx"]
+  return SIGN_APPROVALS.includes(type)
+}
 
-const flow = new PromiseFlow();
+const flow = new PromiseFlow()
 const flowContext = flow
   .use(async (ctx, next) => {
     // check method
     const {
-      data: { method },
-    } = ctx.request;
-    ctx.mapMethod = underline2Camelcase(method);
+      data: { method }
+    } = ctx.request
+    ctx.mapMethod = underline2Camelcase(method)
 
     if (!providerController[ctx.mapMethod]) {
       throw ethErrors.rpc.methodNotFound({
         message: `method [${method}] doesn't has corresponding handler`,
-        data: ctx.request.data,
-      });
+        data: ctx.request.data
+      })
     }
 
-    return next();
+    return next()
   })
   .use(async (ctx, next) => {
-    const { mapMethod } = ctx;
+    const { mapMethod } = ctx
     if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
       // check lock
-      const isUnlock = keyringService.memStore.getState().isUnlocked;
+      const isUnlock = keyringService.memStore.getState().isUnlocked
 
       if (!isUnlock) {
-        ctx.request.requestedApproval = true;
-        await notificationService.requestApproval({ lock: true });
+        ctx.request.requestedApproval = true
+        await notificationService.requestApproval({ lock: true })
       }
     }
 
-    return next();
+    return next()
   })
   .use(async (ctx, next) => {
     // check connect
     const {
       request: {
-        session: { origin, name, icon },
+        session: { origin, name, icon }
       },
-      mapMethod,
-    } = ctx;
+      mapMethod
+    } = ctx
     if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
       if (!permissionService.hasPermission(origin)) {
-        ctx.request.requestedApproval = true;
+        ctx.request.requestedApproval = true
         const { defaultChain } = await notificationService.requestApproval(
           {
             params: { origin, name, icon },
-            approvalComponent: "Connect",
+            approvalComponent: "Connect"
           },
           { height: 390 }
-        );
+        )
 
-        permissionService.addConnectedSite(origin, name, icon, defaultChain);
+        permissionService.addConnectedSite(origin, name, icon, defaultChain)
       }
     }
 
-    return next();
+    return next()
   })
   .use(async (ctx, next) => {
     // check need approval
     const {
       request: {
         data: { params, method },
-        session: { origin, name, icon },
+        session: { origin, name, icon }
       },
-      mapMethod,
-    } = ctx;
-    const [approvalType, condition, options = {}] =
-      Reflect.getMetadata("APPROVAL", providerController, mapMethod) || [];
-    let windowHeight = 800;
+      mapMethod
+    } = ctx
+    const [approvalType, condition, options = {}] = Reflect.getMetadata("APPROVAL", providerController, mapMethod) || []
+    let windowHeight = 800
     if ("height" in options) {
-      windowHeight = options.height;
+      windowHeight = options.height
     } else {
-      const minHeight = 500;
+      const minHeight = 500
       if (window.screen.availHeight < 1000) {
-        windowHeight = window.screen.availHeight - 200;
+        windowHeight = window.screen.availHeight - 200
       }
       if (windowHeight < minHeight) {
-        windowHeight = minHeight;
+        windowHeight = minHeight
       }
     }
     if (approvalType && (!condition || !condition(ctx.request))) {
-      ctx.request.requestedApproval = true;
+      ctx.request.requestedApproval = true
       if (approvalType === "SignTx" && !("chainId" in params[0])) {
-        const site = permissionService.getConnectedSite(origin);
+        const site = permissionService.getConnectedSite(origin)
         if (site) {
-          const chain = Object.values(CHAINS).find(
-            (item) => item.enum === site.chain
-          );
+          const chain = Object.values(CHAINS).find((item) => item.enum === site.chain)
           if (chain) {
-            params[0].chainId = chain.name;
+            params[0].chainId = chain.name
           }
         }
       }
@@ -114,36 +107,35 @@ const flowContext = flow
           params: {
             method,
             data: params,
-            session: { origin, name, icon },
+            session: { origin, name, icon }
           },
-          origin,
+          origin
         },
         { height: windowHeight }
-      );
+      )
       if (isSignApproval(approvalType)) {
-        permissionService.updateConnectSite(origin, { isSigned: true }, true);
+        permissionService.updateConnectSite(origin, { isSigned: true }, true)
       } else {
-        permissionService.touchConnectedSite(origin);
+        permissionService.touchConnectedSite(origin)
       }
     }
 
-    return next();
+    return next()
   })
   .use(async (ctx) => {
-    const { approvalRes, mapMethod, request } = ctx;
+    const { approvalRes, mapMethod, request } = ctx
     // process request
-    const [approvalType] =
-      Reflect.getMetadata("APPROVAL", providerController, mapMethod) || [];
-    const { uiRequestComponent, ...rest } = approvalRes || {};
+    const [approvalType] = Reflect.getMetadata("APPROVAL", providerController, mapMethod) || []
+    const { uiRequestComponent, ...rest } = approvalRes || {}
     const {
-      session: { origin },
-    } = request;
+      session: { origin }
+    } = request
     const requestDefer = Promise.resolve(
       providerController[mapMethod]({
         ...request,
-        approvalRes,
+        approvalRes
       })
-    );
+    )
 
     requestDefer
       .then((result) => {
@@ -152,11 +144,11 @@ const flowContext = flow
             method: EVENTS.SIGN_FINISHED,
             params: {
               success: true,
-              data: result,
-            },
-          });
+              data: result
+            }
+          })
         }
-        return result;
+        return result
       })
       .catch((e: any) => {
         if (isSignApproval(approvalType)) {
@@ -164,41 +156,41 @@ const flowContext = flow
             method: EVENTS.SIGN_FINISHED,
             params: {
               success: false,
-              errorMsg: JSON.stringify(e),
-            },
-          });
+              errorMsg: JSON.stringify(e)
+            }
+          })
         }
-      });
+      })
     async function requestApprovalLoop({ uiRequestComponent, ...rest }) {
-      ctx.request.requestedApproval = true;
+      ctx.request.requestedApproval = true
       const res = await notificationService.requestApproval({
         approvalComponent: uiRequestComponent,
         params: rest,
         origin,
-        approvalType,
-      });
+        approvalType
+      })
       if (res.uiRequestComponent) {
-        return await requestApprovalLoop(res);
+        return await requestApprovalLoop(res)
       } else {
-        return res;
+        return res
       }
     }
     if (uiRequestComponent) {
-      ctx.request.requestedApproval = true;
-      return await requestApprovalLoop({ uiRequestComponent, ...rest });
+      ctx.request.requestedApproval = true
+      return await requestApprovalLoop({ uiRequestComponent, ...rest })
     }
 
-    return requestDefer;
+    return requestDefer
   })
-  .callback();
+  .callback()
 
 export default (request) => {
-  const ctx: any = { request: { ...request, requestedApproval: false } };
+  const ctx: any = { request: { ...request, requestedApproval: false } }
   return flowContext(ctx).finally(() => {
     if (ctx.request.requestedApproval) {
-      flow.requestedApproval = false;
+      flow.requestedApproval = false
       // only unlock notification if current flow is an approval flow
-      notificationService.unLock();
+      notificationService.unLock()
     }
-  });
-};
+  })
+}

@@ -1,9 +1,9 @@
-import { Button } from "antd";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Button } from "antd"
+import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 const Welcome = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <div
       className="flex justify-center pt-60"
@@ -21,27 +21,19 @@ const Welcome = () => {
         </div>
         <div className="grid gap-5">
           <Link to="/create-password" replace>
-            <Button
-              size="large"
-              type="primary"
-              className="border-none bg-primary box w380 content h-15_5"
-            >
+            <Button size="large" type="primary" className="border-none bg-primary box w380 content h-15_5">
               {t("Create new wallet")}
             </Button>
           </Link>
           <Link to="/login" replace>
-            <Button
-              size="large"
-              type="default"
-              className="box w380 default content"
-            >
+            <Button size="large" type="default" className="box w380 default content">
               {t("I already have a wallet")}
             </Button>
           </Link>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Welcome;
+export default Welcome

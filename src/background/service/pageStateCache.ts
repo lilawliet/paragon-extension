@@ -1,65 +1,65 @@
-import { createPersistStore } from 'background/utils';
+import { createPersistStore } from "background/utils"
 
 export interface CacheState {
-  path: string;
-  params: Record<string, string>;
-  states: Record<string, any>;
+  path: string
+  params: Record<string, string>
+  states: Record<string, any>
 }
 
 interface CacheStore {
-  cache: CacheState | null;
-  hasCache: boolean;
+  cache: CacheState | null
+  hasCache: boolean
 }
 
 class PageStateCacheService {
-  store: CacheStore | null = null;
+  store: CacheStore | null = null
 
   init = async () => {
     this.store = await createPersistStore<CacheStore>({
-      name: 'pageStateCache',
+      name: "pageStateCache",
       template: {
         cache: {
-          path: '',
+          path: "",
           params: {},
-          states: {},
+          states: {}
         },
-        hasCache: false,
-      },
-    });
-  };
+        hasCache: false
+      }
+    })
+  }
 
   has = () => {
-    if (!this.store) return false;
+    if (!this.store) return false
 
-    return this.store.hasCache;
-  };
+    return this.store.hasCache
+  }
 
   get = (): CacheState | null => {
-    if (!this.store) return null;
+    if (!this.store) return null
 
     if (this.has()) {
-      return this.store.cache!;
+      return this.store.cache!
     }
 
-    return null;
-  };
+    return null
+  }
 
   set = (cache: CacheState) => {
-    if (!this.store) return;
-    this.store.cache = cache;
-    this.store.hasCache = true;
-  };
+    if (!this.store) return
+    this.store.cache = cache
+    this.store.hasCache = true
+  }
 
   clear = () => {
-    if (!this.store) return;
+    if (!this.store) return
 
     this.store.cache = {
-      path: '',
+      path: "",
       params: {},
-      states: {},
-    };
-    this.store.hasCache = false;
-  };
+      states: {}
+    }
+    this.store.hasCache = false
+  }
 }
 
-export default new PageStateCacheService();
+export default new PageStateCacheService()

@@ -1,10 +1,10 @@
 /* constants pool */
-import { Chain } from "@/background/service/openapi";
+import { Chain } from "@/background/service/openapi"
 // import IconNovoLogo from "./images/novo.svg";
 
 export enum CHAINS_ENUM {
   NOVO = "NOVO",
-  BSV = "BSV",
+  BSV = "BSV"
 }
 
 export const CHAINS: Record<string, Chain> = {
@@ -14,11 +14,10 @@ export const CHAINS: Record<string, Chain> = {
     logo: "",
     network: "mainnet",
     nativeTokenSymbol: "NOVO",
-    nativeTokenLogo:
-      "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png",
+    nativeTokenLogo: "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png",
     nativeTokenDecimals: 4,
     nativeTokenAddress: "eth",
-    scanLink: "https://etherscan.io/tx/_s_",
+    scanLink: "https://etherscan.io/tx/_s_"
   },
   [CHAINS_ENUM.BSV]: {
     name: "BSV",
@@ -26,89 +25,86 @@ export const CHAINS: Record<string, Chain> = {
     logo: "",
     network: "mainnet",
     nativeTokenSymbol: "BSV",
-    nativeTokenLogo:
-      "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png",
+    nativeTokenLogo: "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png",
     nativeTokenAddress: "bsc",
     scanLink: "https://bscscan.com/tx/_s_",
-    nativeTokenDecimals: 4,
-  },
-};
+    nativeTokenDecimals: 4
+  }
+}
 
 export const KEYRING_TYPE = {
   HdKeyring: "HD Key Tree",
   SimpleKeyring: "Simple Key Pair",
   WatchAddressKeyring: "Watch Address",
-  WalletConnectKeyring: "WalletConnect",
-};
+  WalletConnectKeyring: "WalletConnect"
+}
 
 export const KEYRING_CLASS = {
   PRIVATE_KEY: "Simple Key Pair",
   MNEMONIC: "HD Key Tree",
   WATCH: "Watch Address",
-  WALLETCONNECT: "WalletConnect",
-};
+  WALLETCONNECT: "WalletConnect"
+}
 
 export const KEYRING_TYPE_TEXT = {
   [KEYRING_TYPE.HdKeyring]: "Created by Mnemonic",
   [KEYRING_TYPE.SimpleKeyring]: "Imported by Private Key",
-  [KEYRING_TYPE.WatchAddressKeyring]: "Watch Mode",
-};
+  [KEYRING_TYPE.WatchAddressKeyring]: "Watch Mode"
+}
 export const BRAND_ALIAN_TYPE_TEXT = {
   [KEYRING_TYPE.HdKeyring]: "Mnemonic",
   [KEYRING_TYPE.SimpleKeyring]: "Private Key",
-  [KEYRING_TYPE.WatchAddressKeyring]: "Watch",
-};
+  [KEYRING_TYPE.WatchAddressKeyring]: "Watch"
+}
 
-export const IS_CHROME = /Chrome\//i.test(navigator.userAgent);
+export const IS_CHROME = /Chrome\//i.test(navigator.userAgent)
 
-export const IS_FIREFOX = /Firefox\//i.test(navigator.userAgent);
+export const IS_FIREFOX = /Firefox\//i.test(navigator.userAgent)
 
-export const IS_LINUX = /linux/i.test(navigator.userAgent);
+export const IS_LINUX = /linux/i.test(navigator.userAgent)
 
-let chromeVersion: number | null = null;
+let chromeVersion: number | null = null
 
 if (IS_CHROME) {
-  const matches = navigator.userAgent.match(/Chrome\/(\d+[^.\s])/);
+  const matches = navigator.userAgent.match(/Chrome\/(\d+[^.\s])/)
   if (matches && matches.length >= 2) {
-    chromeVersion = Number(matches[1]);
+    chromeVersion = Number(matches[1])
   }
 }
 
-export const IS_AFTER_CHROME91 = IS_CHROME
-  ? chromeVersion && chromeVersion >= 91
-  : false;
+export const IS_AFTER_CHROME91 = IS_CHROME ? chromeVersion && chromeVersion >= 91 : false
 
 export const GAS_LEVEL_TEXT = {
   slow: "Standard",
   normal: "Fast",
   fast: "Instant",
-  custom: "Custom",
-};
+  custom: "Custom"
+}
 
-export const IS_WINDOWS = /windows/i.test(navigator.userAgent);
+export const IS_WINDOWS = /windows/i.test(navigator.userAgent)
 
 export const LANGS = [
   {
     value: "en",
-    label: "English",
+    label: "English"
   },
   {
     value: "zh_CN",
-    label: "中文",
-  },
-];
+    label: "中文"
+  }
+]
 
 export const CHECK_METAMASK_INSTALLED_URL = {
   Chrome: "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/phishing.html",
   Firefox: "",
   Brave: "",
-  Edge: "",
-};
+  Edge: ""
+}
 
-export const MINIMUM_GAS_LIMIT = 21000;
+export const MINIMUM_GAS_LIMIT = 21000
 
 export enum WATCH_ADDRESS_CONNECT_TYPE {
-  WalletConnect = "WalletConnect",
+  WalletConnect = "WalletConnect"
 }
 
 export const WALLETCONNECT_STATUS_MAP = {
@@ -117,18 +113,18 @@ export const WALLETCONNECT_STATUS_MAP = {
   WAITING: 3,
   SIBMITTED: 4,
   REJECTED: 5,
-  FAILD: 6,
-};
+  FAILD: 6
+}
 
-export const INTERNAL_REQUEST_ORIGIN = "https://rabby.io";
+export const INTERNAL_REQUEST_ORIGIN = "https://rabby.io"
 
 export const INTERNAL_REQUEST_SESSION = {
   name: "Rabby",
   origin: INTERNAL_REQUEST_ORIGIN,
-  icon: "./images/icon-128.png",
-};
+  icon: "./images/icon-128.png"
+}
 
-export const INITIAL_OPENAPI_URL = "http://http://127.0.0.1:8122";
+export const INITIAL_OPENAPI_URL = "http://http://127.0.0.1:8122"
 
 export const EVENTS = {
   broadcastToUI: "broadcastToUI",
@@ -137,20 +133,20 @@ export const EVENTS = {
   WALLETCONNECT: {
     STATUS_CHANGED: "WALLETCONNECT_STATUS_CHANGED",
     INIT: "WALLETCONNECT_INIT",
-    INITED: "WALLETCONNECT_INITED",
-  },
-};
+    INITED: "WALLETCONNECT_INITED"
+  }
+}
 
 export const SORT_WEIGHT = {
   [KEYRING_TYPE.HdKeyring]: 1,
   [KEYRING_TYPE.SimpleKeyring]: 2,
   [KEYRING_TYPE.WalletConnectKeyring]: 4,
-  [KEYRING_TYPE.WatchAddressKeyring]: 5,
-};
+  [KEYRING_TYPE.WatchAddressKeyring]: 5
+}
 
 export const GASPRICE_RANGE = {
-  [CHAINS_ENUM.NOVO]: [0, 10000],
-};
+  [CHAINS_ENUM.NOVO]: [0, 10000]
+}
 
-export const COIN_NAME = "Novo";
-export const COIN_SYMBOL = "NOVO";
+export const COIN_NAME = "Novo"
+export const COIN_SYMBOL = "NOVO"
