@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": [
       "dom",
       "dom.iterable",
@@ -8,11 +8,14 @@
     ],
     "baseUrl": "./",
     "paths": {
+      "utils": ["./src/utils"],
       "@/*": ["./src/*"],
+      "background/*": ["./src/background/*"],
       "consts": ["./src/constant/index"],
       "consts/*": ["./src/constant/*"],
+      "ui/*": ["./src/ui/*"],
     },
-
+    "types": ["chrome","node","react", "react-dom"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -23,10 +26,12 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "isolatedModules": false,
+    "jsx": "react-jsx",
+    "plugins": [{ "transform": "typescript-transform-paths", "afterDeclarations": true }],
+    "noImplicitAny": false
   },
+  "exclude": ["./node_modules"],
   "include": [
     "src"
   ]

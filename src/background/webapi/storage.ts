@@ -1,8 +1,8 @@
-import browser from 'webextension-polyfill';
+import { browser } from 'webextension-polyfill-ts';
 
-let cacheMap: Map<string, any>;
+let cacheMap;
 
-const get = async (prop: string) => {
+const get = async (prop?) => {
   if (cacheMap) {
     return cacheMap.get(prop);
   }
@@ -13,25 +13,25 @@ const get = async (prop: string) => {
   return prop ? result[prop] : result;
 };
 
-const set = async (prop: string, value: any): Promise<void> => {
+const set = async (prop, value): Promise<void> => {
   await browser.storage.local.set({ [prop]: value });
   cacheMap.set(prop, value);
 };
 
-// const byteInUse = async (): Promise<number> => {
-//   return new Promise((resolve, reject) => {
-//     if (chrome) {
-//       chrome.storage.local.getBytesInUse((value) => {
-//         resolve(value);
-//       });
-//     } else {
-//       reject('ByteInUse only works in Chrome');
-//     }
-//   });
-// };
+const byteInUse = async (): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    if (chrome) {
+      chrome.storage.local.getBytesInUse((value) => {
+        resolve(value);
+      });
+    } else {
+      reject('ByteInUse only works in Chrome');
+    }
+  });
+};
 
 export default {
   get,
   set,
-  // byteInUse,
+  byteInUse,
 };

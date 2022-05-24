@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { storage } from '@/background/webapi';
-import debounce from 'lodash/debounce'
+import { storage } from "background/webapi";
+import { debounce } from "debounce";
+
 const persistStorage = (name: string, obj: object) => {
-  debounce(() => {storage.set(name, obj)}, 1000);
+  debounce(storage.set(name, obj), 1000);
 };
 
 interface CreatePersistStoreParams<T> {
@@ -28,7 +29,7 @@ const createPersistStore = async <T extends object>({
 
   const createProxy = <A extends object>(obj: A): A =>
     new Proxy(obj, {
-      set(target: any, prop, value) {
+      set(target, prop, value) {
         target[prop] = value;
 
         persistStorage(name, target);

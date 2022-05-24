@@ -4,30 +4,23 @@
   "version": "1.0",
   "default_locale": "en",
   "description": "Paragon Wallet",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "background": {
-    "service_worker": "static/js/background.js"
+    "page": "background.html",
+    "persistent": true
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["static/js/content.js"],
+      "js": ["content-script.js"],
       "run_at": "document_end"
     }
   ],
-  "permissions": ["storage", "declarativeContent"],
-  "host_permissions": [],
+  "permissions": ["storage", "declarativeContent","notifications"],
   "web_accessible_resources": [
-    {
-      "resources": ["/images/logo.png"],
-      "matches": ["<all_urls>"]
-    },
-    {
-      "resources": ["insert.js"],
-      "matches": ["<all_urls>"]
-    }
+    "/images/logo.png"
   ],
-  "action": {
+  "browser_action": {
     "default_popup": "index.html",
     "default_icon": {
       "16": "/images/logo.png",
