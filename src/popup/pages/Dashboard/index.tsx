@@ -7,10 +7,12 @@ import Home from './Home'
 import Transaction from './Transaction'
 import Settings from './Settings'
 
-import { getPanel } from '@/common/storages/stores/popup/slice'
+import { getPanel, setAccount } from '@/common/storages/stores/popup/slice'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { useLocation } from 'react-router-dom'
-import { getUiType } from '@/ui/utils'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Account } from '@/background/service/preference'
+import { useWallet } from '@/ui/utils'
 
 interface State {
   keyring: string
@@ -23,8 +25,32 @@ interface State {
 
 const Dashboard = () => {
   const { t } = useTranslation()
-  const panel = useAppSelector(getPanel)
+  const wallet = useWallet()
+  const navigate = useNavigate()
   const { state } = useLocation()
+
+  const panel = useAppSelector(getPanel)
+  const dispatch = useAppDispatch()
+  // 改名
+  // addressItems.current.forEach((item) => item.alianNameConfirm());
+
+  const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
+  
+  const getCurrentAccount = async () => {
+    const account = await wallet.getCurrentAccount();
+    if (!account) {
+      navigate('/login');
+    }
+    
+    setCurrentAccount(account);
+    dispatch(setAccount(account))
+  };
+  
+  useEffect(() => {
+    if (!currentAccount) {
+      getCurrentAccount();
+    }
+  }, []);
 
   return (
     <Layout className="h-full">

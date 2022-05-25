@@ -132,11 +132,13 @@ export class WalletController extends BaseController {
   setPageStateCache = (cache: CacheState) => pageStateCacheService.set(cache)
 
   getAddressBalance = async (address: string) => {
+    console.log('getAddressBalance', address)
     const data = await openapiService.getAddressBalance(address)
     preferenceService.updateAddressBalance(address, data as any)
     return data
   }
   getAddressCacheBalance = (address: string | undefined) => {
+    console.log('getAddressCacheBalance', address)
     if (!address) return null
     return preferenceService.getAddressBalance(address)
   }
