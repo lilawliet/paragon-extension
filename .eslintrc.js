@@ -42,7 +42,7 @@ module.exports = {
     "linebreak-style": [0, "error", "windows"], // 强制使用一致的换行风格
     "indent": ["error", 2, { "SwitchCase": 1 }], // 空格4个
     "array-bracket-spacing": [2, "never"], // 指定数组的元素之间要以空格隔开(,后面)
-    "brace-style": [2, "1tbs", { "allowSingleLine": true }], // if while function 后面的{必须与if在同一行，java风格。
+    // "brace-style": [2, "1tbs", { "allowSingleLine": true }], // if while function 后面的{必须与if在同一行，java风格。
     "no-irregular-whitespace": 0, // 不规则的空白不允许
     "no-trailing-spaces": 1, // 一行结束后面有空格就发出警告
     "eol-last": 0, // 文件以单一的换行符结束
@@ -62,7 +62,7 @@ module.exports = {
     "no-func-assign": 2, // 禁止重复的函数声明
     "no-invalid-this": 0, // 禁止无效的this，只能用在构造器，类，对象字面量
     // "no-redeclare": 2, // 禁止重复声明变量
-    "no-spaced-func": 2, // 函数调用时 函数名与()之间不能有空格
+    // "no-spaced-func": 2, // 函数调用时 函数名与()之间不能有空格
     "no-this-before-super": 0, // 在调用super()之前不能使用this或super
     "no-undef": 1, // 不能有未定义的变量
     "no-use-before-define": 2, // 未定义前不能使用
