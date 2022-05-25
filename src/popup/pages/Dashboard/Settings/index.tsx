@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useEffect, useRef, useState } from 'react'
+import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, List } from 'antd'
 import VirtualList from 'rc-virtual-list'
-import { EditOutlined, RightOutlined } from '@ant-design/icons'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
 
 interface Transaction {
@@ -64,9 +64,7 @@ const SettingList: Setting[] = [
   }
 ]
 
-export default ({
-  currentAccount
-}: AccountsProps) => {
+export default ({ currentAccount }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [editable, setEditable] = useState(false)
@@ -78,7 +76,7 @@ export default ({
   }
 
   const handleChangeAlianName = () => {
-    
+    //todo
   }
 
   useEffect(() => {
@@ -125,19 +123,21 @@ export default ({
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5 ">
-        <Button
-          size="large"
-          type="default"
-          className="grid grid-cols-6 p-5 h-15_5 box default w380"
-        >
+        <Button size="large" type="default" className="grid grid-cols-6 p-5 h-15_5 box default w380">
           <div className="flex items-center justify-between font-semibold text-4_5 opacity-60">
-            <div className="col-span-5 font-semibold p0" 
+            <div
+              className="col-span-5 font-semibold p0"
               onClick={(e) => {
                 navigate('/settings/account')
-              }}>{currentAccount?.alianName? currentAccount?.alianName : currentAccount?.brandName}</div>
+              }}>
+              {currentAccount?.alianName ? currentAccount?.alianName : currentAccount?.brandName}
+            </div>
             <div className="flex items-center justify-center cursor-pointer">
-              <EditOutlined onClick={(e) => {
-                handleChangeAlianName}}/>
+              <EditOutlined
+                onClick={(e) => {
+                  handleChangeAlianName
+                }}
+              />
             </div>
           </div>
         </Button>
@@ -153,8 +153,7 @@ export default ({
                 className={`mt-3_75 box w-115 default ${item.right ? 'btn-settings' : ''}`}
                 onClick={(e) => {
                   navigate(`/settings/${item.route}`)
-                }}
-              >
+                }}>
                 <div className="flex items-center justify-between font-semibold text-4_5">
                   <div className="flex flex-col text-left gap-2_5">
                     <span>{item.label}</span>

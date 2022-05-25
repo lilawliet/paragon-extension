@@ -1,19 +1,18 @@
-import { Layout } from 'antd'
-import { useTranslation } from 'react-i18next'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import CHeader from '@/popup/components/CHeader'
-import CFooter from '@/popup/components/CFooter'
-import Home from './Home'
-import Transaction from './Transaction'
-import Settings from './Settings'
-
-import { getPanel, setAccount } from '@/common/storages/stores/popup/slice'
-import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { Account } from '@/background/service/preference'
+import { useAppSelector } from '@/common/storages/hooks'
+import { getPanel } from '@/common/storages/stores/popup/slice'
+import CFooter from '@/popup/components/CFooter'
+import CHeader from '@/popup/components/CHeader'
 import { useWallet } from '@/ui/utils'
+import { Layout } from 'antd'
+import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import BigNumber from 'bignumber.js'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
+import Home from './Home'
+import Settings from './Settings'
+import Transaction from './Transaction'
 
 interface State {
   keyring: string
@@ -25,7 +24,7 @@ interface State {
 }
 
 export interface AccountsProps {
-  currentAccount: Account | null
+  currentAccount?: Account | null
   accountsList?: Account[]
   handleChange?(account: Account): void
 }
@@ -166,7 +165,7 @@ const Dashboard = () => {
         ) : panel == 'transaction' ? (
           <Transaction currentAccount={currentAccount} accountsList={accountsList} handleChange={handleChange} />
         ) : panel == 'settings' ? (
-          <Settings currentAccount={currentAccount} >
+          <Settings currentAccount={currentAccount} />
         ) : (
           <Home currentAccount={currentAccount} accountsList={accountsList} handleChange={handleChange} />
         )}

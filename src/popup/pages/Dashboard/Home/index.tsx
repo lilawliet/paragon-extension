@@ -1,11 +1,8 @@
-import { Statistic } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import AccountSelect from '@/popup/components/Account'
-import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount } from '@/common/storages/stores/popup/slice'
-import { useWallet } from '@/ui/utils'
+import { Statistic } from 'antd'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
 
 interface Currency {
@@ -14,11 +11,7 @@ interface Currency {
   value: string
 }
 
-const Home = ({
-  currentAccount,
-  accountsList,
-  handleChange
-}: AccountsProps) => {
+const Home = ({ currentAccount, accountsList, handleChange }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -52,8 +45,7 @@ const Home = ({
           className="cursor-pointer box unit hover:border-primary hover:text-primary"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
-          }}
-        >
+          }}>
           <span>
             <img src="./images/qrcode-solid.png" alt="" />
           </span>
@@ -63,8 +55,7 @@ const Home = ({
           className="cursor-pointer box unit"
           onClick={(e) => {
             navigate('/send/index')
-          }}
-        >
+          }}>
           <span>
             <img src="./images/arrow-right-arrow-left-solid.png" alt="" />
           </span>

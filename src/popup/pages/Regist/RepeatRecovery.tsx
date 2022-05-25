@@ -1,7 +1,7 @@
-import { Button, Checkbox, Input } from 'antd'
-import { Link, useNavigate } from 'react-router-dom'
+import { Button, Input } from 'antd'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ChangeEventHandler, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './index.module.less'
 
 const RepeatRecovery = () => {
@@ -35,7 +35,9 @@ const RepeatRecovery = () => {
     )
   }, [keys])
 
-  useEffect(() => {}, [hover])
+  useEffect(() => {
+    //todo
+  }, [hover])
 
   return (
     <div className="flex justify-center pt-15 box w380">
@@ -49,8 +51,7 @@ const RepeatRecovery = () => {
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 
                                     ${hover == index ? ' border-white border-opacity-40 text-white' : ''} 
-                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}
-              >
+                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}>
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}

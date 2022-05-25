@@ -1,33 +1,26 @@
 import { Account } from '@/background/service/preference'
-import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount } from '@/common/storages/stores/popup/slice'
+import { useAppDispatch } from '@/common/storages/hooks'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface AccountSelectDrawerProps {
-  current: Account | null
-  accounts: Account[]
-  onChange(account: Account): void
+  current?: Account | null
+  accounts?: Account[]
+  onChange?(account: Account): void
   onCancel(): void
   title: string
   isLoading?: boolean
 }
 
-const AccountSelect = ({ 
-  current,
-  accounts,
-  onChange, 
-  title, 
-  onCancel, 
-  isLoading = false 
-}: AccountSelectDrawerProps) => {
+const AccountSelect = ({ current, accounts, onChange, title, onCancel, isLoading = false }: AccountSelectDrawerProps) => {
   const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
   const { t } = useTranslation()
   const { Option } = Select
   const dispatch = useAppDispatch()
 
   const init = async () => {
+    //todo
   }
 
   useEffect(() => {
@@ -51,9 +44,9 @@ const AccountSelect = ({
               <img src="./images/chevron-down-solid.png" alt="" />
             </span>
           }>
-          {accounts.map((account, index) => (
+          {accounts?.map((account, index) => (
             <Option value={account.address} key={index}>
-              {account.alianName? account.alianName : account.brandName}{' '}
+              {account.alianName ? account.alianName : account.brandName}{' '}
             </Option>
           ))}
         </Select>
