@@ -121,19 +121,6 @@ export interface TokenItem {
   raw_amount_hex_str?: string
 }
 
-export interface TokenApproval {
-  id: string
-  name: string
-  symbol: string
-  logo_url: string
-  chain: string
-  price: number
-  balance: number
-  spenders: Spender[]
-  sum_exposure_usd: number
-  exposure_balance: number
-}
-
 export interface Spender {
   id: string
   value: number
@@ -150,6 +137,19 @@ export interface Spender {
   is_abandoned: boolean
 }
 
+export interface TokenApproval {
+  id: string
+  name: string
+  symbol: string
+  logo_url: string
+  chain: string
+  price: number
+  balance: number
+  spenders: Spender[]
+  sum_exposure_usd: number
+  exposure_balance: number
+}
+
 export interface AssetItem {
   id: string
   chain: string
@@ -162,20 +162,17 @@ export interface AssetItem {
   asset_usd_value: number
   debt_usd_value: number
 }
-export interface NFTCollection {
-  create_at: string
+
+export interface Collection {
   id: string
-  is_core: boolean
   name: string
-  price: number
-  chain: string
-  tokens: NFTItem[]
+  description: null | string
+  logo_url: string
+  is_core: boolean
+  contract_uuids: string[]
+  create_at: number
 }
 
-export interface UserCollection {
-  collection: Collection
-  list: NFTItem[]
-}
 export interface NFTItem {
   chain: string
   id: string
@@ -207,21 +204,21 @@ export interface NFTItem {
   is_erc721: boolean
 }
 
-export interface Collection {
+export interface NFTCollection {
+  create_at: string
   id: string
-  name: string
-  description: null | string
-  logo_url: string
   is_core: boolean
-  contract_uuids: string[]
-  create_at: number
+  name: string
+  price: number
+  chain: string
+  tokens: NFTItem[]
 }
 
-export interface TxDisplayItem extends TxHistoryItem {
-  projectDict: TxHistoryResult['project_dict']
-  cateDict: TxHistoryResult['cate_dict']
-  tokenDict: TxHistoryResult['token_dict']
+export interface UserCollection {
+  collection: Collection
+  list: NFTItem[]
 }
+
 export interface TxHistoryItem {
   cate_id: string | null
   chain: string
@@ -270,6 +267,13 @@ export interface TxHistoryResult {
   >
   token_dict: Record<string, TokenItem>
 }
+
+export interface TxDisplayItem extends TxHistoryItem {
+  projectDict: TxHistoryResult['project_dict']
+  cateDict: TxHistoryResult['cate_dict']
+  tokenDict: TxHistoryResult['token_dict']
+}
+
 export interface GasResult {
   estimated_gas_cost_usd_value: number
   estimated_gas_cost_value: number

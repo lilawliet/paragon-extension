@@ -679,7 +679,9 @@ export class WalletController extends BaseController {
     return assets
   }
 
-  reportErrors = (error: string) => {}
+  reportErrors = (error: string) => {
+    console.error('report not implemented')
+  }
 }
 
 export default new WalletController()

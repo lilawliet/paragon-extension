@@ -27,19 +27,19 @@ const getSession = (id) => {
   return sessionMap.get(id)
 }
 
+const createSession = (id, data) => {
+  const session = new Session(data)
+  sessionMap.set(id, session)
+
+  return session
+}
+
 const getOrCreateSession = (id) => {
   if (sessionMap.has(id)) {
     return getSession(id)
   }
 
   return createSession(id, null)
-}
-
-const createSession = (id, data) => {
-  const session = new Session(data)
-  sessionMap.set(id, session)
-
-  return session
 }
 
 const deleteSession = (id) => {

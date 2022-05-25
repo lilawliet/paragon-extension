@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState, AppThunk } from '../index'
+import { AppThunk, RootState } from '../index'
 import { fetchCount } from './api'
 
 export type Panel = 'home' | 'nft' | 'transaction' | 'settings'
@@ -39,13 +39,13 @@ export const { handleSetPanel, setConn } = slice.actions
 export const getPanel = (state: RootState) => state.popup.panel
 export const getConn = (state: RootState) => state.popup.conn
 
-export const setPanel =
-  (panel: Panel): AppThunk =>
-  (dispatch, getState) => {
+export const setPanel = (panel: Panel): AppThunk => {
+  return (dispatch, getState) => {
     const current = getPanel(getState())
     if (current != panel) {
       dispatch(handleSetPanel(panel))
     }
   }
+}
 
 export default slice.reducer
