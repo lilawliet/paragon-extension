@@ -529,11 +529,10 @@ export class OpenApiService {
   }
 
   async getWalletConfig() {
-    return {} as Record<string, any>
-    // const { status, data } = await this.request.get("/wallet/config", {
-    //   params: {}
-    // })
-    // return data.result
+    const { status, data } = await this.request.get('/wallet/config', {
+      params: {}
+    })
+    return data.result
   }
 
   async getAddressBalance(address: string): Promise<{
