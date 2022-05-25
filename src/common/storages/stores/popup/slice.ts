@@ -8,7 +8,7 @@ export type Panel = 'home' | 'nft' | 'transaction' | 'settings'
 export interface State {
   panel: Panel // main panel state
   conn: boolean // connected state
-  account: Account | undefined
+  account: Account | null
 }
 
 // typically used to make async requests.
@@ -20,7 +20,7 @@ export const makeAsync = createAsyncThunk('counter/fetchCount', async (amount: n
 const initialState: State = {
   panel: 'home',
   conn: false,
-  account: undefined
+  account: null
 }
 
 export const slice = createSlice({

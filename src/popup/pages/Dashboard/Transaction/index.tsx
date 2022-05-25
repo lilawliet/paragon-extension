@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import AccountSelect from '@/popup/components/Account'
-import { Account } from '@/background/service/preference'
 import { useState } from 'react'
+import { useWallet } from '@/ui/utils'
+import { AccountsProps } from '..'
 
 interface Transaction {
   time: number
@@ -11,9 +12,18 @@ interface Transaction {
   opt: string
 }
 
-const Transaction = () => {
+const Transaction = ({
+  currentAccount,
+  accountsList,
+  handleChange
+}: AccountsProps) => {
   const { t } = useTranslation()
+  const wallet = useWallet()
   const navigate = useNavigate()
+
+  const [isListLoading, setIsListLoading] = useState(false);
+  const [isAssetsLoading, setIsAssetsLoading] = useState(true);
+
 
   const [transactions, setTransactions] = useState<Transaction[]>([
     {
@@ -34,9 +44,9 @@ const Transaction = () => {
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box black bg-opacity-20 w340">
         <AccountSelect
-          onChange={function (account: Account): void {
-            throw new Error('Function not implemented.')
-          }}
+          current={currentAccount}
+          accounts={accountsList}
+          onChange={handleChange}
           onCancel={function (): void {
             throw new Error('Function not implemented.')
           }}

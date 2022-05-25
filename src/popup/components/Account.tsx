@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface AccountSelectDrawerProps {
+  current: Account | null
   accounts: Account[]
   onChange(account: Account): void
   onCancel(): void
@@ -14,6 +15,7 @@ interface AccountSelectDrawerProps {
 }
 
 const AccountSelect = ({ 
+  current,
   accounts,
   onChange, 
   title, 
@@ -23,16 +25,9 @@ const AccountSelect = ({
   const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
   const { t } = useTranslation()
   const { Option } = Select
-
-  
-  const account = useAppSelector(getAccount)
   const dispatch = useAppDispatch()
 
   const init = async () => {
-    //   const visibleAccounts: Account[] = await wallet.getAllVisibleAccountsArray();
-    //   setAccounts(
-    //     visibleAccounts.filter((item) => item.type !== KEYRING_TYPE.GnosisKeyring)
-    //   );
   }
 
   useEffect(() => {
@@ -47,7 +42,8 @@ const AccountSelect = ({
       <div className="flex-grow">
         <Select
           onChange={onChange}
-          defaultValue={account}
+          defaultValue={current}
+          key={'address'}
           style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}
           bordered={false}
           suffixIcon={
@@ -56,8 +52,8 @@ const AccountSelect = ({
             </span>
           }>
           {accounts.map((account, index) => (
-            <Option value={account.brandName} key={index}>
-              {account.brandName}{' '}
+            <Option value={account.address} key={index}>
+              {account.alianName? account.alianName : account.brandName}{' '}
             </Option>
           ))}
         </Select>
