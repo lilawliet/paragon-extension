@@ -2,6 +2,20 @@
   "name": "paragon-wallet-ts",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "clean": "mkdir -p dist && rm -rf dist/* && cp -r _raw/* dist",
+    "build:chrome:dev": "webpack --progress --env browser=chrome config=dev",
+    "build:firefox:dev": "webpack --progress --env browser=firefox config=dev",
+    "build:brave:dev": "webpack --progress --env browser=brave config=dev",
+    "build:edge:dev": "webpack --progress --env browser=edge config=dev",
+    "build:chrome:pro": "webpack --progress --env browser=chrome config=pro",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js",
+    "_lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
+    "_lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
@@ -107,17 +121,7 @@
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1"
   },
-  "scripts": {
-    "clean": "mkdir -p dist && rm -rf dist/* && cp -r _raw/* dist",
-    "build:dev": "npm run clean && NODE_ENV=development BABEL_ENV=development TAILWIND_MODE=watch webpack --progress --env config=dev",
-    "build:dev-win": "cross-env NODE_ENV=development BABEL_ENV=development TAILWIND_MODE=watch webpack --progress --env config=dev",
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
-  },
+  
   "browserslist": {
     "production": [
       ">0.2%",
