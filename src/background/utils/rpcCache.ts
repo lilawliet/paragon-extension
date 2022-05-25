@@ -3,11 +3,17 @@ type CacheState = Map<string, { timeoutId: number; result: any; expireTime: numb
 class RpcCache {
   state: CacheState = new Map()
 
-  start() {}
+  start() {
+    //todo
+  }
 
-  async loadBlockNumber() {}
+  async loadBlockNumber() {
+    //todo
+  }
 
-  set(address: string, data: { method: string; chainId: string; params: any; result: any }, expireTime = 150000) {}
+  set(address: string, data: { method: string; chainId: string; params: any; result: any }, expireTime = 150000) {
+    //todo
+  }
 
   has(address: string, data: { method: string; params: any; chainId: string }) {
     return false
@@ -17,7 +23,9 @@ class RpcCache {
     return false
   }
 
-  updateExpire(address: string, data: { method: string; params: any; chainId: string }, expireTime = 10000) {}
+  updateExpire(address: string, data: { method: string; params: any; chainId: string }, expireTime = 10000) {
+    //todo
+  }
 
   canCache(data: { method: string; params: any }) {
     switch (data.method) {

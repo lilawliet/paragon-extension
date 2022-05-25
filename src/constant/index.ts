@@ -116,15 +116,15 @@ export const WALLETCONNECT_STATUS_MAP = {
   FAILD: 6
 }
 
-export const INTERNAL_REQUEST_ORIGIN = 'https://rabby.io'
+export const INTERNAL_REQUEST_ORIGIN = 'https://paragon.li'
 
 export const INTERNAL_REQUEST_SESSION = {
-  name: 'Rabby',
+  name: 'Paragon',
   origin: INTERNAL_REQUEST_ORIGIN,
   icon: './images/icon-128.png'
 }
 
-export const INITIAL_OPENAPI_URL = 'http://http://127.0.0.1:8122'
+export const INITIAL_OPENAPI_URL = 'https://api.paragon.li'
 
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',

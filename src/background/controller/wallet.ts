@@ -263,9 +263,9 @@ export class WalletController extends BaseController {
         brandName: brandName,
         clientMeta: {
           description: i18n.t('appDescription'),
-          url: 'https://rabby.io',
-          icons: ['https://rabby.io/assets/images/logo.png'],
-          name: 'Rabby'
+          url: 'https://paragon.li',
+          icons: ['https://paragon.li/assets/images/logo.png'],
+          name: 'Paragon'
         }
       })
       isNewKey = true
@@ -681,7 +681,11 @@ export class WalletController extends BaseController {
     return assets
   }
 
-  reportErrors = (error: string) => {}
+  reportErrors = (error: string) => {
+    console.error('report not implemented')
+  }
+
+  sendNovo
 }
 
 export default new WalletController()
