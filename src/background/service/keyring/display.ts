@@ -1,8 +1,8 @@
-import KeyringService from "./index"
+import KeyringService from './index'
 
 class DisplayKeyring {
   accounts: string[] = []
-  type = ""
+  type = ''
 
   constructor(keyring) {
     this.accounts = keyring.accounts

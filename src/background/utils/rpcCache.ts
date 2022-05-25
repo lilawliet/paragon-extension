@@ -21,31 +21,31 @@ class RpcCache {
 
   canCache(data: { method: string; params: any }) {
     switch (data.method) {
-      case "web3_clientVersion":
-      case "web3_sha3":
-      case "eth_protocolVersion":
-      case "eth_getBlockTransactionCountByHash":
-      case "eth_getUncleCountByBlockHash":
-      case "eth_getCode":
-      case "eth_getBlockByHash":
-      case "eth_getUncleByBlockHashAndIndex":
-      case "eth_getCompilers":
-      case "eth_compileLLL":
-      case "eth_compileSolidity":
-      case "eth_compileSerpent":
-      case "shh_version":
-      case "eth_getBlockByNumber":
-      case "eth_getBlockTransactionCountByNumber":
-      case "eth_getUncleCountByBlockNumber":
-      case "eth_getTransactionByBlockNumberAndIndex":
-      case "eth_getUncleByBlockNumberAndIndex":
-      case "eth_gasPrice":
-      case "eth_blockNumber":
-      case "eth_getStorageAt":
-      case "eth_call":
-      case "eth_estimateGas":
-      case "eth_getFilterLogs":
-      case "eth_getLogs":
+      case 'web3_clientVersion':
+      case 'web3_sha3':
+      case 'eth_protocolVersion':
+      case 'eth_getBlockTransactionCountByHash':
+      case 'eth_getUncleCountByBlockHash':
+      case 'eth_getCode':
+      case 'eth_getBlockByHash':
+      case 'eth_getUncleByBlockHashAndIndex':
+      case 'eth_getCompilers':
+      case 'eth_compileLLL':
+      case 'eth_compileSolidity':
+      case 'eth_compileSerpent':
+      case 'shh_version':
+      case 'eth_getBlockByNumber':
+      case 'eth_getBlockTransactionCountByNumber':
+      case 'eth_getUncleCountByBlockNumber':
+      case 'eth_getTransactionByBlockNumberAndIndex':
+      case 'eth_getUncleByBlockNumberAndIndex':
+      case 'eth_gasPrice':
+      case 'eth_blockNumber':
+      case 'eth_getStorageAt':
+      case 'eth_call':
+      case 'eth_estimateGas':
+      case 'eth_getFilterLogs':
+      case 'eth_getLogs':
         return true
 
       default:

@@ -1,13 +1,13 @@
-import { RightOutlined } from "@ant-design/icons"
-import { Button, Input } from "antd"
-import { useNavigate } from "react-router-dom"
+import { RightOutlined } from '@ant-design/icons'
+import { Button, Input } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
-import { Account, Status } from "./index"
+import { Account, Status } from './index'
 
 interface Props {
-    account: Account
-    setAccount(account: Account): void
-    setStatus(status: Status): void
+  account: Account
+  setAccount(account: Account): void
+  setStatus(status: Status): void
 }
 
 export default ({ account, setAccount, setStatus }: Props) => {
@@ -15,7 +15,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
 
   const verify = () => {
     // to verify
-    navigate("/create-recovery")
+    navigate('/create-recovery')
   }
 
   return (
@@ -26,7 +26,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
         type="default"
         className="mt-1_25 box w-115 default btn-settings"
         onClick={(e) => {
-          setStatus("create")
+          setStatus('create')
         }}
       >
         <div className="flex items-center justify-between font-semibold text-4_5">
@@ -44,7 +44,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
         type="default"
         className="box w-115 default btn-settings"
         onClick={(e) => {
-          setStatus("import")
+          setStatus('import')
         }}
       >
         <div className="flex items-center justify-between font-semibold text-4_5">

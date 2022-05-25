@@ -1,14 +1,14 @@
-import { useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import AccountSelect from "@/popup/components/Account"
-import { Account } from "@/background/service/preference"
-import { useState } from "react"
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import AccountSelect from '@/popup/components/Account'
+import { Account } from '@/background/service/preference'
+import { useState } from 'react'
 
 interface Transaction {
-    time: number
-    address: string
-    amount: string
-    opt: string
+  time: number
+  address: string
+  amount: string
+  opt: string
 }
 
 const Transaction = () => {
@@ -18,15 +18,15 @@ const Transaction = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([
     {
       time: 1652188199,
-      address: "sadfjkl...2j343jlk",
-      amount: "1,224",
-      opt: "+"
+      address: 'sadfjkl...2j343jlk',
+      amount: '1,224',
+      opt: '+'
     },
     {
       time: 1652188199,
-      address: "sadfjkl...2j343jlk",
-      amount: "1,224",
-      opt: "-"
+      address: 'sadfjkl...2j343jlk',
+      amount: '1,224',
+      opt: '-'
     }
   ])
 
@@ -35,12 +35,12 @@ const Transaction = () => {
       <div className="flex items-center px-2 h-13 box black bg-opacity-20 w340">
         <AccountSelect
           onChange={function (account: Account): void {
-            throw new Error("Function not implemented.")
+            throw new Error('Function not implemented.')
           }}
           onCancel={function (): void {
-            throw new Error("Function not implemented.")
+            throw new Error('Function not implemented.')
           }}
-          title={""}
+          title={''}
         />
       </div>
       <div className="grid mt-6 gap-2_5">
@@ -49,7 +49,7 @@ const Transaction = () => {
           <div className="justify-between mb-4 box nobor w440 text-soft-white" key={index}>
             <span>{transaction.address}</span>
             <span>
-              <span className={`font-semibold ${transaction.opt == "+" ? "text-custom-green" : "text-warn"}`}>{transaction.opt}</span>
+              <span className={`font-semibold ${transaction.opt == '+' ? 'text-custom-green' : 'text-warn'}`}>{transaction.opt}</span>
               <span className="font-semibold text-white">{transaction.amount}</span> Novo
             </span>
           </div>
@@ -59,7 +59,7 @@ const Transaction = () => {
           <div className="justify-between mb-4 box nobor w440 text-soft-white" key={index}>
             <span>{transaction.address}</span>
             <span>
-              <span className={`font-semibold ${transaction.opt == "+" ? "text-custom-green" : "text-warn"}`}>{transaction.opt}</span>
+              <span className={`font-semibold ${transaction.opt == '+' ? 'text-custom-green' : 'text-warn'}`}>{transaction.opt}</span>
               <span className="font-semibold text-white">{transaction.amount}</span> Novo
             </span>
           </div>

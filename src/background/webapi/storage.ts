@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts"
+import { browser } from 'webextension-polyfill-ts'
 
 let cacheMap
 
@@ -25,7 +25,7 @@ const byteInUse = async (): Promise<number> => {
         resolve(value)
       })
     } else {
-      reject("ByteInUse only works in Chrome")
+      reject('ByteInUse only works in Chrome')
     }
   })
 }

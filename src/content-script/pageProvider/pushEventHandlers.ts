@@ -1,5 +1,5 @@
-import { ethErrors } from "eth-rpc-errors"
-import { ParagonProvider } from "./index"
+import { ethErrors } from 'eth-rpc-errors'
+import { ParagonProvider } from './index'
 
 class PushEventHandlers {
   provider: ParagonProvider
@@ -18,7 +18,7 @@ class PushEventHandlers {
     if (!this.provider._isConnected) {
       this.provider._isConnected = true
       this.provider._state.isConnected = true
-      this._emit("connect", data)
+      this._emit('connect', data)
     }
   }
 
@@ -38,9 +38,9 @@ class PushEventHandlers {
     this.provider._selectedAddress = null
     const disconnectError = ethErrors.provider.disconnected()
 
-    this._emit("accountsChanged", [])
-    this._emit("disconnect", disconnectError)
-    this._emit("close", disconnectError)
+    this._emit('accountsChanged', [])
+    this._emit('disconnect', disconnectError)
+    this._emit('close', disconnectError)
   }
 
   accountsChanged = (accounts) => {
@@ -50,7 +50,7 @@ class PushEventHandlers {
 
     this.provider._selectedAddress = accounts?.[0]
     this.provider._state.accounts = accounts
-    this._emit("accountsChanged", accounts)
+    this._emit('accountsChanged', accounts)
   }
 
   chainChanged = ({ chain, networkVersion }) => {
@@ -58,12 +58,12 @@ class PushEventHandlers {
 
     if (chain !== this.provider._chainId) {
       this.provider._chainId = chain
-      this._emit("chainChanged", chain)
+      this._emit('chainChanged', chain)
     }
 
     if (networkVersion !== this.provider._networkVersion) {
       this.provider._networkVersion = networkVersion
-      this._emit("networkChanged", networkVersion)
+      this._emit('networkChanged', networkVersion)
     }
   }
 }

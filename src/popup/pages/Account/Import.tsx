@@ -1,12 +1,12 @@
-import { Button, Input } from "antd"
-import { useNavigate } from "react-router-dom"
+import { Button, Input } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
-import { Account, Status } from "./index"
+import { Account, Status } from './index'
 
 interface Props {
-    account: Account
-    setAccount(account: Account): void
-    setStatus(status: Status): void
+  account: Account
+  setAccount(account: Account): void
+  setStatus(status: Status): void
 }
 
 export default ({ account, setAccount, setStatus }: Props) => {
@@ -14,7 +14,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
 
   const verify = () => {
     // to verify
-    navigate("/create-recovery")
+    navigate('/create-recovery')
   }
 
   return (

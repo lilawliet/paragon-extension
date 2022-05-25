@@ -1,14 +1,14 @@
-import { CheckOutlined, RightOutlined } from "@ant-design/icons"
-import { Button, Input } from "antd"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { CheckOutlined, RightOutlined } from '@ant-design/icons'
+import { Button, Input } from 'antd'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { Account, Status } from "./index"
+import { Account, Status } from './index'
 
 interface Props {
-    account: Account
-    setAccount(account: Account): void
-    setStatus(status: Status): void
+  account: Account
+  setAccount(account: Account): void
+  setStatus(status: Status): void
 }
 
 export default ({ account, setAccount, setStatus }: Props) => {
@@ -17,7 +17,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
 
   const verify = () => {
     // to verify
-    setStatus("add")
+    setStatus('add')
   }
 
   return (
@@ -35,7 +35,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
           <div className="flex-grow text-left">
             {account.name} <span className="font-normal opacity-60">({account.address})</span>
           </div>
-          {currency == 0 ? <CheckOutlined style={{ transform: "scale(1.5)", opacity: "80%" }} /> : <></>}
+          {currency == 0 ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
         </div>
       </Button>
       <Button
@@ -48,9 +48,9 @@ export default ({ account, setAccount, setStatus }: Props) => {
       >
         <div className="flex items-center justify-between text-base font-semibold">
           <div className="flex-grow text-left">
-                        Account 2 <span className="font-normal opacity-60">(1DpeW...48ztM)</span>
+            Account 2 <span className="font-normal opacity-60">(1DpeW...48ztM)</span>
           </div>
-          {currency == 1 ? <CheckOutlined style={{ transform: "scale(1.5)", opacity: "80%" }} /> : <></>}
+          {currency == 1 ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
         </div>
       </Button>
 

@@ -1,8 +1,8 @@
-import { useState } from "react"
-import { getConn, setConn } from "@/common/storages/stores/popup/slice"
-import { useAppDispatch, useAppSelector } from "@/common/storages/hooks"
+import { useState } from 'react'
+import { getConn, setConn } from '@/common/storages/stores/popup/slice'
+import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
 
-import "./index.less"
+import './index.less'
 
 const CHeader = () => {
   const conn = useAppSelector(getConn)
@@ -40,7 +40,7 @@ const CHeader = () => {
           }}
         >
           <div className="mr-2 bg-custom-green rounded-xl w-2_5 h-2_5"></div>
-                    Connected
+          Connected
         </div>
       )
     }
@@ -66,7 +66,7 @@ const CHeader = () => {
       {loading ? (
         <div className="connected">
           <div className="mr-2 bg-custom-green rounded-xl w-2_5 h-2_5"></div>
-          {conn ? "Disconnecting" : "Connecting"}
+          {conn ? 'Disconnecting' : 'Connecting'}
         </div>
       ) : (
         <StatusEl />

@@ -1,16 +1,16 @@
-import { browser, Windows } from "webextension-polyfill-ts"
-import { EventEmitter } from "events"
-import { IS_WINDOWS } from "consts"
+import { browser, Windows } from 'webextension-polyfill-ts'
+import { EventEmitter } from 'events'
+import { IS_WINDOWS } from 'consts'
 
 const event = new EventEmitter()
 
 // if focus other windows, then reject the approval
 browser.windows.onFocusChanged.addListener((winId) => {
-  event.emit("windowFocusChange", winId)
+  event.emit('windowFocusChange', winId)
 })
 
 browser.windows.onRemoved.addListener((winId) => {
-  event.emit("windowRemoved", winId)
+  event.emit('windowRemoved', winId)
 })
 
 const BROWSER_HEADER = 80
@@ -25,7 +25,7 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
     left: cLeft,
     width
   } = await browser.windows.getCurrent({
-    windowTypes: ["normal"]
+    windowTypes: ['normal']
   } as Windows.GetInfo)
 
   const top = cTop! + BROWSER_HEADER
@@ -33,24 +33,24 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
 
   const currentWindow = await browser.windows.getCurrent()
   let win
-  if (currentWindow.state === "fullscreen") {
+  if (currentWindow.state === 'fullscreen') {
     // browser.windows.create not pass state to chrome
     win = await chrome.windows.create({
       focused: true,
       url,
-      type: "popup",
+      type: 'popup',
       ...rest,
       width: undefined,
       height: undefined,
       left: undefined,
       top: undefined,
-      state: "fullscreen"
+      state: 'fullscreen'
     })
   } else {
     win = await browser.windows.create({
       focused: true,
       url,
-      type: "popup",
+      type: 'popup',
       top,
       left,
       ...WINDOW_SIZE,
@@ -70,7 +70,7 @@ const remove = async (winId) => {
   return browser.windows.remove(winId)
 }
 
-const openNotification = ({ route = "", ...rest } = {}): Promise<number | undefined> => {
+const openNotification = ({ route = '', ...rest } = {}): Promise<number | undefined> => {
   const url = `notification.html${route && `#${route}`}`
 
   return create({ url, ...rest })

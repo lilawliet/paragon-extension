@@ -1,24 +1,24 @@
 // this script is injected into webpage's context
-import { EventEmitter } from "events"
+import { EventEmitter } from 'events'
 
 interface StateProvider {
-    accounts: string[] | null
-    isConnected: boolean
-    isUnlocked: boolean
-    initialized: boolean
-    isPermanentlyDisconnected: boolean
+  accounts: string[] | null
+  isConnected: boolean
+  isUnlocked: boolean
+  initialized: boolean
+  isPermanentlyDisconnected: boolean
 }
 
 export class EthereumProvider extends EventEmitter {
-  currentAccount = ""
-  currentAccountType = ""
-  currentAccountBrand = ""
+  currentAccount = ''
+  currentAccountType = ''
+  currentAccountBrand = ''
   chainId: string | null = null
   selectedAddress: string | null = null
   /**
-     * The network ID of the currently connected Ethereum chain.
-     * @deprecated
-     */
+   * The network ID of the currently connected Ethereum chain.
+   * @deprecated
+   */
   networkVersion: string | null = null
   isRabby = true
   isMetaMask = true
@@ -52,7 +52,7 @@ export class EthereumProvider extends EventEmitter {
   initialize = async () => {
     this._initialized = true
     this._state.initialized = true
-    this.emit("_initialized")
+    this.emit('_initialized')
   }
 
   isConnected = () => {
@@ -145,34 +145,34 @@ export class EthereumProvider extends EventEmitter {
   }
 
   send = (payload, callback?) => {
-    if (typeof payload === "string" && (!callback || Array.isArray(callback))) {
+    if (typeof payload === 'string' && (!callback || Array.isArray(callback))) {
       // send(method, params? = [])
       return this.request({
         method: payload,
         params: callback
       }).then((result) => ({
         id: undefined,
-        jsonrpc: "2.0",
+        jsonrpc: '2.0',
         result
       }))
     }
 
-    if (typeof payload === "object" && typeof callback === "function") {
+    if (typeof payload === 'object' && typeof callback === 'function') {
       return this.sendAsync(payload, callback)
     }
 
     let result
     switch (payload.method) {
-      case "eth_accounts":
+      case 'eth_accounts':
         result = this.selectedAddress ? [this.selectedAddress] : []
         break
 
-      case "eth_coinbase":
+      case 'eth_coinbase':
         result = this.selectedAddress || null
         break
 
       default:
-        throw new Error("sync method doesnt support")
+        throw new Error('sync method doesnt support')
     }
 
     return {
@@ -184,8 +184,8 @@ export class EthereumProvider extends EventEmitter {
 
   shimLegacy = () => {
     const legacyMethods = [
-      ["enable", "eth_requestAccounts"],
-      ["net_version", "net_version"]
+      ['enable', 'eth_requestAccounts'],
+      ['net_version', 'net_version']
     ]
 
     for (const [_method, method] of legacyMethods) {
@@ -196,7 +196,7 @@ export class EthereumProvider extends EventEmitter {
 
 const provider = new EthereumProvider()
 
-window.dispatchEvent(new Event("ethereum#initialized"))
+window.dispatchEvent(new Event('ethereum#initialized'))
 
 export default {
   currentProvider: new Proxy(provider, {

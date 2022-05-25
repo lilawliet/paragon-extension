@@ -1,28 +1,28 @@
-import { Account } from "@/background/service/preference"
-import { DownOutlined } from "@ant-design/icons"
-import { Select } from "antd"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { Account } from '@/background/service/preference'
+import { DownOutlined } from '@ant-design/icons'
+import { Select } from 'antd'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface AccountSelectDrawerProps {
-    onChange(account: Account): void
-    onCancel(): void
-    title: string
-    isLoading?: boolean
+  onChange(account: Account): void
+  onCancel(): void
+  title: string
+  isLoading?: boolean
 }
 
 const AccountSelect = ({ onChange, title, onCancel, isLoading = false }: AccountSelectDrawerProps) => {
   const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
   const [accounts, setAccounts] = useState<Account[]>([
     {
-      type: "",
-      address: "",
-      brandName: "jack"
+      type: '',
+      address: '',
+      brandName: 'jack'
     },
     {
-      type: "",
-      address: "",
-      brandName: "luck"
+      type: '',
+      address: '',
+      brandName: 'luck'
     }
   ])
   const { t } = useTranslation()
@@ -50,8 +50,8 @@ const AccountSelect = ({ onChange, title, onCancel, isLoading = false }: Account
       </span>
       <div className="flex-grow">
         <Select
-          defaultValue={"jack"}
-          style={{ width: "100%", textAlign: "center", lineHeight: "2.5rem" }}
+          defaultValue={'jack'}
+          style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}
           bordered={false}
           suffixIcon={
             <span className="text-white">
@@ -61,7 +61,7 @@ const AccountSelect = ({ onChange, title, onCancel, isLoading = false }: Account
         >
           {accounts.map((account, index) => (
             <Option value={account.brandName} key={index}>
-              {account.brandName}{" "}
+              {account.brandName}{' '}
             </Option>
           ))}
         </Select>

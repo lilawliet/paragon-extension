@@ -1,16 +1,16 @@
-export * from "./WalletContext"
+export * from './WalletContext'
 export * from './hooks'
 
 const UI_TYPE = {
-  Tab: "index",
-  Pop: "popup",
-  Notification: "notification"
+  Tab: 'index',
+  Pop: 'popup',
+  Notification: 'notification'
 }
 
 type UiTypeCheck = {
-    isTab: boolean
-    isNotification: boolean
-    isPop: boolean
+  isTab: boolean
+  isNotification: boolean
+  isPop: boolean
 }
 
 export const getUiType = (): UiTypeCheck => {
@@ -24,20 +24,21 @@ export const getUiType = (): UiTypeCheck => {
 
 export const hex2Text = (hex: string) => {
   try {
-    return hex.startsWith("0x") ? decodeURIComponent(hex.replace(/^0x/, "").replace(/[0-9a-f]{2}/g, "%$&")) : hex
+    return hex.startsWith('0x') ? decodeURIComponent(hex.replace(/^0x/, '').replace(/[0-9a-f]{2}/g, '%$&')) : hex
   } catch {
     return hex
   }
 }
 
 export const getUITypeName = (): string => {
+  // need to refact
   const UIType = getUiType()
 
-  if (UIType.isPop) return "popup"
-  if (UIType.isNotification) return "notification"
-  if (UIType.isTab) return "tab"
+  if (UIType.isPop) return 'popup'
+  if (UIType.isNotification) return 'notification'
+  if (UIType.isTab) return 'tab'
 
-  return ""
+  return ''
 }
 
 /**
@@ -46,7 +47,7 @@ export const getUITypeName = (): string => {
  * @returns (pancakeswap)
  */
 export const getOriginName = (origin: string) => {
-  const matches = origin.replace(/https?:\/\//, "").match(/^([^.]+\.)?(\S+)\./)
+  const matches = origin.replace(/https?:\/\//, '').match(/^([^.]+\.)?(\S+)\./)
 
   return matches ? matches[2] || origin : origin
 }
@@ -70,7 +71,7 @@ export const ellipsisOverflowedText = (str: string, length = 5, removeLastComma 
   if (str.length <= length) return str
   let cut = str.substring(0, length)
   if (removeLastComma) {
-    if (cut.endsWith(",")) {
+    if (cut.endsWith(',')) {
       cut = cut.substring(0, length - 1)
     }
   }

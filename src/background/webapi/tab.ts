@@ -1,17 +1,17 @@
-import { browser } from "webextension-polyfill-ts"
-import { EventEmitter } from "events"
+import { browser } from 'webextension-polyfill-ts'
+import { EventEmitter } from 'events'
 
 const tabEvent = new EventEmitter()
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo.url) {
-    tabEvent.emit("tabUrlChanged", tabId, changeInfo.url)
+    tabEvent.emit('tabUrlChanged', tabId, changeInfo.url)
   }
 })
 
 // window close will trigger this event also
 browser.tabs.onRemoved.addListener((tabId) => {
-  tabEvent.emit("tabRemove", tabId)
+  tabEvent.emit('tabRemove', tabId)
 })
 
 const createTab = async (url): Promise<number | undefined> => {
@@ -23,7 +23,7 @@ const createTab = async (url): Promise<number | undefined> => {
   return tab?.id
 }
 
-const openIndexPage = (route = ""): Promise<number | undefined> => {
+const openIndexPage = (route = ''): Promise<number | undefined> => {
   const url = `index.html${route && `#${route}`}`
 
   return createTab(url)

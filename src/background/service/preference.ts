@@ -1,54 +1,54 @@
-import eventBus from "@/eventBus"
-import { createPersistStore } from "background/utils"
-import compareVersions from "compare-versions"
-import { EVENTS } from "consts"
-import cloneDeep from "lodash/cloneDeep"
-import { browser } from "webextension-polyfill-ts"
-import { i18n, keyringService, sessionService } from "./index"
-import { TotalBalanceResponse } from "./openapi"
+import eventBus from '@/eventBus'
+import { createPersistStore } from 'background/utils'
+import compareVersions from 'compare-versions'
+import { EVENTS } from 'consts'
+import cloneDeep from 'lodash/cloneDeep'
+import { browser } from 'webextension-polyfill-ts'
+import { i18n, keyringService, sessionService } from './index'
+import { TotalBalanceResponse } from './openapi'
 
-const version = process.env.release || "0"
+const version = process.env.release || '0'
 
 export interface Account {
-    type: string
-    address: string
-    brandName: string
-    alianName?: string
-    displayBrandName?: string
-    index?: number
-    balance?: number
+  type: string
+  address: string
+  brandName: string
+  alianName?: string
+  displayBrandName?: string
+  index?: number
+  balance?: number
 }
 
 export interface ChainGas {
-    gasPrice?: number | null // custom cached gas price
-    gasLevel?: string | null // cached gasLevel
-    lastTimeSelect?: "gasLevel" | "gasPrice" // last time selection, 'gasLevel' | 'gasPrice'
+  gasPrice?: number | null // custom cached gas price
+  gasLevel?: string | null // cached gasLevel
+  lastTimeSelect?: 'gasLevel' | 'gasPrice' // last time selection, 'gasLevel' | 'gasPrice'
 }
 
 export interface GasCache {
-    [chainId: string]: ChainGas
+  [chainId: string]: ChainGas
 }
 
 export interface addedToken {
-    [address: string]: string[]
+  [address: string]: string[]
 }
 
 export interface PreferenceStore {
-    currentAccount: Account | undefined | null
-    externalLinkAck: boolean
-    balanceMap: {
-        [address: string]: TotalBalanceResponse
-    }
-    locale: string
-    watchAddressPreference: Record<string, number>
-    walletSavedList: []
-    alianNames?: Record<string, string>
-    initAlianNames: boolean
-    currentVersion: string
-    firstOpen: boolean
+  currentAccount: Account | undefined | null
+  externalLinkAck: boolean
+  balanceMap: {
+    [address: string]: TotalBalanceResponse
+  }
+  locale: string
+  watchAddressPreference: Record<string, number>
+  walletSavedList: []
+  alianNames?: Record<string, string>
+  initAlianNames: boolean
+  currentVersion: string
+  firstOpen: boolean
 }
 
-const SUPPORT_LOCALES = ["en"]
+const SUPPORT_LOCALES = ['en']
 
 class PreferenceService {
   store!: PreferenceStore
@@ -56,9 +56,9 @@ class PreferenceService {
   hasOtherProvider = false
 
   init = async () => {
-    const defaultLang = "en"
+    const defaultLang = 'en'
     this.store = await createPersistStore<PreferenceStore>({
-      name: "preference",
+      name: 'preference',
       template: {
         currentAccount: undefined,
         externalLinkAck: false,
@@ -68,7 +68,7 @@ class PreferenceService {
         walletSavedList: [],
         alianNames: {},
         initAlianNames: false,
-        currentVersion: "0",
+        currentVersion: '0',
         firstOpen: false
       }
     })
@@ -96,14 +96,14 @@ class PreferenceService {
   getAcceptLanguages = async () => {
     let langs = await browser.i18n.getAcceptLanguages()
     if (!langs) langs = []
-    return langs.map((lang) => lang.replace(/-/g, "_")).filter((lang) => SUPPORT_LOCALES.includes(lang))
+    return langs.map((lang) => lang.replace(/-/g, '_')).filter((lang) => SUPPORT_LOCALES.includes(lang))
   }
 
   /**
-     * If current account be hidden or deleted
-     * call this function to reset current account
-     * to the first address in address list
-     */
+   * If current account be hidden or deleted
+   * call this function to reset current account
+   * to the first address in address list
+   */
   resetCurrentAccount = async () => {
     const [account] = await keyringService.getAllVisibleAccountsArray()
     this.setCurrentAccount(account)
@@ -116,9 +116,9 @@ class PreferenceService {
   setCurrentAccount = (account: Account | null) => {
     this.store.currentAccount = account
     if (account) {
-      sessionService.broadcastEvent("accountsChanged", [account.address.toLowerCase()])
+      sessionService.broadcastEvent('accountsChanged', [account.address.toLowerCase()])
       eventBus.emit(EVENTS.broadcastToUI, {
-        method: "accountsChanged",
+        method: 'accountsChanged',
         params: account
       })
     }

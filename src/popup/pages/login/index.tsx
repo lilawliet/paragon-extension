@@ -1,20 +1,32 @@
-import { Button, Input, message } from "antd"
-import { Link, useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import React, { ChangeEventHandler, useEffect, useRef, useState } from "react"
+import { Button, Input, message } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react'
+import { useApproval, useWallet, useWalletRequest } from '@/ui/utils'
 
 const Login = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const wallet = useWallet()
+  const [, resolveApproval] = useApproval()
 
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState('')
   const [disabled, setDisabled] = useState(true)
+
+  const [run] = useWalletRequest(wallet.unlock, {
+    onSuccess() {
+      resolveApproval()
+    },
+    onError(err) {
+      message.error('PASSWORD ERROR')
+    }
+  })
 
   const btnClick = () => {
     // to create wallet
-
+    run(password)
     // jump to dashboard
-    navigate("/dashboard")
+    // navigate("/dashboard")
   }
 
   const verify = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +37,6 @@ const Login = () => {
   useEffect(() => {
     if (password) {
       if (true) {
-        // to verify
         setDisabled(false)
       }
     }
@@ -45,7 +56,7 @@ const Login = () => {
           </div>
           <div>
             <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
-              {t("Unlock")}
+              {t('Unlock')}
             </Button>
           </div>
         </div>

@@ -1,32 +1,32 @@
-import { Button, Divider, Input, Layout, Statistic } from "antd"
-import { useTranslation } from "react-i18next"
-import { Content, Footer, Header } from "antd/lib/layout/layout"
-import { ArrowLeftOutlined } from "@ant-design/icons"
-import CHeader from "@/popup/components/CHeader"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import SendCreate from "./Create"
-import SendConfirm from "./Confirm"
-import Sending from "./Sending"
-import Success from "./Success"
+import { Button, Divider, Input, Layout, Statistic } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import CHeader from '@/popup/components/CHeader'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import SendCreate from './Create'
+import SendConfirm from './Confirm'
+import Sending from './Sending'
+import Success from './Success'
 
 export interface Transaction {
-    time: number
-    address: string
-    amount: string
+  time: number
+  address: string
+  amount: string
 }
 
-export type Status = "create" | "confirm" | "sending" | "success" | "error"
+export type Status = 'create' | 'confirm' | 'sending' | 'success' | 'error'
 
 const SendIndex = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const [status, setStatus] = useState<Status>("create")
+  const [status, setStatus] = useState<Status>('create')
   const [transaction, setTransaction] = useState<Transaction>({
     time: 1652188199,
-    address: "sadfjkl2j343jlk",
-    amount: "+1,224"
+    address: 'sadfjkl2j343jlk',
+    amount: '+1,224'
   })
 
   useEffect(() => {
@@ -38,26 +38,26 @@ const SendIndex = () => {
       <Header className="border-b border-white border-opacity-10">
         <CHeader />
       </Header>
-      <Content style={{ backgroundColor: "#1C1919" }}>
-        {status == "create" ? (
+      <Content style={{ backgroundColor: '#1C1919' }}>
+        {status == 'create' ? (
           <SendCreate transaction={transaction} setTransaction={setTransaction} setStatus={setStatus} />
-        ) : status == "confirm" ? (
+        ) : status == 'confirm' ? (
           <SendConfirm transaction={transaction} setTransaction={setTransaction} setStatus={setStatus} />
-        ) : status == "sending" ? (
+        ) : status == 'sending' ? (
           <Sending transaction={transaction} setTransaction={setTransaction} setStatus={setStatus} />
-        ) : status == "success" ? (
+        ) : status == 'success' ? (
           <Success transaction={transaction} setTransaction={setTransaction} setStatus={setStatus} />
         ) : (
           <div>error</div>
         )}
       </Content>
-      {status !== "sending" ? (
+      {status !== 'sending' ? (
         <Footer
           style={{
-            height: "5.625rem",
-            backgroundColor: "#1C1919",
-            textAlign: "center",
-            width: "100%"
+            height: '5.625rem',
+            backgroundColor: '#1C1919',
+            textAlign: 'center',
+            width: '100%'
           }}
         >
           <Button
@@ -70,7 +70,7 @@ const SendIndex = () => {
           >
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
-                            &nbsp;Back
+              &nbsp;Back
             </div>
           </Button>
         </Footer>

@@ -1,41 +1,49 @@
-import { Button, Input, message } from "antd"
-import { useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import { useEffect, useState } from "react"
-import { useWallet, useWalletRequest } from "@/ui/utils"
+import { Button, Input, message } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react'
+import { useWallet, useWalletRequest } from '@/ui/utils'
 
-type Status = "" | "error" | "warning" | undefined
+type Status = '' | 'error' | 'warning' | undefined
 
 const CreatePassword = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const wallet = useWallet();
+  const wallet = useWallet()
 
-  const [password, setPassword] = useState("")
-  const [placeholder1, setPlaceholder1] = useState("Password")
-  const [status1, setStatus1] = useState<Status>("")
+  const [password, setPassword] = useState('')
+  const [placeholder1, setPlaceholder1] = useState('Password')
+  const [status1, setStatus1] = useState<Status>('')
 
-  const [password2, setPassword2] = useState("")
-  const [placeholder2, setPlaceholder2] = useState("Confirm Password")
-  const [status2, setStatus2] = useState<Status>("")
+  const [password2, setPassword2] = useState('')
+  const [placeholder2, setPlaceholder2] = useState('Confirm Password')
+  const [status2, setStatus2] = useState<Status>('')
 
   const [disabled, setDisabled] = useState(true)
-  const [active, setActive] = useState("")
+  const [active, setActive] = useState('')
+
+  // const init = async () => {
+  //   if ((await wallet.isBooted()) && !(await wallet.isUnlocked())) {
+  //     navigate('/login');
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   init();
+  // }, []);
 
   message.config({
-    maxCount:1
+    maxCount: 1
   })
 
   const [run, loading] = useWalletRequest(wallet.boot, {
     onSuccess() {
-      
-      navigate('/create-recovery');
-
+      navigate('/create-recovery')
     },
     onError(err) {
       message.error(err)
     }
-  });
+  })
 
   const btnClick = () => {
     run(password.trim())
@@ -51,9 +59,9 @@ const CreatePassword = () => {
   useEffect(() => {
     setDisabled(true)
 
-    if (password){
+    if (password) {
       if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
-        message.warning("at least six characters and must contain uppercase and lowercase letters and digits")
+        message.warning('at least six characters and must contain uppercase and lowercase letters and digits')
         setStatus1('error')
         return
       }
@@ -70,15 +78,15 @@ const CreatePassword = () => {
   }, [password, password2])
 
   useEffect(() => {
-    setPlaceholder1("Password")
-    setPlaceholder2("Confirm Password")
+    setPlaceholder1('Password')
+    setPlaceholder2('Confirm Password')
 
-    if ("password1" == active) {
-      setActive("password1")
-      setPlaceholder1("")
-    } else if ("password2" == active) {
-      setActive("password2")
-      setPlaceholder2("")
+    if ('password1' == active) {
+      setActive('password1')
+      setPlaceholder1('')
+    } else if ('password2' == active) {
+      setActive('password2')
+      setPlaceholder2('')
     }
   }, [active])
 
@@ -90,29 +98,35 @@ const CreatePassword = () => {
         <div className="mt-12">
           <Input.Password
             status={status1}
-            className={active == "password1" ? "active" : ""}
+            className={active == 'password1' ? 'active' : ''}
             placeholder={placeholder1}
             onFocus={(e) => {
-              setActive("password1")
+              setActive('password1')
             }}
-            onBlur={(e) => {setPassword(e.target.value)}}
+            onBlur={(e) => {
+              setPassword(e.target.value)
+            }}
           />
         </div>
         <div>
           <Input.Password
             status={status2}
-            className={active == "password2" ? "active" : ""}
+            className={active == 'password2' ? 'active' : ''}
             placeholder={placeholder2}
             onFocus={(e) => {
-              setActive("password2")
+              setActive('password2')
             }}
-            onChange={(e) => {setPassword2(e.target.value)}}
-            onBlur={(e) => {verify(e.target.value)}}
+            onChange={(e) => {
+              setPassword2(e.target.value)
+            }}
+            onBlur={(e) => {
+              verify(e.target.value)
+            }}
           />
         </div>
         <div>
           <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
-            {t("Continue")}
+            {t('Continue')}
           </Button>
         </div>
       </div>

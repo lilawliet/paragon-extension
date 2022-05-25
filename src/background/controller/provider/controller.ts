@@ -1,8 +1,8 @@
-import { keyringService, permissionService, sessionService } from "background/service"
-import { CHAINS } from "consts"
-import { ethErrors } from "eth-rpc-errors"
-import { normalize as normalizeAddress } from "eth-sig-util"
-import BaseController from "../base"
+import { keyringService, permissionService, sessionService } from 'background/service'
+import { CHAINS } from 'consts'
+import { ethErrors } from 'eth-rpc-errors'
+import { normalize as normalizeAddress } from 'eth-sig-util'
+import BaseController from '../base'
 
 class ProviderController extends BaseController {
   ethRequestAccounts = async ({ session: { origin } }) => {
@@ -12,12 +12,12 @@ class ProviderController extends BaseController {
 
     const _account = await this.getCurrentAccount()
     const account = _account ? [_account.address.toLowerCase()] : []
-    sessionService.broadcastEvent("accountsChanged", account)
+    sessionService.broadcastEvent('accountsChanged', account)
     const connectSite = permissionService.getConnectedSite(origin)
     if (connectSite) {
       const chain = CHAINS[connectSite.chain]
       sessionService.broadcastEvent(
-        "chainChanged",
+        'chainChanged',
         {
           chain: chain.name,
           network: chain.network
@@ -44,7 +44,7 @@ class ProviderController extends BaseController {
     currentAddress = currentAddress?.toLowerCase()
     if (!currentAddress || currentAddress !== normalizeAddress(address).toLowerCase()) {
       throw ethErrors.rpc.invalidParams({
-        message: "Invalid parameters: must use the current user address to sign"
+        message: 'Invalid parameters: must use the current user address to sign'
       })
     }
     const keyring = await keyringService.getKeyringForAccount(currentAddress, type)

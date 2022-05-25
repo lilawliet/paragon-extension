@@ -1,23 +1,23 @@
-import { Button, Checkbox, Input } from "antd"
-import { Link, useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import { ChangeEventHandler, useEffect, useState } from "react"
-import styles from "./index.module.less"
+import { Button, Checkbox, Input } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { ChangeEventHandler, useEffect, useState } from 'react'
+import styles from './index.module.less'
 
 const RepeatRecovery = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const [keys, setKeys] = useState<Array<string>>(new Array(12).fill(""))
+  const [keys, setKeys] = useState<Array<string>>(new Array(12).fill(''))
   const [active, setActive] = useState(999)
   const [hover, setHover] = useState(999)
   const [disabled, setDisabled] = useState(true)
 
   const verify = () => {
     // to verify
-    console.log("verify")
+    console.log('verify')
     // path move
-    navigate("/create-password")
+    navigate('/create-password')
   }
 
   const onChange = (e: any, index: any) => {
@@ -30,7 +30,7 @@ const RepeatRecovery = () => {
     // to verify key
     setDisabled(
       keys.filter((key) => {
-        return key == ""
+        return key == ''
       }).length > 0
     )
   }, [keys])
@@ -48,8 +48,8 @@ const RepeatRecovery = () => {
               <div
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 
-                                    ${hover == index ? " border-white border-opacity-40 text-white" : ""} 
-                                    ${active == index ? " border-white border-opacity-40 bg-primary-active text-white" : ""}`}
+                                    ${hover == index ? ' border-white border-opacity-40 text-white' : ''} 
+                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}
               >
                 {index + 1}.&nbsp;
                 <Input
@@ -78,7 +78,7 @@ const RepeatRecovery = () => {
         </div>
         <div>
           <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={verify}>
-            {t("Import wallet")}
+            {t('Import wallet')}
           </Button>
         </div>
       </div>

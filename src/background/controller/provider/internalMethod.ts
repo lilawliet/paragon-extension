@@ -1,6 +1,6 @@
-import { keyringService, permissionService } from "background/service"
-import { CHAINS, CHAINS_ENUM } from "consts"
-import providerController from "./controller"
+import { keyringService, permissionService } from 'background/service'
+import { CHAINS, CHAINS_ENUM } from 'consts'
+import providerController from './controller'
 
 const tabCheckin = ({
   data: {

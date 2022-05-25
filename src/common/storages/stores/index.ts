@@ -1,5 +1,5 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import { default as popupReducer } from "./popup/slice"
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
+import { default as popupReducer } from './popup/slice'
 
 export const store = configureStore({
   reducer: {

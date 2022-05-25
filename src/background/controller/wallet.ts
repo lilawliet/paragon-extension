@@ -1,6 +1,6 @@
-import eventBus from "@/eventBus"
-import WalletConnectKeyring from "@rabby-wallet/eth-walletconnect-keyring"
-import WatchKeyring from "@rabby-wallet/eth-watch-keyring"
+import eventBus from '@/eventBus'
+import WalletConnectKeyring from '@rabby-wallet/eth-walletconnect-keyring'
+import WatchKeyring from '@rabby-wallet/eth-watch-keyring'
 import {
   contactBookService,
   keyringService,
@@ -10,24 +10,24 @@ import {
   permissionService,
   preferenceService,
   sessionService
-} from "background/service"
-import i18n from "background/service/i18n"
-import { DisplayedKeryring, KEYRING_CLASS } from "background/service/keyring"
-import { CacheState } from "background/service/pageStateCache"
-import { isSameAddress, setPageStateCacheWhenPopupClose } from "background/utils"
-import { openIndexPage } from "background/webapi/tab"
-import * as bip39 from "bip39"
-import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL, EVENTS } from "consts"
-import { ethErrors } from "eth-rpc-errors"
-import * as ethUtil from "ethereumjs-util"
-import Wallet, { thirdparty } from "ethereumjs-wallet"
-import { groupBy } from "lodash"
-import { ContactBookItem } from "../service/contactBook"
-import DisplayKeyring from "../service/keyring/display"
-import { OpenApiService } from "../service/openapi"
-import { ConnectedSite } from "../service/permission"
-import { Account } from "../service/preference"
-import BaseController from "./base"
+} from 'background/service'
+import i18n from 'background/service/i18n'
+import { DisplayedKeryring, KEYRING_CLASS } from 'background/service/keyring'
+import { CacheState } from 'background/service/pageStateCache'
+import { isSameAddress, setPageStateCacheWhenPopupClose } from 'background/utils'
+import { openIndexPage } from 'background/webapi/tab'
+import * as bip39 from 'bip39'
+import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL, EVENTS } from 'consts'
+import { ethErrors } from 'eth-rpc-errors'
+import * as ethUtil from 'ethereumjs-util'
+import Wallet, { thirdparty } from 'ethereumjs-wallet'
+import { groupBy } from 'lodash'
+import { ContactBookItem } from '../service/contactBook'
+import DisplayKeyring from '../service/keyring/display'
+import { OpenApiService } from '../service/openapi'
+import { ConnectedSite } from '../service/permission'
+import { Account } from '../service/preference'
+import BaseController from './base'
 
 const stashKeyrings: Record<string, any> = {}
 
@@ -45,25 +45,25 @@ export class WalletController extends BaseController {
 
   transferNFT = async ({ to, contractId, tokenId, amount }: { to: string; contractId: string; tokenId: string; amount?: number }) => {
     const account = await preferenceService.getCurrentAccount()
-    if (!account) throw new Error("no current account")
-    throw new Error("not implemented")
+    if (!account) throw new Error('no current account')
+    throw new Error('not implemented')
   }
 
   initAlianNames = async () => {
     await preferenceService.changeInitAlianNameStatus()
     const contacts = await this.listContact()
     const keyrings = await keyringService.getAllTypedAccounts()
-    const walletConnectKeyrings = keyrings.filter((item) => item.type === "WalletConnect")
+    const walletConnectKeyrings = keyrings.filter((item) => item.type === 'WalletConnect')
     const catergoryGroupAccount = keyrings.map((item) => ({
       type: item.type,
       accounts: item.accounts
     }))
-    let walletConnectList: DisplayedKeryring["accounts"] = []
+    let walletConnectList: DisplayedKeryring['accounts'] = []
     for (let i = 0; i < walletConnectKeyrings.length; i++) {
       const keyring = walletConnectKeyrings[i]
       walletConnectList = [...walletConnectList, ...keyring.accounts]
     }
-    const groupedWalletConnectList = groupBy(walletConnectList, "brandName")
+    const groupedWalletConnectList = groupBy(walletConnectList, 'brandName')
     if (keyrings.length > 0) {
       Object.keys(groupedWalletConnectList).forEach((key) => {
         groupedWalletConnectList[key].map((acc, index) => {
@@ -74,8 +74,8 @@ export class WalletController extends BaseController {
         })
       })
       const catergories = groupBy(
-        catergoryGroupAccount.filter((group) => group.type !== "WalletConnect"),
-        "type"
+        catergoryGroupAccount.filter((group) => group.type !== 'WalletConnect'),
+        'type'
       )
       const result = Object.keys(catergories)
         .map((key) =>
@@ -106,7 +106,7 @@ export class WalletController extends BaseController {
     const alianNameInited = await preferenceService.getInitAlianNameStatus()
     const alianNames = contactBookService.listAlias()
     await keyringService.submitPassword(password)
-    sessionService.broadcastEvent("unlock")
+    sessionService.broadcastEvent('unlock')
     if (!alianNameInited && alianNames.length === 0) {
       this.initAlianNames()
     }
@@ -115,8 +115,8 @@ export class WalletController extends BaseController {
 
   lockWallet = async () => {
     await keyringService.setLocked()
-    sessionService.broadcastEvent("accountsChanged", [])
-    sessionService.broadcastEvent("lock")
+    sessionService.broadcastEvent('accountsChanged', [])
+    sessionService.broadcastEvent('lock')
   }
   setPopupOpen = (isOpen) => {
     preferenceService.setPopupOpen(isOpen)
@@ -186,9 +186,9 @@ export class WalletController extends BaseController {
     permissionService.setSite(data)
     if (data.isConnected) {
       sessionService.broadcastEvent(
-        "chainChanged",
+        'chainChanged',
         {
-          networkVersion: "0x01"
+          networkVersion: '0x01'
         },
         data.origin
       )
@@ -197,9 +197,9 @@ export class WalletController extends BaseController {
   updateConnectSite = (origin: string, data: ConnectedSite) => {
     permissionService.updateConnectSite(origin, data)
     sessionService.broadcastEvent(
-      "chainChanged",
+      'chainChanged',
       {
-        networkVersion: "0x01"
+        networkVersion: '0x01'
       },
       data.origin
     )
@@ -211,7 +211,7 @@ export class WalletController extends BaseController {
     })
   }
   removeConnectedSite = (origin: string) => {
-    sessionService.broadcastEvent("accountsChanged", [], origin)
+    sessionService.broadcastEvent('accountsChanged', [], origin)
     permissionService.removeConnectedSite(origin)
   }
   getSitesByDefaultChain = permissionService.getSitesByDefaultChain
@@ -260,10 +260,10 @@ export class WalletController extends BaseController {
         accounts: [],
         brandName: brandName,
         clientMeta: {
-          description: i18n.t("appDescription"),
-          url: "https://rabby.io",
-          icons: ["https://rabby.io/assets/images/logo.png"],
-          name: "Rabby"
+          description: i18n.t('appDescription'),
+          url: 'https://rabby.io',
+          icons: ['https://rabby.io/assets/images/logo.png'],
+          name: 'Rabby'
         }
       })
       isNewKey = true
@@ -275,13 +275,13 @@ export class WalletController extends BaseController {
       eventBus.addEventListener(EVENTS.WALLETCONNECT.INIT, ({ address, brandName }) => {
         ;(keyring as WalletConnectKeyring).init(address, brandName)
       })
-      ;(keyring as WalletConnectKeyring).on("inited", (uri) => {
+      ;(keyring as WalletConnectKeyring).on('inited', (uri) => {
         eventBus.emit(EVENTS.broadcastToUI, {
           method: EVENTS.WALLETCONNECT.INITED,
           params: { uri }
         })
       })
-      keyring.on("statusChange", (data) => {
+      keyring.on('statusChange', (data) => {
         eventBus.emit(EVENTS.broadcastToUI, {
           method: EVENTS.WALLETCONNECT.STATUS_CHANGED,
           params: data
@@ -318,7 +318,7 @@ export class WalletController extends BaseController {
       for (const key in keyring.connectors) {
         const target = keyring.connectors[key]
         result.push({
-          address: key.split("-")[1],
+          address: key.split('-')[1],
           brandName: target.brandName
         })
       }
@@ -387,9 +387,9 @@ export class WalletController extends BaseController {
 
   importPrivateKey = async (data) => {
     const privateKey = ethUtil.stripHexPrefix(data)
-    const buffer = Buffer.from(privateKey, "hex")
+    const buffer = Buffer.from(privateKey, 'hex')
 
-    const error = new Error(i18n.t("the private key is invalid"))
+    const error = new Error(i18n.t('the private key is invalid'))
     try {
       if (!ethUtil.isValidPrivate(buffer)) {
         throw error
@@ -409,7 +409,7 @@ export class WalletController extends BaseController {
     try {
       JSON.parse(content)
     } catch {
-      throw new Error(i18n.t("the input file is invalid"))
+      throw new Error(i18n.t('the input file is invalid'))
     }
 
     let wallet
@@ -467,7 +467,7 @@ export class WalletController extends BaseController {
 
   generateKeyringWithMnemonic = (mnemonic) => {
     if (!bip39.validateMnemonic(mnemonic)) {
-      throw new Error(i18n.t("mnemonic phrase is invalid"))
+      throw new Error(i18n.t('mnemonic phrase is invalid'))
     }
 
     const Keyring = keyringService.getKeyringClassForType(KEYRING_CLASS.MNEMONIC)
@@ -493,7 +493,7 @@ export class WalletController extends BaseController {
       await keyringService.addKeyring(keyring)
       this._setCurrentAccountFromKeyring(keyring)
     } else {
-      throw new Error("failed to addKeyring, keyring is undefined")
+      throw new Error('failed to addKeyring, keyring is undefined')
     }
   }
 
@@ -626,13 +626,13 @@ export class WalletController extends BaseController {
     const account = accounts[index < 0 ? index + accounts.length : index]
 
     if (!account) {
-      throw new Error("the current account is empty")
+      throw new Error('the current account is empty')
     }
 
     const _account = {
-      address: typeof account === "string" ? account : account.address,
+      address: typeof account === 'string' ? account : account.address,
       type: keyring.type,
-      brandName: typeof account === "string" ? keyring.type : account.brandName
+      brandName: typeof account === 'string' ? keyring.type : account.brandName
     }
     preferenceService.setCurrentAccount(_account)
 
@@ -675,7 +675,7 @@ export class WalletController extends BaseController {
   listChainAssets = async (address: string) => {
     const { confirmed, unconfirmed } = await openapiService.getAddressBalance(address)
     const amount = (confirmed + unconfirmed) / 10000
-    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount, value: "$6.748.29" }]
+    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount, value: '$6.748.29' }]
     return assets
   }
 

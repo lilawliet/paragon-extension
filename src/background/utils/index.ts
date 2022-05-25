@@ -1,6 +1,6 @@
-import * as ethUtil from "ethereumjs-util"
-import pageStateCache from "../service/pageStateCache"
-export { default as createPersistStore } from "./persisitStore"
+import * as ethUtil from 'ethereumjs-util'
+import pageStateCache from '../service/pageStateCache'
+export { default as createPersistStore } from './persisitStore'
 
 // {a:{b: string}} => {1: 'a.b'}
 // later same [source] value will override [result] key generated before
@@ -17,12 +17,12 @@ const retrieveValuePath = (obj) => {
       parentKey.pop()
     }
 
-    if (typeof value === "object") {
+    if (typeof value === 'object') {
       arr.unshift(...Object.entries(value!))
       parentKey.push(key)
       lastParent = value
-    } else if (typeof value === "string") {
-      result[value] = `${[...parentKey, key].join(".")}`
+    } else if (typeof value === 'string') {
+      result[value] = `${[...parentKey, key].join('.')}`
     }
   }
 
@@ -34,20 +34,20 @@ export const underline2Camelcase = (str: string) => {
 }
 
 export { retrieveValuePath }
-export { default as PromiseFlow } from "./promiseFlow"
+export { default as PromiseFlow } from './promiseFlow'
 
 export function normalizeAddress(input: number | string): string {
   if (!input) {
-    return ""
+    return ''
   }
 
-  if (typeof input === "number") {
+  if (typeof input === 'number') {
     const buffer = ethUtil.toBuffer(input)
     input = ethUtil.bufferToHex(buffer)
   }
 
-  if (typeof input !== "string") {
-    let msg = "eth-sig-util.normalize() requires hex string or integer input."
+  if (typeof input !== 'string') {
+    let msg = 'eth-sig-util.normalize() requires hex string or integer input.'
     msg += ` received ${typeof input}: ${input}`
     throw new Error(msg)
   }
@@ -66,7 +66,7 @@ export const wait = (fn: () => void, ms = 1000) => {
 
 export const setPageStateCacheWhenPopupClose = (data) => {
   const cache = pageStateCache.get()
-  if (cache && cache.path === "/import/wallet-connect") {
+  if (cache && cache.path === '/import/wallet-connect') {
     pageStateCache.set({
       ...cache,
       states: {
@@ -79,7 +79,7 @@ export const setPageStateCacheWhenPopupClose = (data) => {
 
 export const hasWalletConnectPageStateCache = () => {
   const cache = pageStateCache.get()
-  if (cache && cache.path === "/import/wallet-connect") {
+  if (cache && cache.path === '/import/wallet-connect') {
     return true
   }
   return false

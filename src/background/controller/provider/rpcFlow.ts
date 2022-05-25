@@ -1,13 +1,13 @@
-import eventBus from "@/eventBus"
-import { keyringService, notificationService, permissionService } from "background/service"
-import { PromiseFlow, underline2Camelcase } from "background/utils"
-import { CHAINS, EVENTS } from "consts"
-import { ethErrors } from "eth-rpc-errors"
-import "reflect-metadata"
-import providerController from "./controller"
+import eventBus from '@/eventBus'
+import { keyringService, notificationService, permissionService } from 'background/service'
+import { PromiseFlow, underline2Camelcase } from 'background/utils'
+import { CHAINS, EVENTS } from 'consts'
+import { ethErrors } from 'eth-rpc-errors'
+import 'reflect-metadata'
+import providerController from './controller'
 
 const isSignApproval = (type: string) => {
-  const SIGN_APPROVALS = ["SignText", "SignTypedData", "SignTx"]
+  const SIGN_APPROVALS = ['SignText', 'SignTypedData', 'SignTx']
   return SIGN_APPROVALS.includes(type)
 }
 
@@ -31,7 +31,7 @@ const flowContext = flow
   })
   .use(async (ctx, next) => {
     const { mapMethod } = ctx
-    if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
+    if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
       // check lock
       const isUnlock = keyringService.memStore.getState().isUnlocked
 
@@ -51,13 +51,13 @@ const flowContext = flow
       },
       mapMethod
     } = ctx
-    if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
+    if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
       if (!permissionService.hasPermission(origin)) {
         ctx.request.requestedApproval = true
         const { defaultChain } = await notificationService.requestApproval(
           {
             params: { origin, name, icon },
-            approvalComponent: "Connect"
+            approvalComponent: 'Connect'
           },
           { height: 390 }
         )
@@ -77,9 +77,9 @@ const flowContext = flow
       },
       mapMethod
     } = ctx
-    const [approvalType, condition, options = {}] = Reflect.getMetadata("APPROVAL", providerController, mapMethod) || []
+    const [approvalType, condition, options = {}] = Reflect.getMetadata('APPROVAL', providerController, mapMethod) || []
     let windowHeight = 800
-    if ("height" in options) {
+    if ('height' in options) {
       windowHeight = options.height
     } else {
       const minHeight = 500
@@ -92,7 +92,7 @@ const flowContext = flow
     }
     if (approvalType && (!condition || !condition(ctx.request))) {
       ctx.request.requestedApproval = true
-      if (approvalType === "SignTx" && !("chainId" in params[0])) {
+      if (approvalType === 'SignTx' && !('chainId' in params[0])) {
         const site = permissionService.getConnectedSite(origin)
         if (site) {
           const chain = Object.values(CHAINS).find((item) => item.enum === site.chain)
@@ -125,7 +125,7 @@ const flowContext = flow
   .use(async (ctx) => {
     const { approvalRes, mapMethod, request } = ctx
     // process request
-    const [approvalType] = Reflect.getMetadata("APPROVAL", providerController, mapMethod) || []
+    const [approvalType] = Reflect.getMetadata('APPROVAL', providerController, mapMethod) || []
     const { uiRequestComponent, ...rest } = approvalRes || {}
     const {
       session: { origin }

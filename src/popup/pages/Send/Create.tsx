@@ -1,24 +1,24 @@
-import { Button, Input } from "antd"
+import { Button, Input } from 'antd'
 
-import { Transaction, Status } from "./index"
+import { Transaction, Status } from './index'
 
 interface Props {
-    transaction: Transaction
-    setTransaction(transaction: Transaction): void
-    setStatus(status: Status): void
+  transaction: Transaction
+  setTransaction(transaction: Transaction): void
+  setStatus(status: Status): void
 }
 
 export default ({ transaction, setTransaction, setStatus }: Props) => {
   const verify = () => {
     // to verify
-    setStatus("confirm")
+    setStatus('confirm')
   }
 
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex items-center px-2 text-2xl h-13">Send Novo</div>
       <div className="w-15 h-15">
-        <img className="w-full" src={"./images/Novo.svg"} alt="" />
+        <img className="w-full" src={'./images/Novo.svg'} alt="" />
       </div>
       <div className="flex items-center w-full p-5 mt-5 h-15_5 box default">
         <Input className="font-semibold text-white p0" bordered={false} status="error" placeholder="Recipient’s NOVO address" />

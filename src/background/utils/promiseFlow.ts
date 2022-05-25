@@ -1,4 +1,4 @@
-import compose from "koa-compose"
+import compose from 'koa-compose'
 
 export default class PromiseFlow {
   private _tasks: ((args: any) => void)[] = []
@@ -6,8 +6,8 @@ export default class PromiseFlow {
   requestedApproval = false
 
   use(fn): PromiseFlow {
-    if (typeof fn !== "function") {
-      throw new Error("promise need function to handle")
+    if (typeof fn !== 'function') {
+      throw new Error('promise need function to handle')
     }
     this._tasks.push(fn)
 

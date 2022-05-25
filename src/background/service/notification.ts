@@ -1,21 +1,21 @@
-import { winMgr } from "background/webapi"
-import { IS_CHROME, IS_LINUX, KEYRING_TYPE } from "consts"
-import { ethErrors } from "eth-rpc-errors"
-import { EthereumProviderError } from "eth-rpc-errors/dist/classes"
-import Events from "events"
-import preferenceService from "./preference"
+import { winMgr } from 'background/webapi'
+import { IS_CHROME, IS_LINUX, KEYRING_TYPE } from 'consts'
+import { ethErrors } from 'eth-rpc-errors'
+import { EthereumProviderError } from 'eth-rpc-errors/dist/classes'
+import Events from 'events'
+import preferenceService from './preference'
 
 interface Approval {
-    data: {
-        state: number
-        params?: any
-        origin?: string
-        approvalComponent: string
-        requestDefer?: Promise<any>
-        approvalType: string
-    }
-    resolve(params?: any): void
-    reject(err: EthereumProviderError<any>): void
+  data: {
+    state: number
+    params?: any
+    origin?: string
+    approvalComponent: string
+    requestDefer?: Promise<any>
+    approvalType: string
+  }
+  resolve(params?: any): void
+  reject(err: EthereumProviderError<any>): void
 }
 
 // something need user approval in window
@@ -28,16 +28,16 @@ class NotificationService extends Events {
   constructor() {
     super()
 
-    winMgr.event.on("windowRemoved", (winId: number) => {
+    winMgr.event.on('windowRemoved', (winId: number) => {
       if (winId === this.notifiWindowId) {
         this.notifiWindowId = 0
       }
     })
 
-    winMgr.event.on("windowFocusChange", (winId: number) => {
+    winMgr.event.on('windowFocusChange', (winId: number) => {
       const account = preferenceService.getCurrentAccount()!
       if (this.notifiWindowId && winId !== this.notifiWindowId) {
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.NODE_ENV === 'production') {
           if ((IS_CHROME && winId === chrome.windows.WINDOW_ID_NONE && IS_LINUX) || account?.type === KEYRING_TYPE.WalletConnectKeyring) {
             // Wired issue: When notification popuped, will focus to -1 first then focus on notification
             return
@@ -52,12 +52,12 @@ class NotificationService extends Events {
 
   resolveApproval = (data?: any, forceReject = false) => {
     if (forceReject) {
-      this.approval?.reject(new EthereumProviderError(4001, "User Cancel"))
+      this.approval?.reject(new EthereumProviderError(4001, 'User Cancel'))
     } else {
       this.approval?.resolve(data)
     }
     this.approval = null
-    this.emit("resolve", data)
+    this.emit('resolve', data)
   }
 
   rejectApproval = async (err?: string, stay = false, isInternal = false) => {
@@ -68,14 +68,14 @@ class NotificationService extends Events {
     }
 
     await this.clear(stay)
-    this.emit("reject", err)
+    this.emit('reject', err)
   }
 
   // currently it only support one approval at the same time
   requestApproval = async (data, winProps?): Promise<any> => {
     // if the request comes into while user approving
     if (this.approval) {
-      throw ethErrors.provider.userRejectedRequest("please request after current approval resolve")
+      throw ethErrors.provider.userRejectedRequest('please request after current approval resolve')
     }
 
     // if (preferenceService.getPopupOpen()) {
@@ -92,7 +92,7 @@ class NotificationService extends Events {
         reject
       }
 
-      if (["wallet_switchEthereumChain", "wallet_addEthereumChain"].includes(data?.params?.method)) {
+      if (['wallet_switchEthereumChain', 'wallet_addEthereumChain'].includes(data?.params?.method)) {
         const chainId = data.params?.data?.[0]?.chainId
         const chain = null
         if (chain) {

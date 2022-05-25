@@ -1,30 +1,30 @@
-import { Button } from "antd"
-import { Link, useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import { useWallet } from "@/ui/utils"
-import { useEffect, useState } from "react"
-import { Account } from 'background/service/preference';
+import { Button } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { useWallet } from '@/ui/utils'
+import { useEffect, useState } from 'react'
+import { Account } from 'background/service/preference'
 
 const Welcome = () => {
   const { t } = useTranslation()
-  const wallet = useWallet()
-  const navigate = useNavigate()
-  const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
+  // const wallet = useWallet()
+  // const navigate = useNavigate()
+  // const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
 
-  const getCurrentAccount = async () => {
-    const account = await wallet.getCurrentAccount();
-    if (account) {
-      navigate('/login');
-      return;
-    }
-    setCurrentAccount(account);
-  };
+  // const getCurrentAccount = async () => {
+  //   const account = await wallet.getCurrentAccount();
+  //   if (account) {
+  //     navigate('/login');
+  //     return;
+  //   }
+  //   setCurrentAccount(account);
+  // };
 
-  useEffect(() => {
-    if (!currentAccount) {
-      getCurrentAccount();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!currentAccount) {
+  //     getCurrentAccount();
+  //   }
+  // }, []);
 
   return (
     <div
@@ -44,12 +44,12 @@ const Welcome = () => {
         <div className="grid gap-5">
           <Link to="/create-password" replace>
             <Button size="large" type="primary" className="border-none bg-primary box w380 content h-15_5">
-              {t("Create new wallet")}
+              {t('Create new wallet')}
             </Button>
           </Link>
           <Link to="/login" replace>
             <Button size="large" type="default" className="box w380 default content">
-              {t("I already have a wallet")}
+              {t('I already have a wallet')}
             </Button>
           </Link>
         </div>

@@ -1,18 +1,18 @@
-import { ArrowRightOutlined } from "@ant-design/icons"
-import { Button, Input } from "antd"
+import { ArrowRightOutlined } from '@ant-design/icons'
+import { Button, Input } from 'antd'
 
-import { Transaction, Status } from "./index"
+import { Transaction, Status } from './index'
 
 interface Props {
-    transaction: Transaction
-    setTransaction(transaction: Transaction): void
-    setStatus(status: Status): void
+  transaction: Transaction
+  setTransaction(transaction: Transaction): void
+  setStatus(status: Status): void
 }
 
 export default ({ transaction, setTransaction, setStatus }: Props) => {
   const verify = () => {
     // to verify
-    setStatus("sending")
+    setStatus('sending')
 
     // setStatus('success')
   }

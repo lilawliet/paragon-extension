@@ -1,11 +1,11 @@
-import { permissionService } from "background/service"
+import { permissionService } from 'background/service'
 
 export class Session {
-  origin = ""
+  origin = ''
 
-  icon = ""
+  icon = ''
 
-  name = ""
+  name = ''
 
   constructor(data) {
     if (data) {

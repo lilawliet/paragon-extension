@@ -1,14 +1,14 @@
-import { createPersistStore } from "background/utils"
+import { createPersistStore } from 'background/utils'
 
 export interface CacheState {
-    path: string
-    params: Record<string, string>
-    states: Record<string, any>
+  path: string
+  params: Record<string, string>
+  states: Record<string, any>
 }
 
 interface CacheStore {
-    cache: CacheState | null
-    hasCache: boolean
+  cache: CacheState | null
+  hasCache: boolean
 }
 
 class PageStateCacheService {
@@ -16,10 +16,10 @@ class PageStateCacheService {
 
   init = async () => {
     this.store = await createPersistStore<CacheStore>({
-      name: "pageStateCache",
+      name: 'pageStateCache',
       template: {
         cache: {
-          path: "",
+          path: '',
           params: {},
           states: {}
         },
@@ -54,7 +54,7 @@ class PageStateCacheService {
     if (!this.store) return
 
     this.store.cache = {
-      path: "",
+      path: '',
       params: {},
       states: {}
     }

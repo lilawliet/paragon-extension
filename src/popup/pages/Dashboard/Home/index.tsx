@@ -1,14 +1,14 @@
-import { Divider, Layout, Statistic } from "antd"
-import { useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import AccountSelect from "@/popup/components/Account"
-import { Account } from "@/background/service/preference"
-import { useState } from "react"
+import { Divider, Layout, Statistic } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import AccountSelect from '@/popup/components/Account'
+import { Account } from '@/background/service/preference'
+import { useState } from 'react'
 
 interface Currency {
-    name: string
-    amount: string
-    value: string
+  name: string
+  amount: string
+  value: string
 }
 
 const Home = () => {
@@ -17,9 +17,9 @@ const Home = () => {
 
   const [currencies, setCurrencies] = useState<Currency[]>([
     {
-      name: "Novo",
-      amount: "15000000000000 Novo",
-      value: "$5,245.01"
+      name: 'Novo',
+      amount: '15000000000000 Novo',
+      value: '$5,245.01'
     }
   ])
 
@@ -28,40 +28,40 @@ const Home = () => {
       <div className="flex items-center px-2 h-13 box black bg-opacity-20 w340">
         <AccountSelect
           onChange={function (account: Account): void {
-            throw new Error("Function not implemented.")
+            throw new Error('Function not implemented.')
           }}
           onCancel={function (): void {
-            throw new Error("Function not implemented.")
+            throw new Error('Function not implemented.')
           }}
-          title={""}
+          title={''}
         />
       </div>
       <div className="flex items-center p-10 font-semibold text-11">
         <span>$</span>
-        <Statistic className="text-white" value={112893} valueStyle={{ fontSize: "2.75rem" }} />
+        <Statistic className="text-white" value={112893} valueStyle={{ fontSize: '2.75rem' }} />
       </div>
       <div className="grid grid-cols-2 gap-4 leading-6_5 w-5/8">
         <div
           className="cursor-pointer box unit hover:border-primary hover:text-primary"
           onClick={(e) => {
-            navigate(`/receive?address=${"quires"}`)
+            navigate(`/receive?address=${'quires'}`)
           }}
         >
           <span>
             <img src="./images/qrcode-solid.png" alt="" />
           </span>
-                    &nbsp;Receive
+          &nbsp;Receive
         </div>
         <div
           className="cursor-pointer box unit"
           onClick={(e) => {
-            navigate("/send/index")
+            navigate('/send/index')
           }}
         >
           <span>
             <img src="./images/arrow-right-arrow-left-solid.png" alt="" />
           </span>
-                    &nbsp;Send
+          &nbsp;Send
         </div>
       </div>
       <div className="mt-2">
