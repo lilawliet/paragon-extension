@@ -1,6 +1,6 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount, setAccount } from '@/common/storages/stores/popup/slice'
+import { getAccount } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
@@ -14,26 +14,24 @@ interface AccountSelectDrawerProps {
   isLoading?: boolean
 }
 
-const AccountSelect = ({ 
-  accountsList,
-  handleOnCancel, 
-  title, 
-  isLoading = false 
-}: AccountSelectDrawerProps) => {
+const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false }: AccountSelectDrawerProps) => {
   const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
   const { t } = useTranslation()
   const wallet = useWallet()
   const { Option } = Select
   const current = useAppSelector(getAccount)
-  const [value, setValue] = useState<Account| null>(null)
+  const [value, setValue] = useState<Account | null>(null)
   const dispatch = useAppDispatch()
 
   const init = async () => {
     //todo
   }
-  
-  const handleOnChange = async (account: Account) => {
-    console.log(account)
+
+  const handleOnChange = async (index: number) => {
+    if (accountsList) {
+      console.log(accountsList[index])
+    }
+
     // setValue(account)
     // const { address, type, brandName } = account
     // await wallet.changeAccount({ address, type, brandName })
@@ -58,10 +56,7 @@ const AccountSelect = ({
       <div className="flex-grow">
         <Select
           onChange={handleOnChange}
-          defaultValue={current}
-          // value={value}
-          key={'brandName'}
-          optionLabelProp="brandName"
+          defaultValue={0}
           style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}
           bordered={false}
           suffixIcon={
@@ -70,7 +65,7 @@ const AccountSelect = ({
             </span>
           }>
           {accountsList?.map((account, index) => (
-            <Option value={account.address} key={index}>
+            <Option value={index} key={index}>
               {account.alianName ? account.alianName : account.brandName}{' '}
             </Option>
           ))}
