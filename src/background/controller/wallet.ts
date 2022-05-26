@@ -221,7 +221,7 @@ export class WalletController extends BaseController {
       this.removeConnectedSite(item.origin)
     })
   }
-  removeConnectedSite = (origin: string) => {
+  removeConnectedSite(origin: string) {
     sessionService.broadcastEvent('accountsChanged', [], origin)
     permissionService.removeConnectedSite(origin)
   }
@@ -292,7 +292,7 @@ export class WalletController extends BaseController {
   getPreMnemonics = () => keyringService.getPreMnemonics()
   generatePreMnemonic = () => keyringService.generatePreMnemonic()
   removePreMnemonics = () => keyringService.removePreMnemonics()
-  async createKeyringWithMnemonics(mnemonic: string) {
+  createKeyringWithMnemonics = async (mnemonic: string) => {
     const keyring = await keyringService.createKeyringWithMnemonics(mnemonic)
     keyringService.removePreMnemonics()
     return this._setCurrentAccountFromKeyring(keyring)
@@ -341,7 +341,7 @@ export class WalletController extends BaseController {
     return stashId
   }
 
-  async addKeyring(keyringId: string) {
+  addKeyring = async (keyringId: string) => {
     const keyring = stashKeyrings[keyringId]
     if (keyring) {
       await keyringService.addKeyring(keyring)
@@ -351,11 +351,11 @@ export class WalletController extends BaseController {
     }
   }
 
-  getKeyringByType(type: string) {
+  getKeyringByType = (type: string) => {
     return keyringService.getKeyringByType(type)
   }
 
-  checkHasMnemonic() {
+  checkHasMnemonic = () => {
     try {
       const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC) as HdKeyring
       return !!keyring.mnemonic
@@ -364,7 +364,7 @@ export class WalletController extends BaseController {
     }
   }
 
-  async deriveNewAccountFromMnemonic() {
+  deriveNewAccountFromMnemonic = async () => {
     const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC)
 
     const result = await keyringService.addNewAccount(keyring)
@@ -372,7 +372,7 @@ export class WalletController extends BaseController {
     return result
   }
 
-  async getAccountsCount() {
+  getAccountsCount = async () => {
     const accounts = await keyringService.getAccounts()
     return accounts.filter((x) => x).length
   }
