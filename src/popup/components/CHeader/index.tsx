@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { getConn, setConn } from '@/common/storages/stores/popup/slice'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
 
-import './index.less'
+import './index.module.less'
 
 const CHeader = () => {
   const conn = useAppSelector(getConn)
@@ -63,14 +63,14 @@ const CHeader = () => {
         <img src="./images/Paragon.svg" className="h-5 ml-3 select-none" alt="" />
       </div>
       <div className="flex-grow-1"></div>
-      {loading ? (
+      {/* {loading ? (
         <div className="connected">
           <div className="mr-2 bg-custom-green rounded-xl w-2_5 h-2_5"></div>
           {conn ? 'Disconnecting' : 'Connecting'}
         </div>
       ) : (
         <StatusEl />
-      )}
+      )} */}
     </div>
   )
 }

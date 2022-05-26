@@ -22,6 +22,7 @@ const SortHat = () => {
     if (isInNotification && !approval) {
       window.close()
       console.log('window.close')
+      return
     }
 
     if (!isInNotification) {
@@ -32,25 +33,31 @@ const SortHat = () => {
       console.log('rejectApproval')
     }
 
+    console.log(await wallet.isBooted())
+
     if (!(await wallet.isBooted())) {
       console.log('welcome')
       navigate('/welcome')
+      return
     }
 
     if (!(await wallet.isUnlocked())) {
       console.log('login')
       navigate('/login')
+      return
     }
 
     if ((await wallet.hasPageStateCache()) && !isInNotification && !isInTab) {
       const cache = await wallet.getPageStateCache()!
       console.log(cache.path)
       navigate(cache.path)
+      return
     }
 
     if ((await wallet.getPreMnemonics()) && !isInNotification && !isInTab) {
       console.log('create-recovery')
       navigate('/create-recovery')
+      return
     }
 
     const currentAccount = await wallet.getCurrentAccount()
@@ -58,12 +65,15 @@ const SortHat = () => {
     if (!currentAccount) {
       console.log('!currentAccount')
       navigate('/welcome')
+      return
     } else if (approval) {
       console.log('approval')
       navigate('/approval')
+      return
     } else {
       console.log('dashboard')
       navigate('/dashboard')
+      return
     }
   }
 

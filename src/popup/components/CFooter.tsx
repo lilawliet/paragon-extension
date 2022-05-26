@@ -9,7 +9,7 @@ const CFooter = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <div className="grid w-full h-full grid-cols-4 text-2xl border-t border-white bg-soft-black border-opacity-10">
+    <div className="grid w-full h-full grid-cols-3 text-2xl border-t border-white bg-soft-black border-opacity-10">
       <div
         className={`cursor-pointer flex items-center justify-center h-full text-center ${panel == 'home' ? 'text-primary' : ''}`}
         onClick={(e) => {
@@ -18,9 +18,9 @@ const CFooter = () => {
       >
         <img src={`./images/wallet-solid${panel == 'home' ? '-active' : ''}.png`} alt="" />
       </div>
-      <div className={`cursor-pointer flex items-center justify-center h-full text-center ${panel == 'nft' ? 'text-primary' : ''}`}>
+      {/* <div className={`cursor-pointer flex items-center justify-center h-full text-center ${panel == 'nft' ? 'text-primary' : ''}`}>
         <img src={`./images/list-solid${panel == 'nft' ? '-active' : ''}.png`} alt="" />
-      </div>
+      </div> */}
       <div
         className={`cursor-pointer flex items-center justify-center h-full text-center ${panel == 'transaction' ? 'text-primary' : ''}`}
         onClick={(e) => {

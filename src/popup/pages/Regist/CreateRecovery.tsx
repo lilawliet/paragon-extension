@@ -1,9 +1,9 @@
-import { Button, Checkbox } from 'antd'
+import { Button, Checkbox, message } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
-import { useWallet } from '@/ui/utils'
+import { useWallet, useWalletRequest } from '@/ui/utils'
 
 const CreateRecovery = () => {
   const { t } = useTranslation()
@@ -14,14 +14,19 @@ const CreateRecovery = () => {
   const [mnemonics, setMnemonics] = useState('')
 
   const init = async (state: any) => {
-    if (state?.create) {
-      setMnemonics((await wallet.generatePreMnemonic()))
-      console.log('create')
-    } else {
-      const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic())
-      setMnemonics(_mnemonics)
-      console.log('getPreMnemonics')
-    }
+    const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic())
+    setMnemonics(_mnemonics)
+
+    // if (state?.create) {
+    //   const _mnemonics = (await wallet.generatePreMnemonic())
+    //   setMnemonics(_mnemonics)
+    //   // run(_mnemonics.trim())
+    //   console.log('create')
+    // } else {
+    //   const _mnemonics = (await wallet.getPreMnemonics())
+    //   setMnemonics(_mnemonics)
+    //   console.log('getPreMnemonics')
+    // }
   }
 
   useEffect(() => {

@@ -9,19 +9,10 @@ import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Home from './Home'
 import Settings from './Settings'
 import Transaction from './Transaction'
-
-interface State {
-  keyring: string
-  isMnemonics?: boolean
-  isWebHID?: boolean
-  path?: string
-  keyringId?: number | null
-  ledgerLive?: boolean
-}
 
 export interface AccountsProps {
   current: Account | null
@@ -33,7 +24,6 @@ const Dashboard = () => {
   const { t } = useTranslation()
   const wallet = useWallet()
   const navigate = useNavigate()
-  const { state } = useLocation()
 
   const panel = useAppSelector(getPanel)
 
@@ -89,6 +79,7 @@ const Dashboard = () => {
   const getAllKeyrings = async () => {
     setLoadingAddress(true)
     const _accounts = await wallet.getAllVisibleAccounts()
+    console.log('_accounts', _accounts)
     const allAlianNames = await wallet.getAllAlianName()
     const allContactNames = await wallet.getContactsByMap()
     const templist = await _accounts
@@ -105,7 +96,7 @@ const Dashboard = () => {
       .flat(1)
     const result = await balanceList(templist)
     setLoadingAddress(false)
-    console.log(templist)
+    console.log('templist', templist)
     if (result) {
       const withBalanceList = result.sort((a, b) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()

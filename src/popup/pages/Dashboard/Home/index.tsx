@@ -46,7 +46,7 @@ const Home = ({
       </div>
       <div className="grid grid-cols-2 gap-4 leading-6_5 w-5/8">
         <div
-          className="cursor-pointer box unit hover:border-primary hover:text-primary"
+          className="cursor-pointer box unit hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
           }}>
@@ -56,7 +56,7 @@ const Home = ({
           &nbsp;Receive
         </div>
         <div
-          className="cursor-pointer box unit"
+          className="cursor-pointer box unit hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate('/send/index')
           }}>
