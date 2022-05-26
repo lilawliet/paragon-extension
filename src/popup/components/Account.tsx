@@ -7,19 +7,19 @@ import { useTranslation } from 'react-i18next'
 
 interface AccountSelectDrawerProps {
   current: Account | null
-  accounts: Account[]
-  onChange(account: Account): void
-  onCancel(): void
+  accountsList?: Account[]
+  handleOnChange?(account: Account): void
+  handleOnCancel(): void
   title: string
   isLoading?: boolean
 }
 
 const AccountSelect = ({ 
   current,
-  accounts,
-  onChange, 
+  accountsList,
+  handleOnChange, 
+  handleOnCancel, 
   title, 
-  onCancel, 
   isLoading = false 
 }: AccountSelectDrawerProps) => {
   const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
@@ -41,7 +41,7 @@ const AccountSelect = ({
       </span>
       <div className="flex-grow">
         <Select
-          onChange={onChange}
+          onChange={handleOnChange}
           defaultValue={current}
           key={'address'}
           style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}
@@ -51,7 +51,7 @@ const AccountSelect = ({
               <img src="./images/chevron-down-solid.png" alt="" />
             </span>
           }>
-          {accounts.map((account, index) => (
+          {accountsList?.map((account, index) => (
             <Option value={account.address} key={index}>
               {account.alianName? account.alianName : account.brandName}{' '}
             </Option>

@@ -25,9 +25,9 @@ interface State {
 }
 
 export interface AccountsProps {
-  currentAccount: Account | null
+  current: Account | null
   accountsList?: Account[]
-  handleChange?(account: Account): void
+  handleOnChange?(account: Account): void
 }
 
 const Dashboard = () => {
@@ -146,7 +146,7 @@ const Dashboard = () => {
 
   const [isListLoading, setIsListLoading] = useState(false)
   const [isAssetsLoading, setIsAssetsLoading] = useState(true)
-  const handleChange = async (account: Account) => {
+  const handleOnChange = async (account: Account) => {
     console.log(account)
     setIsListLoading(true)
     setIsAssetsLoading(true)
@@ -162,13 +162,13 @@ const Dashboard = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919', overflowY: 'auto' }}>
         {panel == 'home' ? (
-          <Home currentAccount={currentAccount} accountsList={accountsList} handleChange={handleChange} />
+          <Home current={current} accountsList={accountsList} handleOnChange={handleOnChange} />
         ) : panel == 'transaction' ? (
-          <Transaction currentAccount={currentAccount} accountsList={accountsList} handleChange={handleChange} />
+          <Transaction current={current} accountsList={accountsList} handleOnChange={handleOnChange} />
         ) : panel == 'settings' ? (
-          <Settings currentAccount={currentAccount} >
+          <Settings current={current} />
         ) : (
-          <Home currentAccount={currentAccount} accountsList={accountsList} handleChange={handleChange} />
+          <Home current={current} accountsList={accountsList} handleOnChange={handleOnChange} />
         )}
       </Content>
       <Footer style={{ height: '5.625rem' }}>

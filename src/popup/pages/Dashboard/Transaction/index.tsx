@@ -13,9 +13,9 @@ interface Transaction {
 }
 
 const Transaction = ({
-  currentAccount,
+  current,
   accountsList,
-  handleChange
+  handleOnChange
 }: AccountsProps) => {
   const { t } = useTranslation()
   const wallet = useWallet()
@@ -44,10 +44,10 @@ const Transaction = ({
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box black bg-opacity-20 w340">
         <AccountSelect
-          current={currentAccount}
-          accounts={accountsList}
-          onChange={handleChange}
-          onCancel={function (): void {
+          current={current}
+          accountsList={accountsList}
+          handleOnChange={handleOnChange}
+          handleOnCancel={function (): void {
             throw new Error('Function not implemented.')
           }}
           title={''}

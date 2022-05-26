@@ -65,7 +65,7 @@ const SettingList: Setting[] = [
 ]
 
 export default ({
-  currentAccount
+  current
 }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -134,7 +134,7 @@ export default ({
             <div className="col-span-5 font-semibold p0" 
               onClick={(e) => {
                 navigate('/settings/account')
-              }}>{currentAccount?.alianName? currentAccount?.alianName : currentAccount?.brandName}</div>
+              }}>{current?.alianName? current?.alianName : current?.brandName}</div>
             <div className="flex items-center justify-center cursor-pointer">
               <EditOutlined onClick={(e) => {
                 handleChangeAlianName}}/>
