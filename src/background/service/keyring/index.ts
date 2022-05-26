@@ -391,7 +391,7 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<void>} A Promise that resolves if the operation was successful.
    */
   async removeAccount(address: string, type: string, brand?: string): Promise<any> {
-    let keyring = await this.getKeyringForAccount(address, type)
+    const keyring = await this.getKeyringForAccount(address, type)
 
     // Not all the keyrings support this, so we have to check
     if (typeof keyring.removeAccount != 'function') {
@@ -399,7 +399,7 @@ class KeyringService extends EventEmitter {
     }
     keyring.removeAccount(address)
     this.emit('removedAccount', address)
-    let accounts = await keyring.getAccounts()
+    const accounts = await keyring.getAccounts()
     if (accounts.length == 0) {
       this.removeEmptyKeyrings()
     }
@@ -654,7 +654,7 @@ class KeyringService extends EventEmitter {
     const accounts = await keyring.getAccounts()
     const all_accounts: { address: string; brandName: string }[] = []
     for (let i = 0; i < accounts.length; i++) {
-      let account = accounts[i]
+      const account = accounts[i]
       all_accounts.push({
         address: account,
         brandName: keyring.type

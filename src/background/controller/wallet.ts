@@ -17,8 +17,6 @@ import { isSameAddress } from 'background/utils'
 import { openIndexPage } from 'background/webapi/tab'
 import * as bip39 from 'bip39'
 import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL } from 'consts'
-import { ethErrors } from 'eth-rpc-errors'
-import * as ethUtil from 'ethereumjs-util'
 import Wallet, { thirdparty } from 'ethereumjs-wallet'
 import { groupBy } from 'lodash'
 import { ContactBookItem } from '../service/contactBook'
@@ -45,13 +43,7 @@ export class WalletController extends BaseController {
   resolveApproval = notificationService.resolveApproval
   rejectApproval = notificationService.rejectApproval
 
-  transferNFT = async ({ to, contractId, tokenId, amount }: { to: string; contractId: string; tokenId: string; amount?: number }) => {
-    const account = await preferenceService.getCurrentAccount()
-    if (!account) throw new Error('no current account')
-    throw new Error('not implemented')
-  }
-
-  initAlianNames = async () => {
+  async initAlianNames() {
     await preferenceService.changeInitAlianNameStatus()
     const contacts = await this.listContact()
     const keyrings = await keyringService.getAllTypedAccounts()
@@ -104,7 +96,7 @@ export class WalletController extends BaseController {
     }
   }
 
-  unlock = async (password: string) => {
+  async unlock(password: string) {
     const alianNameInited = await preferenceService.getInitAlianNameStatus()
     const alianNames = contactBookService.listAlias()
     await keyringService.submitPassword(password)
@@ -113,14 +105,16 @@ export class WalletController extends BaseController {
       this.initAlianNames()
     }
   }
-  isUnlocked = () => keyringService.memStore.getState().isUnlocked
+  isUnlocked() {
+    return keyringService.memStore.getState().isUnlocked
+  }
 
-  lockWallet = async () => {
+  async lockWallet() {
     await keyringService.setLocked()
     sessionService.broadcastEvent('accountsChanged', [])
     sessionService.broadcastEvent('lock')
   }
-  setPopupOpen = (isOpen) => {
+  setPopupOpen(isOpen: boolean) {
     preferenceService.setPopupOpen(isOpen)
   }
   openIndexPage = openIndexPage
@@ -130,27 +124,40 @@ export class WalletController extends BaseController {
     if (!this.isUnlocked()) return null
     return pageStateCacheService.get()
   }
-  clearPageStateCache = () => pageStateCacheService.clear()
-  setPageStateCache = (cache: CacheState) => pageStateCacheService.set(cache)
+  clearPageStateCache() {
+    pageStateCacheService.clear()
+  }
+  setPageStateCache(cache: CacheState) {
+    pageStateCacheService.set(cache)
+  }
 
-  getAddressBalance = async (address: string) => {
+  async getAddressBalance(address: string) {
     console.log('getAddressBalance', address)
     const data = await openapiService.getAddressBalance(address)
     preferenceService.updateAddressBalance(address, data as any)
     return data
   }
-  getAddressCacheBalance = (address: string | undefined) => {
+  getAddressCacheBalance(address: string | undefined) {
     console.log('getAddressCacheBalance', address)
     if (!address) return null
     return preferenceService.getAddressBalance(address)
   }
 
-  getExternalLinkAck = () => preferenceService.getExternalLinkAck()
+  getExternalLinkAck() {
+    preferenceService.getExternalLinkAck()
+  }
 
-  setExternalLinkAck = (ack) => preferenceService.setExternalLinkAck(ack)
+  setExternalLinkAck(ack) {
+    preferenceService.setExternalLinkAck(ack)
+  }
 
-  getLocale = () => preferenceService.getLocale()
-  setLocale = (locale: string) => preferenceService.setLocale(locale)
+  getLocale() {
+    return preferenceService.getLocale()
+  }
+
+  setLocale(locale: string) {
+    preferenceService.setLocale(locale)
+  }
 
   /* connectedSites */
 
@@ -278,7 +285,7 @@ export class WalletController extends BaseController {
     }
 
     const privateKey = wallet.getPrivateKeyString()
-    const keyring = await keyringService.importPrivateKey(ethUtil.stripHexPrefix(privateKey))
+    const keyring = await keyringService.importPrivateKey(privateKey)
     return this._setCurrentAccountFromKeyring(keyring)
   }
 
@@ -434,7 +441,7 @@ export class WalletController extends BaseController {
       return keyring
     }
 
-    throw ethErrors.rpc.internal(`No ${type} keyring found`)
+    throw new Error(`No ${type} keyring found`)
   }
 
   addContact(data: ContactBookItem) {
