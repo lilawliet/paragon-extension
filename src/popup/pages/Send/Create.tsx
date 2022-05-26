@@ -1,14 +1,20 @@
+import { NovoBalance } from '@/background/service/openapi'
+import { satoshisToNovo } from '@/ui/utils'
 import { Button, Input } from 'antd'
-
-import { Transaction, Status } from './index'
+import { Status, Transaction } from './index'
 
 interface Props {
   transaction: Transaction
-  setTransaction(transaction: Transaction): void
+
+  balance: NovoBalance
+  fee: number
+
+  setToAddress(val: string): void
+  setToAmount(val: number): void
   setStatus(status: Status): void
 }
 
-export default ({ transaction, setTransaction, setStatus }: Props) => {
+export default ({ transaction, balance, fee, setToAddress, setToAmount, setStatus }: Props) => {
   const verify = () => {
     // to verify
     setStatus('confirm')
@@ -20,22 +26,38 @@ export default ({ transaction, setTransaction, setStatus }: Props) => {
       <div className="w-15 h-15">
         <img className="w-full" src={'./images/Novo.svg'} alt="" />
       </div>
-      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default hover">
-        <Input className="font-semibold text-white p0 hover:" bordered={false} status="error" placeholder="Recipient’s NOVO address" />
+      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default">
+        <Input
+          className="font-semibold text-white p0"
+          bordered={false}
+          status="error"
+          placeholder="Recipient’s NOVO address"
+          onChange={async (e) => {
+            setToAddress(e.target.value)
+          }}
+        />
       </div>
       <div className="flex justify-between w-full mt-5 box text-soft-white">
         <span>Available</span>
         <span>
-          <span className="font-semibold text-white">{transaction.amount}</span> Novo
+          <span className="font-semibold text-white">{satoshisToNovo(balance.amount)}</span> Novo
         </span>
       </div>
-      <div className="flex items-center w-full p-5 h-15_5 box default hover">
-        <Input className="font-semibold text-white p0" bordered={false} placeholder="Amount" />
+      <div className="flex items-center w-full p-5 h-15_5 box default">
+        <Input
+          className="font-semibold text-white p0"
+          bordered={false}
+          placeholder="Amount"
+          onChange={async (e) => {
+            const val = parseFloat(e.target.value)
+            setToAmount(val)
+          }}
+        />
       </div>
       <div className="flex justify-between w-full mt-5 text-soft-white">
         <span>Fee</span>
         <span>
-          <span className="font-semibold text-white">{transaction.amount}</span> Novo
+          <span className="font-semibold text-white">{fee}</span> Novo
         </span>
       </div>
 

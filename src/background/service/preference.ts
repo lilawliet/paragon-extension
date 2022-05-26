@@ -5,7 +5,7 @@ import { EVENTS } from 'consts'
 import cloneDeep from 'lodash/cloneDeep'
 import { browser } from 'webextension-polyfill-ts'
 import { i18n, keyringService, sessionService } from './index'
-import { TotalBalanceResponse } from './openapi'
+import { NovoBalance } from './openapi'
 
 const version = process.env.release || '0'
 
@@ -23,7 +23,7 @@ export interface PreferenceStore {
   currentAccount: Account | undefined | null
   externalLinkAck: boolean
   balanceMap: {
-    [address: string]: TotalBalanceResponse
+    [address: string]: NovoBalance
   }
   locale: string
   watchAddressPreference: Record<string, number>
@@ -118,7 +118,7 @@ class PreferenceService {
     return this.popupOpen
   }
 
-  updateAddressBalance = (address: string, data: TotalBalanceResponse) => {
+  updateAddressBalance = (address: string, data: NovoBalance) => {
     const balanceMap = this.store.balanceMap || {}
     this.store.balanceMap = {
       ...balanceMap,
@@ -135,7 +135,7 @@ class PreferenceService {
     }
   }
 
-  getAddressBalance = (address: string): TotalBalanceResponse | null => {
+  getAddressBalance = (address: string): NovoBalance | null => {
     const balanceMap = this.store.balanceMap || {}
     return balanceMap[address] || null
   }

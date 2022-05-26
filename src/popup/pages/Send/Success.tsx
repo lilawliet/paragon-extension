@@ -1,17 +1,15 @@
-import { ArrowRightOutlined, EyeOutlined, LoadingOutlined } from '@ant-design/icons'
-import { Button, Input } from 'antd'
-import { result } from 'lodash'
+import { EyeOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-
-import { Transaction, Status } from './index'
+import { Status, Transaction } from './index'
 
 interface Props {
   transaction: Transaction
-  setTransaction(transaction: Transaction): void
+  fromAddress: string
+  toAmount: number
   setStatus(status: Status): void
 }
 
-export default ({ transaction, setTransaction, setStatus }: Props) => {
+export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
   const verify = () => {
     // to verify
     setStatus('success')
@@ -54,9 +52,9 @@ export default ({ transaction, setTransaction, setStatus }: Props) => {
       <span className="mt-6 text-2xl">Payment Sent</span>
       <span className="text-soft-white">Your transaction has been succesfully sent</span>
       <div className="justify-between w-full box nobor text-soft-white mt-2_5">
-        <span>{transaction.address}</span>
+        <span>{fromAddress}</span>
         <span>
-          <span className="font-semibold text-white">{transaction.amount}</span> Novo
+          <span className="font-semibold text-white">{toAmount}</span> Novo
         </span>
       </div>
       <div className="flex items-center text-soft-white">

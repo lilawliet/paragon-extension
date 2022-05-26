@@ -49,7 +49,7 @@ const Dashboard = () => {
         }
         return {
           ...item,
-          balance: balance?.total_usd_value || 0
+          balance: balance?.amount || 0
         }
       })
     )
@@ -82,11 +82,6 @@ const Dashboard = () => {
     }
   }
 
-  const getPendingTxCount = async (address: string) => {
-    const count = await wallet.getPendingCount(address)
-    setPendingTxCount(count)
-  }
-
   const getCurrentAccount = async () => {
     const account = await wallet.getCurrentAccount()
     if (!account) {
@@ -99,9 +94,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (dashboardReload) {
-      if (current) {
-        getPendingTxCount(current.address)
-      }
       setDashboardReload(false)
       getCurrentAccount()
       getAllKeyrings()

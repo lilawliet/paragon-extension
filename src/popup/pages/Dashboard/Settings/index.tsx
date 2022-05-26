@@ -165,8 +165,7 @@ export default () => {
         </Button> */}
 
         <div className="grid items-center grid-cols-6 p-5 mt-5 h-15_5 box default hover w380">
-          {
-            editable ? 
+          {editable ? (
             <Input
               ref={addressInput}
               className="col-span-5 font-semibold p0 hover hover:cursor-pointer disabled:color-soft-white"
@@ -174,11 +173,17 @@ export default () => {
               status="error"
               placeholder="Recipient’s NOVO address"
               defaultValue={name}
-            /> :
-            <span className='col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60' onClick={e=>{navigate('/settings/account')}}>
+            />
+          ) : (
+            <span
+              className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60"
+              onClick={(e) => {
+                navigate('/settings/account')
+              }}
+            >
               {name}
             </span>
-          }
+          )}
           <div
             className="flex items-center justify-center cursor-pointer opacity-60 hover:opacity-100"
             onClick={(e) => {
