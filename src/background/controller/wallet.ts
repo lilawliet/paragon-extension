@@ -1,5 +1,4 @@
 import { HdKeyring } from '@paragon/novo-hd-keyring'
-import { SimpleKeyring } from '@paragon/novo-simple-keyring'
 import * as novo from '@paragon/novocore-lib'
 import {
   contactBookService,
@@ -12,7 +11,7 @@ import {
   sessionService
 } from 'background/service'
 import i18n from 'background/service/i18n'
-import { DisplayedKeryring, KEYRING_CLASS } from 'background/service/keyring'
+import { DisplayedKeryring, Keyring, KEYRING_CLASS } from 'background/service/keyring'
 import { CacheState } from 'background/service/pageStateCache'
 import { isSameAddress } from 'background/utils'
 import { openIndexPage } from 'background/webapi/tab'
@@ -23,13 +22,12 @@ import * as ethUtil from 'ethereumjs-util'
 import Wallet, { thirdparty } from 'ethereumjs-wallet'
 import { groupBy } from 'lodash'
 import { ContactBookItem } from '../service/contactBook'
-import DisplayKeyring from '../service/keyring/display'
 import { OpenApiService } from '../service/openapi'
 import { ConnectedSite } from '../service/permission'
 import { Account } from '../service/preference'
 import { TxComposer } from '../utils/tx-utils'
 import BaseController from './base'
-const stashKeyrings: Record<string, any> = {}
+const stashKeyrings: Record<string, Keyring> = {}
 
 function novoToSatoshis(amount: number) {
   return Math.ceil(amount * 10000)
@@ -210,7 +208,7 @@ export class WalletController extends BaseController {
       data.origin
     )
   }
-  removeAllRecentConnectedSites = () => {
+  removeAllRecentConnectedSites() {
     const sites = permissionService.getRecentConnectedSites().filter((item) => !item.isTop)
     sites.forEach((item) => {
       this.removeConnectedSite(item.origin)
@@ -221,8 +219,13 @@ export class WalletController extends BaseController {
     permissionService.removeConnectedSite(origin)
   }
   getSitesByDefaultChain = permissionService.getSitesByDefaultChain
-  topConnectedSite = (origin: string) => permissionService.topConnectedSite(origin)
-  unpinConnectedSite = (origin: string) => permissionService.unpinConnectedSite(origin)
+  topConnectedSite(origin: string) {
+    return permissionService.topConnectedSite(origin)
+  }
+  unpinConnectedSite(origin: string) {
+    return permissionService.unpinConnectedSite(origin)
+  }
+
   /* keyrings */
 
   clearKeyrings = () => keyringService.clearKeyrings()
@@ -243,27 +246,24 @@ export class WalletController extends BaseController {
     return seedWords
   }
 
-  importPrivateKey = async (data) => {
-    const privateKey = ethUtil.stripHexPrefix(data)
-    const buffer = Buffer.from(privateKey, 'hex')
-
+  async importPrivateKey(data: string) {
     const error = new Error(i18n.t('the private key is invalid'))
     try {
-      if (!ethUtil.isValidPrivate(buffer)) {
+      if (!novo.PrivateKey.isValid(data)) {
         throw error
       }
     } catch {
       throw error
     }
 
-    const keyring = await keyringService.importPrivateKey(privateKey)
+    const keyring = await keyringService.importPrivateKey(data)
     return this._setCurrentAccountFromKeyring(keyring)
   }
 
   // json format is from "https://github.com/SilentCicero/ethereumjs-accounts"
   // or "https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition"
   // for example: https://www.myetherwallet.com/create-wallet
-  importJson = async (content: string, password: string) => {
+  async importJson(content: string, password: string) {
     try {
       JSON.parse(content)
     } catch {
@@ -285,7 +285,7 @@ export class WalletController extends BaseController {
   getPreMnemonics = () => keyringService.getPreMnemonics()
   generatePreMnemonic = () => keyringService.generatePreMnemonic()
   removePreMnemonics = () => keyringService.removePreMnemonics()
-  createKeyringWithMnemonics = async (mnemonic) => {
+  async createKeyringWithMnemonics(mnemonic: string) {
     const keyring = await keyringService.createKeyringWithMnemonics(mnemonic)
     keyringService.removePreMnemonics()
     return this._setCurrentAccountFromKeyring(keyring)
@@ -312,7 +312,7 @@ export class WalletController extends BaseController {
     }
   }
 
-  generateKeyringWithMnemonic = (mnemonic) => {
+  generateKeyringWithMnemonic = (mnemonic: string) => {
     if (!bip39.validateMnemonic(mnemonic)) {
       throw new Error(i18n.t('mnemonic phrase is invalid'))
     }
@@ -327,14 +327,14 @@ export class WalletController extends BaseController {
     return stashId
   }
 
-  addKyeringToStash = (keyring) => {
+  addKyeringToStash(keyring: Keyring) {
     const stashId = Object.values(stashKeyrings).length
     stashKeyrings[stashId] = keyring
 
     return stashId
   }
 
-  addKeyring = async (keyringId) => {
+  async addKeyring(keyringId: string) {
     const keyring = stashKeyrings[keyringId]
     if (keyring) {
       await keyringService.addKeyring(keyring)
@@ -344,9 +344,11 @@ export class WalletController extends BaseController {
     }
   }
 
-  getKeyringByType = (type: string) => keyringService.getKeyringByType(type)
+  getKeyringByType(type: string) {
+    return keyringService.getKeyringByType(type)
+  }
 
-  checkHasMnemonic = () => {
+  checkHasMnemonic() {
     try {
       const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC) as HdKeyring
       return !!keyring.mnemonic
@@ -355,7 +357,7 @@ export class WalletController extends BaseController {
     }
   }
 
-  deriveNewAccountFromMnemonic = async () => {
+  async deriveNewAccountFromMnemonic() {
     const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC)
 
     const result = await keyringService.addNewAccount(keyring)
@@ -363,38 +365,38 @@ export class WalletController extends BaseController {
     return result
   }
 
-  getAccountsCount = async () => {
+  async getAccountsCount() {
     const accounts = await keyringService.getAccounts()
     return accounts.filter((x) => x).length
   }
 
-  getTypedAccounts = async (type) => {
+  async getTypedAccounts(type: string) {
     return Promise.all(keyringService.keyrings.filter((keyring) => !type || keyring.type === type).map((keyring) => keyringService.displayForKeyring(keyring)))
   }
 
-  getAllVisibleAccounts: () => Promise<DisplayedKeryring[]> = async () => {
+  async getAllVisibleAccounts(): Promise<DisplayedKeryring[]> {
     const typedAccounts = await keyringService.getAllTypedVisibleAccounts()
 
     return typedAccounts.map((account) => ({
       ...account,
-      keyring: new DisplayKeyring(account.keyring)
+      keyring: account.keyring
     }))
   }
 
-  getAllVisibleAccountsArray: () => Promise<Account[]> = () => {
-    return keyringService.getAllVisibleAccountsArray()
+  async getAllVisibleAccountsArray(): Promise<Account[]> {
+    return await keyringService.getAllVisibleAccountsArray()
   }
 
-  getAllClassAccounts: () => Promise<DisplayedKeryring[]> = async () => {
+  async getAllClassAccounts() {
     const typedAccounts = await keyringService.getAllTypedAccounts()
 
     return typedAccounts.map((account) => ({
       ...account,
-      keyring: new DisplayKeyring(account.keyring)
+      keyring: account.keyring
     }))
   }
 
-  changeAccount = (account: Account) => {
+  changeAccount(account: Account) {
     preferenceService.setCurrentAccount(account)
   }
 
@@ -403,7 +405,7 @@ export class WalletController extends BaseController {
     return keyringService.signTransaction(keyring, novoTx, from)
   }
 
-  requestKeyring(type, methodName: string, keyringId: number | null, ...params) {
+  requestKeyring(type: string, methodName: string, keyringId: number | null, ...params) {
     let keyring
     if (keyringId !== null && keyringId !== undefined) {
       keyring = stashKeyrings[keyringId]
@@ -425,7 +427,7 @@ export class WalletController extends BaseController {
     return result
   }
 
-  private _getKeyringByType(type): SimpleKeyring | HdKeyring {
+  private _getKeyringByType(type: string): Keyring {
     const keyring = keyringService.getKeyringsByType(type)[0]
 
     if (keyring) {
@@ -435,16 +437,19 @@ export class WalletController extends BaseController {
     throw ethErrors.rpc.internal(`No ${type} keyring found`)
   }
 
-  addContact = (data: ContactBookItem) => {
+  addContact(data: ContactBookItem) {
     contactBookService.addContact(data)
   }
-  updateContact = (data: ContactBookItem) => {
+
+  updateContact(data: ContactBookItem) {
     contactBookService.updateContact(data)
   }
-  removeContact = (address: string) => {
+
+  removeContact(address: string) {
     contactBookService.removeContact(address)
   }
-  listContact = (includeAlias = true) => {
+
+  listContact(includeAlias = true) {
     const list = contactBookService.listContacts()
     if (includeAlias) {
       return list
@@ -452,11 +457,17 @@ export class WalletController extends BaseController {
       return list.filter((item) => !item.isAlias)
     }
   }
-  getContactsByMap = () => contactBookService.getContactsByMap()
-  getContactByAddress = (address: string) => contactBookService.getContactByAddress(address)
 
-  private async _setCurrentAccountFromKeyring(keyring, index = 0) {
-    const accounts = keyring.getAccountsWithBrand ? await keyring.getAccountsWithBrand() : await keyring.getAccounts()
+  getContactsByMap() {
+    return contactBookService.getContactsByMap()
+  }
+
+  getContactByAddress(address: string) {
+    return contactBookService.getContactByAddress(address)
+  }
+
+  private async _setCurrentAccountFromKeyring(keyring: Keyring, index = 0) {
+    const accounts = await keyring.getAccounts()
     const account = accounts[index < 0 ? index + accounts.length : index]
 
     if (!account) {
@@ -464,56 +475,63 @@ export class WalletController extends BaseController {
     }
 
     const _account = {
-      address: typeof account === 'string' ? account : account.address,
+      address: account,
       type: keyring.type,
-      brandName: typeof account === 'string' ? keyring.type : account.brandName
+      brandName: keyring.type
     }
     preferenceService.setCurrentAccount(_account)
 
     return [_account]
   }
 
-  getHighlightWalletList = () => {
+  getHighlightWalletList() {
     return preferenceService.getWalletSavedList()
   }
 
-  updateHighlightWalletList = (list) => {
+  updateHighlightWalletList(list) {
     return preferenceService.updateWalletSavedList(list)
   }
 
-  getAlianName = (address: string) => {
+  getAlianName(address: string) {
     const contactName = contactBookService.getContactByAddress(address)?.name
     return contactName
   }
 
-  updateAlianName = (address: string, name: string) => {
+  updateAlianName(address: string, name: string) {
     contactBookService.updateAlias({
       name,
       address
     })
   }
 
-  getAllAlianName = () => {
+  getAllAlianName() {
     return contactBookService.listAlias()
   }
 
-  getInitAlianNameStatus = () => preferenceService.getInitAlianNameStatus()
-  updateInitAlianNameStatus = () => preferenceService.changeInitAlianNameStatus()
+  getInitAlianNameStatus() {
+    preferenceService.getInitAlianNameStatus()
+  }
 
-  getIsFirstOpen = () => {
+  updateInitAlianNameStatus() {
+    preferenceService.changeInitAlianNameStatus()
+  }
+
+  getIsFirstOpen() {
     return preferenceService.getIsFirstOpen()
   }
-  updateIsFirstOpen = () => {
+
+  updateIsFirstOpen() {
     return preferenceService.updateIsFirstOpen()
   }
-  listChainAssets = async (address: string) => {
+
+  async listChainAssets(address: string) {
     const { confirmed, unconfirmed } = await openapiService.getAddressBalance(address)
     const amount = (confirmed + unconfirmed) / 10000
     const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount, value: '$6.748.29' }]
     return assets
   }
 
-  reportErrors = (error: string) => {
+  reportErrors(error: string) {
     console.error('report not implemented')
   }
 

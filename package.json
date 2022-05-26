@@ -20,7 +20,7 @@
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
     "@metamask/obs-store": "^7.0.0",
-    "@paragon/novo-hd-keyring": "^0.1.0",
+    "@paragon/novo-hd-keyring": "^0.1.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@reduxjs/toolkit": "^1.8.1",
     "@sentry/browser": "^6.19.7",

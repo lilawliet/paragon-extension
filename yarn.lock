@@ -1525,10 +1525,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@paragon/novo-hd-keyring@^0.1.0":
-  version "0.1.0"
-  resolved "https://npm.paragon.li/@paragon/novo-hd-keyring/-/novo-hd-keyring-0.1.0.tgz#30da5ce43e55245d6cf51c5b25777841a0a2f09e"
-  integrity sha512-xmdwMKR+NHKD4nuSxurDK8rltxmrAWcKWZJU6vlGHDY380q7uvNpa4FZ9YMxsceyVHFtQnqD5L/hJb9SBMOsug==
+"@paragon/novo-hd-keyring@^0.1.2":
+  version "0.1.2"
+  resolved "https://npm.paragon.li/@paragon/novo-hd-keyring/-/novo-hd-keyring-0.1.2.tgz#5a1cafd497cf262b07f8b4f5f85df2576065a0ff"
+  integrity sha512-9FavtSX6a5gvF6Yi4yAIA7MElUfkmHLN/Oujw8YSu9TqMm7DiL6pJaajR4Rzxn4uaeRXudhjkX6xwcHDIvuHgQ==
   dependencies:
     "@paragon/novo-simple-keyring" "^0.1.3"
     "@paragon/novocore-lib" "^1.0.0"

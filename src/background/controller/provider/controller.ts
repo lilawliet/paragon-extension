@@ -1,4 +1,4 @@
-import { keyringService, permissionService, sessionService } from 'background/service'
+import { permissionService, sessionService } from 'background/service'
 import { CHAINS } from 'consts'
 import { ethErrors } from 'eth-rpc-errors'
 import BaseController from '../base'
@@ -35,20 +35,6 @@ class ProviderController extends BaseController {
 
     const account = await this.getCurrentAccount()
     return account ? [account.address.toLowerCase()] : []
-  }
-
-  private _checkAddress = async (address) => {
-    // eslint-disable-next-line prefer-const
-    let { address: currentAddress, type } = (await this.getCurrentAccount()) || {}
-    currentAddress = currentAddress?.toLowerCase()
-    if (!currentAddress || currentAddress !== address) {
-      throw ethErrors.rpc.invalidParams({
-        message: 'Invalid parameters: must use the current user address to sign'
-      })
-    }
-    const keyring = await keyringService.getKeyringForAccount(currentAddress, type)
-
-    return keyring
   }
 }
 

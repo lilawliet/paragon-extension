@@ -39,6 +39,30 @@ export interface DisplayedKeryring {
   keyring: DisplayKeyring
 }
 
+export interface Keyring {
+  type: string
+  serialize(): Promise<any>
+  deserialize(opts: any): Promise<void>
+  addAccounts(n: number): Promise<string[]>
+  getAccounts(): Promise<string[]>
+  signTransaction(address: string, tx: novo.Transaction): Promise<novo.Transaction>
+  signMessage(address: string, message: string): Promise<string>
+  verifyMessage(address: string, message: string, sig: string): Promise<boolean>
+  exportAccount(address: string): Promise<string>
+  removeAccount(address: string): void
+
+  accounts?: string[]
+  unlock?(): Promise<void>
+  getFirstPage?(): Promise<{ address: string; index: number }[]>
+  getNextPage?(): Promise<{ address: string; index: number }[]>
+  getPreviousPage?(): Promise<{ address: string; index: number }[]>
+  getAddresses?(start: number, end: number): { address: string; index: number }[]
+  getIndexByAddress?(address: string): number
+
+  getAccountsWithBrand?(): { address: string; index: number }[]
+  activeAccounts?(indexes: number[]): string[]
+}
+
 class KeyringService extends EventEmitter {
   //
   // PUBLIC METHODS
@@ -46,7 +70,7 @@ class KeyringService extends EventEmitter {
   keyringTypes: any[]
   store!: ObservableStore<any>
   memStore: ObservableStore<MemStoreState>
-  keyrings: any[]
+  keyrings: Keyring[]
   encryptor: typeof encryptor = encryptor
   password: string | null = null
 
@@ -182,7 +206,7 @@ class KeyringService extends EventEmitter {
     return keyring
   }
 
-  async addKeyring(keyring: SimpleKeyring) {
+  async addKeyring(keyring: Keyring) {
     const accounts = await keyring.getAccounts()
     await this.checkForDuplicate(keyring.type, accounts)
     this.keyrings.push(keyring)
@@ -262,14 +286,14 @@ class KeyringService extends EventEmitter {
    * All Keyring classes implement a unique `type` string,
    * and this is used to retrieve them from the keyringTypes array.
    *
-   * @param {string} type - The type of keyring to add.
-   * @param {Object} opts - The constructor options for the keyring.
-   * @returns {Promise<Keyring>} The new keyring.
+   * @param  type - The type of keyring to add.
+   * @param  opts - The constructor options for the keyring.
+   * @returns  The new keyring.
    */
-  addNewKeyring(type: string, opts?: unknown): Promise<any> {
+  async addNewKeyring(type: string, opts?: unknown): Promise<Keyring> {
     const Keyring = this.getKeyringClassForType(type)
     const keyring = new Keyring(opts)
-    return this.addKeyring(keyring)
+    return await this.addKeyring(keyring)
   }
 
   /**
@@ -278,8 +302,8 @@ class KeyringService extends EventEmitter {
    * Loops through the keyrings and removes the ones with empty accounts
    * (usually after removing the last / only account) from a keyring
    */
-  async removeEmptyKeyrings(): Promise<undefined> {
-    const validKeyrings: unknown[] = []
+  async removeEmptyKeyrings() {
+    const validKeyrings: Keyring[] = []
 
     // Since getAccounts returns a Promise
     // We need to wait to hear back form each keyring
@@ -294,7 +318,6 @@ class KeyringService extends EventEmitter {
       })
     )
     this.keyrings = validKeyrings
-    return
   }
 
   /**
@@ -329,7 +352,7 @@ class KeyringService extends EventEmitter {
    * @param {Keyring} selectedKeyring - The currently selected keyring.
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
-  async addNewAccount(selectedKeyring: SimpleKeyring): Promise<string[]> {
+  async addNewAccount(selectedKeyring: Keyring): Promise<string[]> {
     const accounts = await selectedKeyring.addAccounts(1)
     accounts.forEach((hexAccount) => {
       this.emit('newAccount', hexAccount)
@@ -352,7 +375,7 @@ class KeyringService extends EventEmitter {
    * @returns {Promise<string>} The private key of the account.
    */
   async exportAccount(address: string): Promise<string> {
-    const keyring: SimpleKeyring = await this.getKeyringForAccount(address)
+    const keyring = await this.getKeyringForAccount(address)
     const privkey = await keyring.exportAccount(address)
     return privkey
   }
@@ -367,30 +390,22 @@ class KeyringService extends EventEmitter {
    * @param {string} address - The address of the account to remove.
    * @returns {Promise<void>} A Promise that resolves if the operation was successful.
    */
-  removeAccount(address: string, type: string, brand?: string): Promise<any> {
-    return this.getKeyringForAccount(address, type)
-      .then((keyring) => {
-        // Not all the keyrings support this, so we have to check
-        if (typeof keyring.removeAccount === 'function') {
-          keyring.removeAccount(address, brand)
-          this.emit('removedAccount', address)
-          return keyring.getAccounts()
-        }
-        return Promise.reject(new Error(`Keyring ${keyring.type} doesn't support account removal operations`))
-      })
-      .then((accounts) => {
-        // Check if this was the last/only account
-        if (accounts.length === 0) {
-          return this.removeEmptyKeyrings()
-        }
-        return undefined
-      })
-      .then(this.persistAllKeyrings.bind(this))
-      .then(this._updateMemStoreKeyrings.bind(this))
-      .then(this.fullUpdate.bind(this))
-      .catch((e) => {
-        return Promise.reject(e)
-      })
+  async removeAccount(address: string, type: string, brand?: string): Promise<any> {
+    let keyring = await this.getKeyringForAccount(address, type)
+
+    // Not all the keyrings support this, so we have to check
+    if (typeof keyring.removeAccount != 'function') {
+      throw new Error(`Keyring ${keyring.type} doesn't support account removal operations`)
+    }
+    keyring.removeAccount(address)
+    this.emit('removedAccount', address)
+    let accounts = await keyring.getAccounts()
+    if (accounts.length == 0) {
+      this.removeEmptyKeyrings()
+    }
+    await this.persistAllKeyrings()
+    await this._updateMemStoreKeyrings()
+    await this.fullUpdate()
   }
 
   //
@@ -406,7 +421,7 @@ class KeyringService extends EventEmitter {
    * @param fromAddress - The transaction 'from' address.
    * @returns  The signed transactio object.
    */
-  signTransaction(keyring: SimpleKeyring, novoTx: novo.Transaction, fromAddress: string) {
+  signTransaction(keyring: Keyring, novoTx: novo.Transaction, fromAddress: string) {
     return keyring.signTransaction(fromAddress, novoTx)
   }
 
@@ -416,7 +431,7 @@ class KeyringService extends EventEmitter {
    * Attempts to sign the provided message parameters.
    */
   async signMessage(address: string, data: string) {
-    const keyring: SimpleKeyring = await this.getKeyringForAccount(address)
+    const keyring = await this.getKeyringForAccount(address)
     const sig = await keyring.signMessage(address, data)
     return sig
   }
@@ -427,7 +442,7 @@ class KeyringService extends EventEmitter {
    * Attempts to verify the provided message parameters.
    */
   async verifyMessage(address: string, data: string, sig: string) {
-    const keyring: SimpleKeyring = await this.getKeyringForAccount(address)
+    const keyring = await this.getKeyringForAccount(address)
     const result = await keyring.verifyMessage(address, data, sig)
     return result
   }
@@ -548,7 +563,7 @@ class KeyringService extends EventEmitter {
    * @param {Object} serialized - The serialized keyring.
    * @returns {Promise<Keyring>} The deserialized keyring.
    */
-  async _restoreKeyring(serialized: any): Promise<SimpleKeyring> {
+  async _restoreKeyring(serialized: any): Promise<Keyring> {
     const { type, data } = serialized
     const Keyring = this.getKeyringClassForType(type)
     const keyring = new Keyring()
@@ -583,7 +598,7 @@ class KeyringService extends EventEmitter {
    * @param {string} type - The keyring types to retrieve.
    * @returns {Array<Keyring>} The keyrings.
    */
-  getKeyringsByType(type: string): SimpleKeyring[] {
+  getKeyringsByType(type: string): Keyring[] {
     return this.keyrings.filter((keyring) => keyring.type === type)
   }
 
@@ -599,7 +614,7 @@ class KeyringService extends EventEmitter {
     const keyrings = this.keyrings || []
     let addrs: string[] = []
     for (let i = 0; i < keyrings.length; i++) {
-      const keyring: SimpleKeyring = keyrings[i]
+      const keyring = keyrings[i]
       const accounts = await keyring.getAccounts()
       addrs = addrs.concat(accounts)
     }
@@ -615,11 +630,11 @@ class KeyringService extends EventEmitter {
    * @param {string} address - An account address.
    * @returns {Promise<Keyring>} The keyring of the account, if it exists.
    */
-  async getKeyringForAccount(address: string, type?: string, start?: number, end?: number, includeWatchKeyring = true): Promise<any> {
+  async getKeyringForAccount(address: string, type?: string, start?: number, end?: number, includeWatchKeyring = true): Promise<Keyring> {
     log.debug(`KeyringController - getKeyringForAccount: ${address}`)
     const keyrings = type ? this.keyrings.filter((keyring) => keyring.type === type) : this.keyrings
     for (let i = 0; i < keyrings.length; i++) {
-      const keyring: SimpleKeyring = keyrings[i]
+      const keyring = keyrings[i]
       const accounts = await keyring.getAccounts()
       if (accounts.includes(address)) {
         return keyring
@@ -635,22 +650,21 @@ class KeyringService extends EventEmitter {
    * @param {Keyring} keyring
    * @returns {Promise<Object>} A keyring display object, with type and accounts properties.
    */
-  displayForKeyring(keyring, includeHidden = true): Promise<DisplayedKeryring> {
-    const accounts: Promise<({ address: string; brandName: string } | string)[]> = keyring.getAccountsWithBrand ? keyring.getAccountsWithBrand() : keyring.getAccounts()
-
-    return accounts.then((accounts) => {
-      const allAccounts = accounts.map((account) => ({
-        address: typeof account === 'string' ? account : account.address,
-        brandName: typeof account === 'string' ? keyring.type : account.brandName
-      }))
-
-      return {
-        type: keyring.type,
-        accounts: allAccounts,
-
-        keyring
-      }
-    })
+  async displayForKeyring(keyring: Keyring, includeHidden = true): Promise<DisplayedKeryring> {
+    const accounts = await keyring.getAccounts()
+    const all_accounts: { address: string; brandName: string }[] = []
+    for (let i = 0; i < accounts.length; i++) {
+      let account = accounts[i]
+      all_accounts.push({
+        address: account,
+        brandName: keyring.type
+      })
+    }
+    return {
+      type: keyring.type,
+      accounts: all_accounts,
+      keyring: new DisplayKeyring(keyring)
+    }
   }
 
   getAllTypedAccounts(): Promise<DisplayedKeryring[]> {
