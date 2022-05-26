@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import AccountSelect from '@/popup/components/Account'
-import { useState } from 'react'
 import { useWallet } from '@/ui/utils'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
 
 interface Transaction {
@@ -21,9 +21,8 @@ const Transaction = ({
   const wallet = useWallet()
   const navigate = useNavigate()
 
-  const [isListLoading, setIsListLoading] = useState(false);
-  const [isAssetsLoading, setIsAssetsLoading] = useState(true);
-
+  const [isListLoading, setIsListLoading] = useState(false)
+  const [isAssetsLoading, setIsAssetsLoading] = useState(true)
 
   const [transactions, setTransactions] = useState<Transaction[]>([
     {

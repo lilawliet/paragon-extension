@@ -1,8 +1,8 @@
-import { Button, Input, message } from 'antd'
-import { Link, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react'
 import { useApproval, useWallet, useWalletRequest } from '@/ui/utils'
+import { Button, Input, message } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const { t } = useTranslation()
@@ -36,9 +36,9 @@ const Login = () => {
 
   useEffect(() => {
     if (password) {
-      if (true) {
-        setDisabled(false)
-      }
+      // if (true) {
+      setDisabled(false)
+      // }
     }
   }, [password])
 

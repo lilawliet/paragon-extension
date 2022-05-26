@@ -1,6 +1,6 @@
-import eventBus from '@/eventBus'
-import WalletConnectKeyring from '@rabby-wallet/eth-walletconnect-keyring'
-import WatchKeyring from '@rabby-wallet/eth-watch-keyring'
+import { HdKeyring } from '@paragon/novo-hd-keyring'
+import { SimpleKeyring } from '@paragon/novo-simple-keyring'
+import * as novo from '@paragon/novocore-lib'
 import {
   contactBookService,
   keyringService,
@@ -14,10 +14,10 @@ import {
 import i18n from 'background/service/i18n'
 import { DisplayedKeryring, KEYRING_CLASS } from 'background/service/keyring'
 import { CacheState } from 'background/service/pageStateCache'
-import { isSameAddress, setPageStateCacheWhenPopupClose } from 'background/utils'
+import { isSameAddress } from 'background/utils'
 import { openIndexPage } from 'background/webapi/tab'
 import * as bip39 from 'bip39'
-import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL, EVENTS } from 'consts'
+import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL } from 'consts'
 import { ethErrors } from 'eth-rpc-errors'
 import * as ethUtil from 'ethereumjs-util'
 import Wallet, { thirdparty } from 'ethereumjs-wallet'
@@ -27,9 +27,13 @@ import DisplayKeyring from '../service/keyring/display'
 import { OpenApiService } from '../service/openapi'
 import { ConnectedSite } from '../service/permission'
 import { Account } from '../service/preference'
+import { TxComposer } from '../utils/tx-utils'
 import BaseController from './base'
-
 const stashKeyrings: Record<string, any> = {}
+
+function novoToSatoshis(amount: number) {
+  return Math.ceil(amount * 10000)
+}
 
 export class WalletController extends BaseController {
   openapi: OpenApiService = openapiService
@@ -223,154 +227,6 @@ export class WalletController extends BaseController {
 
   clearKeyrings = () => keyringService.clearKeyrings()
 
-  importWatchAddress = async (address) => {
-    let keyring, isNewKey
-    const keyringType = KEYRING_CLASS.WATCH
-    try {
-      keyring = this._getKeyringByType(keyringType)
-    } catch {
-      const WatchKeyring = keyringService.getKeyringClassForType(keyringType)
-      keyring = new WatchKeyring()
-      isNewKey = true
-    }
-
-    keyring.setAccountToAdd(address)
-    await keyringService.addNewAccount(keyring)
-    if (isNewKey) {
-      await keyringService.addKeyring(keyring)
-    }
-    return this._setCurrentAccountFromKeyring(keyring, -1)
-  }
-
-  getWalletConnectStatus = (address: string, brandName: string) => {
-    const keyringType = KEYRING_CLASS.WALLETCONNECT
-    const keyring: WalletConnectKeyring = this._getKeyringByType(keyringType)
-    if (keyring) {
-      return keyring.getConnectorStatus(address, brandName)
-    }
-    return null
-  }
-
-  initWalletConnect = async (brandName: string, bridge?: string) => {
-    let keyring: WalletConnectKeyring, isNewKey
-    const keyringType = KEYRING_CLASS.WALLETCONNECT
-    try {
-      keyring = this._getKeyringByType(keyringType)
-    } catch {
-      const WalletConnect = keyringService.getKeyringClassForType(keyringType)
-      keyring = new WalletConnect({
-        accounts: [],
-        brandName: brandName,
-        clientMeta: {
-          description: i18n.t('appDescription'),
-          url: 'https://paragon.li',
-          icons: ['https://paragon.li/assets/images/logo.png'],
-          name: 'Paragon'
-        }
-      })
-      isNewKey = true
-    }
-    const { uri } = await keyring.initConnector(brandName, bridge)
-    let stashId: null | number = null
-    if (isNewKey) {
-      stashId = this.addKyeringToStash(keyring)
-      eventBus.addEventListener(EVENTS.WALLETCONNECT.INIT, ({ address, brandName }) => {
-        ;(keyring as WalletConnectKeyring).init(address, brandName)
-      })
-      ;(keyring as WalletConnectKeyring).on('inited', (uri) => {
-        eventBus.emit(EVENTS.broadcastToUI, {
-          method: EVENTS.WALLETCONNECT.INITED,
-          params: { uri }
-        })
-      })
-      keyring.on('statusChange', (data) => {
-        eventBus.emit(EVENTS.broadcastToUI, {
-          method: EVENTS.WALLETCONNECT.STATUS_CHANGED,
-          params: data
-        })
-        if (!preferenceService.getPopupOpen()) {
-          setPageStateCacheWhenPopupClose(data)
-        }
-      })
-    }
-    return {
-      uri,
-      stashId
-    }
-  }
-
-  getWalletConnectBridge = (address: string, brandName: string) => {
-    const keyringType = KEYRING_CLASS.WALLETCONNECT
-    const keyring: WalletConnectKeyring = this._getKeyringByType(keyringType)
-    if (keyring) {
-      const target = keyring.accounts.find((account) => account.address.toLowerCase() === address.toLowerCase() && brandName === account.brandName)
-
-      if (target) return target.bridge
-
-      return null
-    }
-    return null
-  }
-
-  getWalletConnectConnectors = () => {
-    const keyringType = KEYRING_CLASS.WALLETCONNECT
-    const keyring: WalletConnectKeyring = this._getKeyringByType(keyringType)
-    if (keyring) {
-      const result: { address: string; brandName: string }[] = []
-      for (const key in keyring.connectors) {
-        const target = keyring.connectors[key]
-        result.push({
-          address: key.split('-')[1],
-          brandName: target.brandName
-        })
-      }
-      return result
-    }
-    return []
-  }
-
-  killWalletConnectConnector = async (address: string, brandName: string) => {
-    const keyringType = KEYRING_CLASS.WALLETCONNECT
-    const keyring: WalletConnectKeyring = this._getKeyringByType(keyringType)
-    if (keyring) {
-      const connector = keyring.connectors[`${brandName}-${address.toLowerCase()}`]
-      if (connector) {
-        await keyring.closeConnector(connector.connector, address, brandName)
-      }
-    }
-  }
-
-  importWalletConnect = async (address: string, brandName: string, bridge?: string, stashId?: number) => {
-    let keyring: WalletConnectKeyring, isNewKey
-    const keyringType = KEYRING_CLASS.WALLETCONNECT
-    if (stashId !== null && stashId !== undefined) {
-      keyring = stashKeyrings[stashId]
-      isNewKey = true
-    } else {
-      try {
-        keyring = this._getKeyringByType(keyringType)
-      } catch {
-        const WalletConnectKeyring = keyringService.getKeyringClassForType(keyringType)
-        keyring = new WalletConnectKeyring()
-        isNewKey = true
-      }
-    }
-
-    keyring.setAccountToAdd({
-      address,
-      brandName,
-      bridge
-    })
-
-    if (isNewKey) {
-      await keyringService.addKeyring(keyring)
-    }
-
-    await keyringService.addNewAccount(keyring)
-    this.clearPageStateCache()
-    return this._setCurrentAccountFromKeyring(keyring, -1)
-  }
-
   getPrivateKey = async (password: string, { address, type }: { address: string; type: string }) => {
     await this.verifyPassword(password)
     const keyring = await keyringService.getKeyringForAccount(address, type)
@@ -435,17 +291,6 @@ export class WalletController extends BaseController {
     return this._setCurrentAccountFromKeyring(keyring)
   }
 
-  clearWatchMode = async () => {
-    const keyrings: WatchKeyring[] = await keyringService.getKeyringsByType(KEYRING_CLASS.WATCH)
-    let addresses: string[] = []
-    for (let i = 0; i < keyrings.length; i++) {
-      const keyring = keyrings[i]
-      const accounts = await keyring.getAccounts()
-      addresses = [...addresses, ...accounts]
-    }
-    await Promise.all(addresses.map((address) => this.removeAddress(address, KEYRING_CLASS.WATCH)))
-  }
-
   removeAddress = async (address: string, type: string, brand?: string) => {
     await keyringService.removeAccount(address, type, brand)
     if (!(await keyringService.hasAddress(address))) {
@@ -503,7 +348,7 @@ export class WalletController extends BaseController {
 
   checkHasMnemonic = () => {
     try {
-      const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC)
+      const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC) as HdKeyring
       return !!keyring.mnemonic
     } catch (e) {
       return false
@@ -553,25 +398,12 @@ export class WalletController extends BaseController {
     preferenceService.setCurrentAccount(account)
   }
 
-  signPersonalMessage = async (type: string, from: string, data: string, options?: any) => {
+  async signTransaction(type: string, from: string, novoTx: novo.Transaction) {
     const keyring = await keyringService.getKeyringForAccount(from, type)
-    const res = await keyringService.signPersonalMessage(keyring, { from, data }, options)
-    eventBus.emit(EVENTS.broadcastToUI, {
-      method: EVENTS.SIGN_FINISHED,
-      params: {
-        success: true,
-        data: res
-      }
-    })
-    return res
+    return keyringService.signTransaction(keyring, novoTx, from)
   }
 
-  signTransaction = async (type: string, from: string, data: any, options?: any) => {
-    const keyring = await keyringService.getKeyringForAccount(from, type)
-    return keyringService.signTransaction(keyring, data, from, options)
-  }
-
-  requestKeyring = (type, methodName, keyringId: number | null, ...params) => {
+  requestKeyring(type, methodName: string, keyringId: number | null, ...params) {
     let keyring
     if (keyringId !== null && keyringId !== undefined) {
       keyring = stashKeyrings[keyringId]
@@ -588,12 +420,12 @@ export class WalletController extends BaseController {
     }
   }
 
-  getTransactionHistory = async (address: string) => {
+  async getTransactionHistory(address: string) {
     const result = await openapiService.getAddressRecentHistory(address)
     return result
   }
 
-  private _getKeyringByType(type) {
+  private _getKeyringByType(type): SimpleKeyring | HdKeyring {
     const keyring = keyringService.getKeyringsByType(type)[0]
 
     if (keyring) {
@@ -685,7 +517,43 @@ export class WalletController extends BaseController {
     console.error('report not implemented')
   }
 
-  sendNovo
+  async sendNovo({ to, amount }: { to: string; amount: number }) {
+    const account = await preferenceService.getCurrentAccount()
+    if (!account) throw new Error('no current account')
+
+    const txComposer = new TxComposer()
+    const utxos = await openapiService.getAddressUtxo(account.address)
+
+    const network = 'mainnet'
+
+    const accountAddress = new novo.Address(account.address, network)
+    const receiverAddress = new novo.Address(to, network)
+    utxos.forEach((utxo) => {
+      txComposer.appendP2PKHInput({
+        address: accountAddress,
+        satoshis: utxo.value,
+        txId: utxo.txid,
+        outputIndex: utxo.outIndex
+      })
+    })
+    txComposer.appendP2PKHOutput({
+      address: receiverAddress,
+      satoshis: novoToSatoshis(amount)
+    })
+    txComposer.appendChangeOutput(accountAddress)
+
+    this.signTransaction(account.type, account.address, txComposer.getTx())
+
+    return {
+      fee: txComposer.getUnspentValue(),
+      rawtx: txComposer.getRawHex()
+    }
+  }
+
+  async pushTx(rawtx: string) {
+    const txid = await this.openapi.pushTx(rawtx)
+    return txid
+  }
 }
 
 export default new WalletController()

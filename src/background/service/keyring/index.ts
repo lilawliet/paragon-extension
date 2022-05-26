@@ -1,34 +1,23 @@
 /// fork from https://github.com/MetaMask/KeyringController/blob/master/index.js
 
-import eventBus from '@/eventBus'
 import { ObservableStore } from '@metamask/obs-store'
-import HdKeyring from '@rabby-wallet/eth-hd-keyring'
-import SimpleKeyring from '@rabby-wallet/eth-simple-keyring'
-import WalletConnectKeyring from '@rabby-wallet/eth-walletconnect-keyring'
-import WatchKeyring from '@rabby-wallet/eth-watch-keyring'
-import { hasWalletConnectPageStateCache, isSameAddress, normalizeAddress, setPageStateCacheWhenPopupClose } from 'background/utils'
+import { HdKeyring } from '@paragon/novo-hd-keyring'
+import { SimpleKeyring } from '@paragon/novo-simple-keyring'
+import * as novo from '@paragon/novocore-lib'
 import * as bip39 from 'bip39'
 import encryptor from 'browser-passworder'
-import { EVENTS, KEYRING_TYPE } from 'consts'
-import * as ethUtil from 'ethereumjs-util'
 import { EventEmitter } from 'events'
 import log from 'loglevel'
 import i18n from '../i18n'
-import preference from '../preference'
 import DisplayKeyring from './display'
-
 export const KEYRING_SDK_TYPES = {
   SimpleKeyring,
-  HdKeyring,
-  WatchKeyring,
-  WalletConnectKeyring
+  HdKeyring
 }
 
 export const KEYRING_CLASS = {
   PRIVATE_KEY: SimpleKeyring.type,
-  MNEMONIC: HdKeyring.type,
-  WATCH: WatchKeyring.type,
-  WALLETCONNECT: WalletConnectKeyring.type
+  MNEMONIC: HdKeyring.type
 }
 
 interface MemStoreState {
@@ -114,21 +103,16 @@ class KeyringService extends EventEmitter {
    * Import Keychain using Private key
    *
    * @emits KeyringController#unlock
-   * @param {string} privateKey - The privateKey to generate address
-   * @returns {Promise<Object>} A Promise that resolves to the state.
+   * @param  privateKey - The privateKey to generate address
+   * @returns  A Promise that resolves to the state.
    */
-  importPrivateKey(privateKey: string): Promise<any> {
-    let keyring
-
-    return this.persistAllKeyrings()
-      .then(this.addNewKeyring.bind(this, 'Simple Key Pair', [privateKey]))
-      .then((_keyring) => {
-        keyring = _keyring
-        return this.persistAllKeyrings.bind(this)
-      })
-      .then(this.setUnlocked.bind(this))
-      .then(this.fullUpdate.bind(this))
-      .then(() => keyring)
+  async importPrivateKey(privateKey: string) {
+    await this.persistAllKeyrings()
+    const keyring = await this.addNewKeyring('Simple Key Pair', [privateKey])
+    await this.persistAllKeyrings()
+    await this.setUnlocked()
+    await this.fullUpdate()
+    return keyring
   }
 
   private generateMnemonic(): string {
@@ -175,53 +159,37 @@ class KeyringService extends EventEmitter {
    * creates a new HD wallet from the given seed with 1 account.
    *
    * @emits KeyringController#unlock
-   * @param {string} seed - The BIP44-compliant seed phrase.
-   * @returns {Promise<Object>} A Promise that resolves to the state.
+   * @param  seed - The BIP44-compliant seed phrase.
+   * @returns  A Promise that resolves to the state.
    */
-  createKeyringWithMnemonics(seed: string): Promise<any> {
+  async createKeyringWithMnemonics(seed: string) {
     if (!bip39.validateMnemonic(seed)) {
       return Promise.reject(new Error(i18n.t('mnemonic phrase is invalid')))
     }
 
-    let keyring
-    return this.persistAllKeyrings()
-      .then(() => {
-        return this.addNewKeyring('HD Key Tree', {
-          mnemonic: seed,
-          activeIndexes: [0]
-        })
-      })
-      .then((firstKeyring) => {
-        keyring = firstKeyring
-        return firstKeyring.getAccounts()
-      })
-      .then(([firstAccount]) => {
-        if (!firstAccount) {
-          throw new Error('KeyringController - First Account not found.')
-        }
-        return null
-      })
-      .then(this.persistAllKeyrings.bind(this))
-      .then(this.setUnlocked.bind(this))
-      .then(this.fullUpdate.bind(this))
-      .then(() => keyring)
+    await this.persistAllKeyrings()
+    const keyring = await this.addNewKeyring('HD Key Tree', {
+      mnemonic: seed,
+      activeIndexes: [0]
+    })
+    const accounts = await keyring.getAccounts()
+    if (!accounts[0]) {
+      throw new Error('KeyringController - First Account not found.')
+    }
+    this.persistAllKeyrings()
+    this.setUnlocked()
+    this.fullUpdate()
+    return keyring
   }
 
-  addKeyring(keyring) {
+  async addKeyring(keyring: SimpleKeyring) {
+    const accounts = await keyring.getAccounts()
+    await this.checkForDuplicate(keyring.type, accounts)
+    this.keyrings.push(keyring)
+    await this.persistAllKeyrings()
+    await this._updateMemStoreKeyrings()
+    await this.fullUpdate()
     return keyring
-      .getAccounts()
-      .then((accounts) => {
-        return this.checkForDuplicate(keyring.type, accounts)
-      })
-      .then(() => {
-        this.keyrings.push(keyring)
-        return this.persistAllKeyrings()
-      })
-      .then(() => this._updateMemStoreKeyrings())
-      .then(() => this.fullUpdate())
-      .then(() => {
-        return keyring
-      })
   }
 
   /**
@@ -343,10 +311,10 @@ class KeyringService extends EventEmitter {
     const keyrings = this.getKeyringsByType(type)
     const _accounts = await Promise.all(keyrings.map((keyring) => keyring.getAccounts()))
 
-    const accounts: string[] = _accounts.reduce((m, n) => m.concat(n), [] as string[]).map((address) => normalizeAddress(address).toLowerCase())
+    const accounts: string[] = _accounts.reduce((m, n) => m.concat(n), [] as string[])
 
     const isIncluded = newAccountArray.some((account) => {
-      return accounts.find((key) => key === account.toLowerCase() || key === ethUtil.stripHexPrefix(account))
+      return accounts.find((key) => key === account)
     })
 
     return isIncluded ? Promise.reject(new Error(i18n.t('duplicateAccount'))) : Promise.resolve(newAccountArray)
@@ -361,20 +329,15 @@ class KeyringService extends EventEmitter {
    * @param {Keyring} selectedKeyring - The currently selected keyring.
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
-  addNewAccount(selectedKeyring: any): Promise<string[]> {
-    let _accounts
-    return selectedKeyring
-      .addAccounts(1)
-      .then((accounts) => {
-        accounts.forEach((hexAccount) => {
-          this.emit('newAccount', hexAccount)
-        })
-        _accounts = accounts
-      })
-      .then(this.persistAllKeyrings.bind(this))
-      .then(this._updateMemStoreKeyrings.bind(this))
-      .then(this.fullUpdate.bind(this))
-      .then(() => _accounts)
+  async addNewAccount(selectedKeyring: SimpleKeyring): Promise<string[]> {
+    const accounts = await selectedKeyring.addAccounts(1)
+    accounts.forEach((hexAccount) => {
+      this.emit('newAccount', hexAccount)
+    })
+    await this.persistAllKeyrings()
+    await this._updateMemStoreKeyrings()
+    await this.fullUpdate()
+    return accounts
   }
 
   /**
@@ -388,14 +351,10 @@ class KeyringService extends EventEmitter {
    * @param {string} address - The address of the account to export.
    * @returns {Promise<string>} The private key of the account.
    */
-  exportAccount(address: string): Promise<string> {
-    try {
-      return this.getKeyringForAccount(address).then((keyring) => {
-        return keyring.exportAccount(normalizeAddress(address))
-      })
-    } catch (e) {
-      return Promise.reject(e)
-    }
+  async exportAccount(address: string): Promise<string> {
+    const keyring: SimpleKeyring = await this.getKeyringForAccount(address)
+    const privkey = await keyring.exportAccount(address)
+    return privkey
   }
 
   /**
@@ -439,118 +398,38 @@ class KeyringService extends EventEmitter {
   //
 
   /**
-   * Sign Ethereum Transaction
+   * Sign Novo Transaction
    *
-   * Signs an Ethereum transaction object.
+   * Signs an Novo transaction object.
    *
-   * @param {Object} ethTx - The transaction to sign.
-   * @param {string} _fromAddress - The transaction 'from' address.
-   * @param {Object} opts - Signing options.
-   * @returns {Promise<Object>} The signed transactio object.
+   * @param novoTx - The transaction to sign.
+   * @param fromAddress - The transaction 'from' address.
+   * @returns  The signed transactio object.
    */
-  signTransaction(keyring, ethTx, _fromAddress, opts = {}) {
-    const fromAddress = normalizeAddress(_fromAddress)
-    return keyring.signTransaction(fromAddress, ethTx, opts)
+  signTransaction(keyring: SimpleKeyring, novoTx: novo.Transaction, fromAddress: string) {
+    return keyring.signTransaction(fromAddress, novoTx)
   }
 
   /**
    * Sign Message
    *
    * Attempts to sign the provided message parameters.
-   *
-   * @param {Object} msgParams - The message parameters to sign.
-   * @returns {Promise<Buffer>} The raw signature.
    */
-  signMessage(msgParams, opts = {}) {
-    const address = normalizeAddress(msgParams.from)
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.signMessage(address, msgParams.data, opts)
-    })
-  }
-
-  /**
-   * Sign Personal Message
-   *
-   * Attempts to sign the provided message paramaters.
-   * Prefixes the hash before signing per the personal sign expectation.
-   *
-   * @param {Object} msgParams - The message parameters to sign.
-   * @returns {Promise<Buffer>} The raw signature.
-   */
-  signPersonalMessage(keyring, msgParams, opts = {}) {
-    const address = normalizeAddress(msgParams.from)
-    return keyring.signPersonalMessage(address, msgParams.data, opts)
-  }
-
-  /**
-   * Sign Typed Data
-   * (EIP712 https://github.com/ethereum/EIPs/pull/712#issuecomment-329988454)
-   *
-   * @param {Object} msgParams - The message parameters to sign.
-   * @returns {Promise<Buffer>} The raw signature.
-   */
-  signTypedMessage(keyring, msgParams, opts = { version: 'V1' }) {
-    const address = normalizeAddress(msgParams.from)
-    return keyring.signTypedData(address, msgParams.data, opts)
-  }
-
-  /**
-   * Get encryption public key
-   *
-   * Get encryption public key for using in encrypt/decrypt process.
-   *
-   * @param {Object} address - The address to get the encryption public key for.
-   * @returns {Promise<Buffer>} The public key.
-   */
-  getEncryptionPublicKey(_address, opts = {}) {
-    const address = normalizeAddress(_address)
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.getEncryptionPublicKey(address, opts)
-    })
+  async signMessage(address: string, data: string) {
+    const keyring: SimpleKeyring = await this.getKeyringForAccount(address)
+    const sig = await keyring.signMessage(address, data)
+    return sig
   }
 
   /**
    * Decrypt Message
    *
-   * Attempts to decrypt the provided message parameters.
-   *
-   * @param {Object} msgParams - The decryption message parameters.
-   * @returns {Promise<Buffer>} The raw decryption result.
+   * Attempts to verify the provided message parameters.
    */
-  decryptMessage(msgParams, opts = {}) {
-    const address = normalizeAddress(msgParams.from)
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.decryptMessage(address, msgParams.data, opts)
-    })
-  }
-
-  /**
-   * Gets the app key address for the given Ethereum address and origin.
-   *
-   * @param {string} _address - The Ethereum address for the app key.
-   * @param {string} origin - The origin for the app key.
-   * @returns {string} The app key address.
-   */
-  async getAppKeyAddress(_address, origin) {
-    const address = normalizeAddress(_address)
-    const keyring = await this.getKeyringForAccount(address)
-    return keyring.getAppKeyAddress(address, origin)
-  }
-
-  /**
-   * Exports an app key private key for the given Ethereum address and origin.
-   *
-   * @param {string} _address - The Ethereum address for the app key.
-   * @param {string} origin - The origin for the app key.
-   * @returns {string} The app key private key.
-   */
-  async exportAppKeyForAddress(_address, origin) {
-    const address = normalizeAddress(_address)
-    const keyring = await this.getKeyringForAccount(address)
-    if (!('exportAccount' in keyring)) {
-      throw new Error(`The keyring for address ${_address} does not support exporting.`)
-    }
-    return keyring.exportAccount(address, { withAppKeyOrigin: origin })
+  async verifyMessage(address: string, data: string, sig: string) {
+    const keyring: SimpleKeyring = await this.getKeyringForAccount(address)
+    const result = await keyring.verifyMessage(address, data, sig)
+    return result
   }
 
   //
@@ -579,7 +458,7 @@ class KeyringService extends EventEmitter {
         if (!firstAccount) {
           throw new Error('KeyringController - No account found on keychain.')
         }
-        const hexAccount = normalizeAddress(firstAccount)
+        const hexAccount = firstAccount
         this.emit('newVault', hexAccount)
         return null
       })
@@ -654,7 +533,7 @@ class KeyringService extends EventEmitter {
    * @param {Object} serialized - The serialized keyring.
    * @returns {Promise<Keyring>} The deserialized keyring.
    */
-  async restoreKeyring(serialized) {
+  async restoreKeyring(serialized: any) {
     const keyring = await this._restoreKeyring(serialized)
     await this._updateMemStoreKeyrings()
     return keyring
@@ -669,31 +548,11 @@ class KeyringService extends EventEmitter {
    * @param {Object} serialized - The serialized keyring.
    * @returns {Promise<Keyring>} The deserialized keyring.
    */
-  async _restoreKeyring(serialized: any): Promise<any> {
+  async _restoreKeyring(serialized: any): Promise<SimpleKeyring> {
     const { type, data } = serialized
     const Keyring = this.getKeyringClassForType(type)
     const keyring = new Keyring()
     await keyring.deserialize(data)
-    if (keyring.type === KEYRING_CLASS.WALLETCONNECT) {
-      eventBus.addEventListener(EVENTS.WALLETCONNECT.INIT, ({ address, brandName }) => {
-        ;(keyring as WalletConnectKeyring).init(address, brandName)
-      })
-      ;(keyring as WalletConnectKeyring).on('inited', (uri) => {
-        eventBus.emit(EVENTS.broadcastToUI, {
-          method: EVENTS.WALLETCONNECT.INITED,
-          params: { uri }
-        })
-      })
-      keyring.on('statusChange', (data) => {
-        if (!preference.getPopupOpen() && hasWalletConnectPageStateCache()) {
-          setPageStateCacheWhenPopupClose(data)
-        }
-        eventBus.emit(EVENTS.broadcastToUI, {
-          method: EVENTS.WALLETCONNECT.STATUS_CHANGED,
-          params: data
-        })
-      })
-    }
 
     // getAccounts also validates the accounts for some keyrings
     await keyring.getAccounts()
@@ -712,7 +571,7 @@ class KeyringService extends EventEmitter {
    * @param {string} type - The type whose class to get.
    * @returns {Keyring|undefined} The class, if it exists.
    */
-  getKeyringClassForType(type: string): any {
+  getKeyringClassForType(type: string) {
     return this.keyringTypes.find((kr) => kr.type === type)
   }
 
@@ -724,7 +583,7 @@ class KeyringService extends EventEmitter {
    * @param {string} type - The keyring types to retrieve.
    * @returns {Array<Keyring>} The keyrings.
    */
-  getKeyringsByType(type: string): any[] {
+  getKeyringsByType(type: string): SimpleKeyring[] {
     return this.keyrings.filter((keyring) => keyring.type === type)
   }
 
@@ -738,12 +597,13 @@ class KeyringService extends EventEmitter {
    */
   async getAccounts(): Promise<string[]> {
     const keyrings = this.keyrings || []
-    const addrs = await Promise.all(keyrings.map((kr) => kr.getAccounts())).then((keyringArrays) => {
-      return keyringArrays.reduce((res, arr) => {
-        return res.concat(arr)
-      }, [])
-    })
-    return addrs.map(normalizeAddress)
+    let addrs: string[] = []
+    for (let i = 0; i < keyrings.length; i++) {
+      const keyring: SimpleKeyring = keyrings[i]
+      const accounts = await keyring.getAccounts()
+      addrs = addrs.concat(accounts)
+    }
+    return addrs
   }
 
   /**
@@ -755,29 +615,17 @@ class KeyringService extends EventEmitter {
    * @param {string} address - An account address.
    * @returns {Promise<Keyring>} The keyring of the account, if it exists.
    */
-  getKeyringForAccount(address: string, type?: string, start?: number, end?: number, includeWatchKeyring = true): Promise<any> {
-    const hexed = normalizeAddress(address).toLowerCase()
-    log.debug(`KeyringController - getKeyringForAccount: ${hexed}`)
-    let keyrings = type ? this.keyrings.filter((keyring) => keyring.type === type) : this.keyrings
-    if (!includeWatchKeyring) {
-      keyrings = keyrings.filter((keyring) => keyring.type !== KEYRING_TYPE.WatchAddressKeyring)
-    }
-    return Promise.all(
-      keyrings.map((keyring) => {
-        return Promise.all([keyring, keyring.getAccounts()])
-      })
-    ).then((candidates) => {
-      const winners = candidates.filter((candidate) => {
-        const accounts = candidate[1].map((addr) => {
-          return normalizeAddress(addr).toLowerCase()
-        })
-        return accounts.includes(hexed)
-      })
-      if (winners && winners.length > 0) {
-        return winners[0][0]
+  async getKeyringForAccount(address: string, type?: string, start?: number, end?: number, includeWatchKeyring = true): Promise<any> {
+    log.debug(`KeyringController - getKeyringForAccount: ${address}`)
+    const keyrings = type ? this.keyrings.filter((keyring) => keyring.type === type) : this.keyrings
+    for (let i = 0; i < keyrings.length; i++) {
+      const keyring: SimpleKeyring = keyrings[i]
+      const accounts = await keyring.getAccounts()
+      if (accounts.includes(address)) {
+        return keyring
       }
-      throw new Error('No keyring found for the requested account.')
-    })
+    }
+    throw new Error('No keyring found for the requested account.')
   }
 
   /**
@@ -792,7 +640,7 @@ class KeyringService extends EventEmitter {
 
     return accounts.then((accounts) => {
       const allAccounts = accounts.map((account) => ({
-        address: normalizeAddress(typeof account === 'string' ? account : account.address),
+        address: typeof account === 'string' ? account : account.address,
         brandName: typeof account === 'string' ? keyring.type : account.brandName
       }))
 
@@ -848,7 +696,7 @@ class KeyringService extends EventEmitter {
 
   async hasAddress(address: string) {
     const addresses = await this.getAllAdresses()
-    return !!addresses.find((item) => isSameAddress(item.address, address))
+    return !!addresses.find((item) => item.address === address)
   }
 
   /**
