@@ -35,6 +35,14 @@ body::-webkit-scrollbar{
     @apply bg-black border rounded-lg border-opacity-20 border-white bg-opacity-20;
 }
 
+.box.soft-black {
+    @apply bg-soft-black border rounded-lg border-opacity-20 border-white;
+}
+
+.box.soft-black:hover {
+    @apply bg-primary-active border-white border-opacity-40;
+}
+
 .box.nobor {
     @apply flex items-center p-5 bg-black rounded-lg bg-opacity-20;
 }
@@ -52,5 +60,5 @@ body::-webkit-scrollbar{
 }
 
 .box.unit {
-    @apply flex w-36 h-13 bg-black border border-opacity-20 border-white bg-opacity-20 items-center justify-center rounded font-semibold;
+    @apply flex w-36 h-13 border border-opacity-20 border-white items-center justify-center rounded font-semibold;
 }

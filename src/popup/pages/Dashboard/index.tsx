@@ -1,6 +1,6 @@
 import { Account } from '@/background/service/preference'
-import { useAppSelector } from '@/common/storages/hooks'
-import { getPanel } from '@/common/storages/stores/popup/slice'
+import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
+import { getAccount, getPanel, setAccount } from '@/common/storages/stores/popup/slice'
 import CFooter from '@/popup/components/CFooter'
 import CHeader from '@/popup/components/CHeader'
 import { useWallet } from '@/ui/utils'
@@ -26,6 +26,8 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   const panel = useAppSelector(getPanel)
+  const current = useAppSelector(getAccount)
+  const dispatch = useAppDispatch()
 
   // 改名
   // addressItems.current.forEach((item) => item.alianNameConfirm());
@@ -79,7 +81,6 @@ const Dashboard = () => {
   const getAllKeyrings = async () => {
     setLoadingAddress(true)
     const _accounts = await wallet.getAllVisibleAccounts()
-    console.log('_accounts', _accounts)
     const allAlianNames = await wallet.getAllAlianName()
     const allContactNames = await wallet.getContactsByMap()
     const templist = await _accounts
@@ -96,12 +97,10 @@ const Dashboard = () => {
       .flat(1)
     const result = await balanceList(templist)
     setLoadingAddress(false)
-    console.log('templist', templist)
     if (result) {
       const withBalanceList = result.sort((a, b) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
       })
-      console.log(withBalanceList)
       setAccountsList(withBalanceList)
     }
   }
@@ -117,21 +116,39 @@ const Dashboard = () => {
       navigate('/welcome')
       return
     }
-    setCurrentAccount(account)
+
+    dispatch(setAccount(account))
   }
 
   useEffect(() => {
     if (dashboardReload) {
-      if (currentAccount) {
-        getPendingTxCount(currentAccount.address)
+      if (current) {
+        getPendingTxCount(current.address)
       }
       setDashboardReload(false)
       getCurrentAccount()
       getAllKeyrings()
     }
   }, [dashboardReload])
+
+  // useEffect(() => {
+  //   if (currentAccount) {
+  //     // if (currentAccount.type === KEYRING_TYPE.GnosisKeyring) {
+  //       // setSafeInfo(null);
+  //       // getGnosisPendingCount();
+  //     // } else {
+  //       // getPendingTxCount(currentAccount.address);
+  //     // }
+  //     // getAlianName(currentAccount?.address.toLowerCase());
+  //     setCurrentAccount(currentAccount);
+  //   }
+  // }, [currentAccount]);
+
   useEffect(() => {
     getAllKeyrings()
+    if (!current) {
+      getCurrentAccount();
+    }
   }, [])
 
   const [isListLoading, setIsListLoading] = useState(false)
@@ -152,13 +169,13 @@ const Dashboard = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919', overflowY: 'auto' }}>
         {panel == 'home' ? (
-          <Home current={currentAccount} accountsList={accountsList} handleOnChange={handleOnChange} />
+          <Home current={currentAccount} accountsList={accountsList}/>
         ) : panel == 'transaction' ? (
-          <Transaction current={currentAccount} accountsList={accountsList} handleOnChange={handleOnChange} />
+          <Transaction current={currentAccount} accountsList={accountsList}/>
         ) : panel == 'settings' ? (
           <Settings current={currentAccount} />
         ) : (
-          <Home current={currentAccount} accountsList={accountsList} handleOnChange={handleOnChange} />
+          <Home current={currentAccount} accountsList={accountsList}/>
         )}
       </Content>
       <Footer style={{ height: '5.625rem' }}>
