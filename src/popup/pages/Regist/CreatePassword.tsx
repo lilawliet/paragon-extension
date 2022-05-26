@@ -38,7 +38,11 @@ const CreatePassword = () => {
 
   const [run, loading] = useWalletRequest(wallet.boot, {
     onSuccess() {
-      navigate('/create-recovery')
+      navigate('/create-recovery', {
+        state: {
+          create: true
+        }
+      })
     },
     onError(err) {
       message.error(err)

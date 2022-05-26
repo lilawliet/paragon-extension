@@ -1,5 +1,5 @@
 import { Button, Checkbox } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
@@ -9,20 +9,28 @@ const CreateRecovery = () => {
   const { t } = useTranslation()
   const wallet = useWallet()
   const navigate = useNavigate()
+  const { state } = useLocation()
 
   const [mnemonics, setMnemonics] = useState('')
 
-  const init = async () => {
-    const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic())
-    setMnemonics(_mnemonics)
+  const init = async (state: any) => {
+    if (state?.create) {
+      setMnemonics((await wallet.generatePreMnemonic()))
+      console.log('create')
+    } else {
+      const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic())
+      setMnemonics(_mnemonics)
+      console.log('getPreMnemonics')
+    }
   }
 
   useEffect(() => {
-    init()
+    init(state)
   }, [])
 
   const btnClick = async () => {
     const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
+    console.log(accounts)
     navigate('/dashboard', {
       state: {
         accounts,

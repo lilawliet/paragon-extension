@@ -5,22 +5,14 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface AccountSelectDrawerProps {
-<<<<<<< HEAD
   current: Account | null
   accountsList?: Account[]
   handleOnChange?(account: Account): void
   handleOnCancel(): void
-=======
-  current?: Account | null
-  accounts?: Account[]
-  onChange?(account: Account): void
-  onCancel(): void
->>>>>>> 235b86cdb7277715a92d62118e938a841c386c56
   title: string
   isLoading?: boolean
 }
 
-<<<<<<< HEAD
 const AccountSelect = ({ 
   current,
   accountsList,
@@ -29,9 +21,6 @@ const AccountSelect = ({
   title, 
   isLoading = false 
 }: AccountSelectDrawerProps) => {
-=======
-const AccountSelect = ({ current, accounts, onChange, title, onCancel, isLoading = false }: AccountSelectDrawerProps) => {
->>>>>>> 235b86cdb7277715a92d62118e938a841c386c56
   const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
   const { t } = useTranslation()
   const { Option } = Select
@@ -62,11 +51,7 @@ const AccountSelect = ({ current, accounts, onChange, title, onCancel, isLoading
               <img src="./images/chevron-down-solid.png" alt="" />
             </span>
           }>
-<<<<<<< HEAD
           {accountsList?.map((account, index) => (
-=======
-          {accounts?.map((account, index) => (
->>>>>>> 235b86cdb7277715a92d62118e938a841c386c56
             <Option value={account.address} key={index}>
               {account.alianName ? account.alianName : account.brandName}{' '}
             </Option>
