@@ -21,7 +21,7 @@ const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false 
   const dispatch = useAppDispatch()
 
   const handleOnChange = (index: number) => {
-    if (accountsList && accountsList[index]){
+    if (accountsList && accountsList[index]) {
       dispatch(setAccount(accountsList[index]))
     }
   }
@@ -49,7 +49,8 @@ const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false 
             <span className="text-white">
               <img src="./images/chevron-down-solid.png" alt="" />
             </span>
-          }>
+          }
+        >
           {accountsList?.map((account, index) => (
             <Option value={index} key={index}>
               {account.alianName ? account.alianName : account.brandName}{' '}

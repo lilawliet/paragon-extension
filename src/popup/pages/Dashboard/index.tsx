@@ -35,33 +35,10 @@ const Dashboard = () => {
   const [dashboardReload, setDashboardReload] = useState(false)
   const [pendingTxCount, setPendingTxCount] = useState(0)
   const [loadingAddress, setLoadingAddress] = useState(false)
-  const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
   const [startEdit, setStartEdit] = useState(false)
   const [alianName, setAlianName] = useState<string>('')
   const [accountsList, setAccountsList] = useState<Account[]>([])
   const [displayName, setDisplayName] = useState<string>('')
-
-  const alianNameConfirm = async (e) => {
-    e.stopPropagation()
-    if (!alianName) {
-      return
-    }
-    setStartEdit(false)
-    await wallet.updateAlianName(currentAccount?.address?.toLowerCase(), alianName)
-    setDisplayName(alianName)
-    const newAccountList = accountsList.map((item) => {
-      if (item.address.toLowerCase() === currentAccount?.address.toLowerCase()) {
-        return {
-          ...item,
-          alianName: alianName
-        }
-      }
-      return item
-    })
-    if (newAccountList.length > 0) {
-      setAccountsList(newAccountList)
-    }
-  }
 
   const balanceList = async (accounts) => {
     return await Promise.all<Account>(
@@ -147,21 +124,9 @@ const Dashboard = () => {
   useEffect(() => {
     getAllKeyrings()
     if (!current) {
-      getCurrentAccount();
+      getCurrentAccount()
     }
   }, [])
-
-  const [isListLoading, setIsListLoading] = useState(false)
-  const [isAssetsLoading, setIsAssetsLoading] = useState(true)
-  const handleOnChange = async (account: Account) => {
-    console.log(account)
-    setIsListLoading(true)
-    setIsAssetsLoading(true)
-    const { address, type, brandName } = account
-    await wallet.changeAccount({ address, type, brandName })
-    setCurrentAccount({ address, type, brandName })
-  }
-
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -169,13 +134,13 @@ const Dashboard = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919', overflowY: 'auto' }}>
         {panel == 'home' ? (
-          <Home current={currentAccount} accountsList={accountsList}/>
+          <Home current={current} accountsList={accountsList} />
         ) : panel == 'transaction' ? (
-          <Transaction current={currentAccount} accountsList={accountsList}/>
+          <Transaction current={current} accountsList={accountsList} />
         ) : panel == 'settings' ? (
-          <Settings current={currentAccount} />
+          <Settings />
         ) : (
-          <Home current={currentAccount} accountsList={accountsList}/>
+          <Home current={current} accountsList={accountsList} />
         )}
       </Content>
       <Footer style={{ height: '5.625rem' }}>

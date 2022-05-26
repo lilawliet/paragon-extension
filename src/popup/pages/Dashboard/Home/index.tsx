@@ -11,10 +11,7 @@ interface Currency {
   value: string
 }
 
-const Home = ({
-  current,
-  accountsList
-}: AccountsProps) => {
+const Home = ({ current, accountsList }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -46,7 +43,8 @@ const Home = ({
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
-          }}>
+          }}
+        >
           <span>
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
@@ -56,7 +54,8 @@ const Home = ({
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate('/send/index')
-          }}>
+          }}
+        >
           <span>
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>

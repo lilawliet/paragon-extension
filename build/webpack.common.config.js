@@ -144,7 +144,8 @@ const config = (env) => {
               "text-color-secondary": "#AAAAAA",
               "height-lg": "3.875rem",
               "checkbox-size": "1.5rem",
-              "btn-text-hover-bg": "#383535"
+              "btn-text-hover-bg": "#383535",
+              "input-disabled-color": "rgba(255,255,255,0.6)",
             },
             javascriptEnabled: true
           }

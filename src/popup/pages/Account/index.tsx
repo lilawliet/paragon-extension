@@ -9,24 +9,69 @@ import AccountSwitch from './Switch'
 import AccountAdd from './Add'
 import AccountCreate from './Create'
 import AccountImport from './Import'
-
-export interface Account {
-  name: string
-  address: string
-}
+import { useWallet } from '@/ui/utils'
+import { BigNumber } from 'bignumber.js'
+import { Account } from '@/background/service/preference'
+import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
+import { getAccount, setAccount } from '@/common/storages/stores/popup/slice'
 
 export type Status = 'switch' | 'add' | 'import' | 'create'
 
 const SendIndex = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const wallet = useWallet()
 
   const [status, setStatus] = useState<Status>('switch')
-  const [accounts, setAccounts] = useState<Account[]>([])
-  const [account, setAccount] = useState<Account>({
-    name: 'Very Long Account Name',
-    address: 'sadfjkl2j343jlk'
-  })
+
+  const current = useAppSelector(getAccount)
+  const dispatch = useAppDispatch()
+
+  const [accountsList, setAccountsList] = useState<Account[]>([])
+
+  const balanceList = async (accounts) => {
+    return await Promise.all<Account>(
+      accounts.map(async (item) => {
+        let balance = await wallet.getAddressCacheBalance(item?.address)
+        if (!balance) {
+          balance = await wallet.getAddressBalance(item?.address)
+        }
+        return {
+          ...item,
+          balance: balance?.total_usd_value || 0
+        }
+      })
+    )
+  }
+
+  const getAllKeyrings = async () => {
+    const _accounts = await wallet.getAllVisibleAccounts()
+    const allAlianNames = await wallet.getAllAlianName()
+    const allContactNames = await wallet.getContactsByMap()
+    const templist = await _accounts
+      .map((item) =>
+        item.accounts.map((account) => {
+          return {
+            ...account,
+            type: item.type,
+            alianName: allContactNames[account?.address?.toLowerCase()]?.name || allAlianNames[account?.address?.toLowerCase()],
+            keyring: item.keyring
+          }
+        })
+      )
+      .flat(1)
+    const result = await balanceList(templist)
+    if (result) {
+      const withBalanceList = result.sort((a, b) => {
+        return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
+      })
+      setAccountsList(withBalanceList)
+    }
+  }
+
+  useEffect(() => {
+    getAllKeyrings()
+  }, [])
 
   const statusBack = () => {
     if (status == 'import' || status == 'create') {
@@ -49,13 +94,13 @@ const SendIndex = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         {status == 'switch' ? (
-          <AccountSwitch account={account} setAccount={setAccount} setStatus={setStatus} />
+          <AccountSwitch account={current} setStatus={setStatus} />
         ) : status == 'add' ? (
-          <AccountAdd account={account} setAccount={setAccount} setStatus={setStatus} />
+          <AccountAdd account={current} setStatus={setStatus} />
         ) : status == 'import' ? (
-          <AccountImport account={account} setAccount={setAccount} setStatus={setStatus} />
+          <AccountImport account={current} setStatus={setStatus} />
         ) : status == 'create' ? (
-          <AccountCreate account={account} setAccount={setAccount} setStatus={setStatus} />
+          <AccountCreate account={current} setStatus={setStatus} />
         ) : (
           <div>error</div>
         )}

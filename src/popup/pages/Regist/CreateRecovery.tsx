@@ -41,7 +41,7 @@ const CreateRecovery = () => {
         accounts,
         title: t('Successfully created'),
         editing: true,
-        importedAccount: true,
+        importedAccount: true
       }
     })
   }

@@ -29,8 +29,7 @@ const SendIndex = () => {
     amount: '+1,224'
   })
 
-  useEffect(() => {
-  }, [status])
+  useEffect(() => {}, [status])
 
   return (
     <Layout className="h-full">

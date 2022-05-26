@@ -41,7 +41,7 @@ export const slice = createSlice({
     },
     handleSetSending: (state, action: PayloadAction<Sending>) => {
       state.sending = action.payload
-    },
+    }
   }
 })
 

@@ -12,9 +12,7 @@ interface Transaction {
   opt: string
 }
 
-const Transaction = ({
-  accountsList
-}: AccountsProps) => {
+const Transaction = ({ accountsList }: AccountsProps) => {
   const { t } = useTranslation()
   const wallet = useWallet()
   const navigate = useNavigate()
