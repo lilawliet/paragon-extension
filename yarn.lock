@@ -1554,6 +1554,16 @@
     inherits "2.0.3"
     unorm "1.4.1"
 
+"@paragon/novojs-wallet@0.1.0":
+  version "0.1.0"
+  resolved "https://npm.paragon.li/@paragon/novojs-wallet/-/novojs-wallet-0.1.0.tgz#694b007fd64c6ed5abe4b96993589c51af6901da"
+  integrity sha512-59uH/Pk3388QIzlKeUuhuTxwL3s3gIOWKHoU07OhE31RQ/3gN9ueRsXzI9ZI8IiM/b0WZSnUXN9iS4Mw3Enr6w==
+  dependencies:
+    "@paragon/novocore-lib" "^1.0.0"
+    randombytes "^2.1.0"
+    scrypt-js "^3.0.1"
+    uuid "^8.3.2"
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.6"
   resolved "https://registry.npmjs.org/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.6.tgz#9ced74cb23dae31ab385f775e237ce4c50422a1d"

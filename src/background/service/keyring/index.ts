@@ -4,7 +4,6 @@ import { ObservableStore } from '@metamask/obs-store'
 import { HdKeyring } from '@paragon/novo-hd-keyring'
 import { SimpleKeyring } from '@paragon/novo-simple-keyring'
 import * as novo from '@paragon/novocore-lib'
-import * as bip39 from 'bip39'
 import encryptor from 'browser-passworder'
 import { EventEmitter } from 'events'
 import log from 'loglevel'
@@ -140,7 +139,7 @@ class KeyringService extends EventEmitter {
   }
 
   private generateMnemonic = (): string => {
-    return bip39.generateMnemonic()
+    return novo.Mnemonic.fromRandom().toString()
   }
 
   generatePreMnemonic = async (): Promise<string> => {
@@ -187,7 +186,7 @@ class KeyringService extends EventEmitter {
    * @returns  A Promise that resolves to the state.
    */
   createKeyringWithMnemonics = async (seed: string) => {
-    if (!bip39.validateMnemonic(seed)) {
+    if (!novo.Mnemonic.isValid(seed)) {
       return Promise.reject(new Error(i18n.t('mnemonic phrase is invalid')))
     }
 
