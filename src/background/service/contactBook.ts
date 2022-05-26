@@ -69,6 +69,7 @@ class ContactBook {
   }
 
   updateAlias = (data: { address: string; name: string }) => {
+    console.log(name)
     const key = data.address.toLowerCase()
     if (this.store[key]) {
       this.store[key] = Object.assign({}, this.store[key], {

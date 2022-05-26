@@ -1,5 +1,3 @@
-import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
@@ -7,6 +5,7 @@ import VirtualList from 'rc-virtual-list'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { AccountsProps } from '..'
 
 interface Transaction {
   time: number
@@ -66,15 +65,13 @@ const SettingList: Setting[] = [
   }
 ]
 
-export default () => {
+export default ({ current }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
-  const current = useAppSelector(getAccount)
+
   const [name, setName] = useState('')
-  const dispatch = useAppDispatch()
   const [editable, setEditable] = useState(false)
-  const [account, setAccount] = useState('Very Long Account Name')
 
   const addressInput = useRef<any>(null)
 
@@ -89,44 +86,19 @@ export default () => {
   //     mnemonLengh + 1
   //   }`
   // );
-
   useEffect(() => {
     setName(current?.alianName ? current.alianName : current?.brandName ? current.brandName : '')
   }, [])
 
   useEffect(() => {
-    console.log(editable)
+    setName(current?.alianName ? current.alianName : current?.brandName ? current.brandName : '')
+  }, [current?.alianName])
+
+  useEffect(() => {
     if (editable) {
-      console.log('editable')
       addressInput.current!.focus({ cursor: 'start' })
     }
   }, [editable])
-
-  useEffect(() => {
-    setEditable(false)
-  }, [account])
-
-  const verify = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // to verify
-
-    // to update
-    console.log(e.target.value)
-
-    setAccount(e.target.value)
-  }
-
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    {
-      time: 1652188199,
-      address: 'sadfjkl2j343jlk',
-      amount: '+1,224'
-    },
-    {
-      time: 1652188199,
-      address: 'sadfjkl2j343jlk',
-      amount: '+1,224'
-    }
-  ])
 
   const ContainerHeight = 500
   const ItemHeight = 90
@@ -137,33 +109,18 @@ export default () => {
     }
   }
 
-  const handleOnClick = (event) => {
-    event.preventDefault()
-    if (!editable) {
-      navigate('/settings/account')
+  const handleOnBlur = async (e) => {
+    if (current) {
+      console.log(current)
+      await wallet.updateAlianName(current.address, e.target.value)
+      setName(e.target.value)
+      setEditable(false)
     }
   }
 
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
-      <div className="mt-5 ">
-        {/* <Button size="large" type="default" className="grid grid-cols-6 p-5 h-15_5 box default w380">
-          <div className="flex items-center justify-between font-semibold text-4_5 opacity-60">
-            <div
-              className="col-span-5 font-semibold p0"
-              onClick={(e) => {
-                navigate('/settings/account')
-              }}>{current?.alianName? current?.alianName : current?.brandName}</div>
-            <div className="flex items-center justify-center cursor-pointer">
-              <EditOutlined
-                onClick={(e) => {
-                  handleChangeAlianName
-                }}
-              />
-            </div>
-          </div>
-        </Button> */}
-
+      <div className="mt-5">
         <div className="grid items-center grid-cols-6 p-5 mt-5 h-15_5 box default hover w380">
           {editable ? (
             <Input
@@ -173,6 +130,8 @@ export default () => {
               status="error"
               placeholder="Recipient’s NOVO address"
               defaultValue={name}
+              onBlur={(e) => handleOnBlur(e)}
+              onPressEnter={(e) => handleOnBlur(e)}
             />
           ) : (
             <span

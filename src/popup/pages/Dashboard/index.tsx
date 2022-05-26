@@ -83,13 +83,12 @@ const Dashboard = () => {
   }
 
   const getCurrentAccount = async () => {
-    const account = await wallet.getCurrentAccount()
-    if (!account) {
+    const _account = await wallet.getCurrentAccount()
+    if (!_account) {
       navigate('/welcome')
       return
     }
-
-    dispatch(setAccount(account))
+    dispatch(setAccount(_account))
   }
 
   useEffect(() => {
@@ -99,19 +98,6 @@ const Dashboard = () => {
       getAllKeyrings()
     }
   }, [dashboardReload])
-
-  // useEffect(() => {
-  //   if (currentAccount) {
-  //     // if (currentAccount.type === KEYRING_TYPE.GnosisKeyring) {
-  //       // setSafeInfo(null);
-  //       // getGnosisPendingCount();
-  //     // } else {
-  //       // getPendingTxCount(currentAccount.address);
-  //     // }
-  //     // getAlianName(currentAccount?.address.toLowerCase());
-  //     setCurrentAccount(currentAccount);
-  //   }
-  // }, [currentAccount]);
 
   useEffect(() => {
     getAllKeyrings()
@@ -130,7 +116,7 @@ const Dashboard = () => {
         ) : panel == 'transaction' ? (
           <Transaction current={current} accountsList={accountsList} />
         ) : panel == 'settings' ? (
-          <Settings />
+          <Settings current={current} />
         ) : (
           <Home current={current} accountsList={accountsList} />
         )}

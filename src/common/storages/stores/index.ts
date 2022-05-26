@@ -1,8 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { default as popupReducer } from './popup/slice'
+import { default as accountReducer } from './account/slice'
 
 export const store = configureStore({
   reducer: {
+    account: accountReducer,
     popup: popupReducer
   }
 })

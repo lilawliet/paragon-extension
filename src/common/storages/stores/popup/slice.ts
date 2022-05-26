@@ -1,7 +1,6 @@
 import { Account } from '@/background/service/preference'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk, RootState } from '../index'
-import { fetchCount } from './api'
 
 export type Panel = 'home' | 'nft' | 'transaction' | 'settings'
 export type Sending = 'create' | 'confirm' | 'sending' | 'success' | 'error' | 'cancel' | ''
@@ -12,12 +11,6 @@ export interface State {
   account: Account | null
   sending: Sending
 }
-
-// typically used to make async requests.
-export const makeAsync = createAsyncThunk('counter/fetchCount', async (amount: number) => {
-  const response = await fetchCount(amount)
-  return response.data
-})
 
 const initialState: State = {
   panel: 'home',

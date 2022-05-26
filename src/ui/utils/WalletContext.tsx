@@ -1,3 +1,4 @@
+import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook'
 import { DisplayedKeryring } from '@/background/service/keyring'
 import DisplayKeyring from '@/background/service/keyring/display'
 import { NovoBalance } from '@/background/service/openapi'
@@ -47,8 +48,11 @@ export type WalletController = {
   getAccountsCount(): Promise<number>
   getTypedAccounts(type: string): Promise<DisplayedKeryring[]>
   getAllVisibleAccounts(): Promise<DisplayedKeryring[]>
+  getAllAlianName: () => (ContactBookItem | undefined)[]
+  getContactsByMap: () => ContactBookStore
   getAllVisibleAccountsArray(): Promise<Account>
   getAllClassAccounts(): Promise<DisplayedKeryring & { keyring: DisplayKeyring }[]>
+  updateAlianName: (address: string, name: string) => void
 
   changeAccount(account: Account): void
   getCurrentAccount(): Promise<Account>
