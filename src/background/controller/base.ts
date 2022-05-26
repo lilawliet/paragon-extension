@@ -3,7 +3,7 @@ import { Account } from 'background/service/preference'
 import cloneDeep from 'lodash/cloneDeep'
 
 class BaseController {
-  async getCurrentAccount() {
+  getCurrentAccount = async () => {
     let account = preferenceService.getCurrentAccount()
     if (account) {
       const accounts = await this.getAccounts()
@@ -20,11 +20,11 @@ class BaseController {
     return cloneDeep(account) as Account
   }
 
-  syncGetCurrentAccount() {
+  syncGetCurrentAccount = () => {
     return preferenceService.getCurrentAccount() || null
   }
 
-  getAccounts() {
+  getAccounts = () => {
     return keyringService.getAllVisibleAccountsArray()
   }
 }

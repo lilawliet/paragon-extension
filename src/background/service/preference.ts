@@ -41,7 +41,7 @@ class PreferenceService {
   popupOpen = false
   hasOtherProvider = false
 
-  async init() {
+  init = async () => {
     const defaultLang = 'en'
     this.store = await createPersistStore<PreferenceStore>({
       name: 'preference',
@@ -79,7 +79,7 @@ class PreferenceService {
     }
   }
 
-  async getAcceptLanguages() {
+  getAcceptLanguages = async () => {
     let langs = await browser.i18n.getAcceptLanguages()
     if (!langs) langs = []
     return langs.map((lang) => lang.replace(/-/g, '_')).filter((lang) => SUPPORT_LOCALES.includes(lang))
@@ -90,16 +90,16 @@ class PreferenceService {
    * call this function to reset current account
    * to the first address in address list
    */
-  async resetCurrentAccount() {
+  resetCurrentAccount = async () => {
     const [account] = await keyringService.getAllVisibleAccountsArray()
     this.setCurrentAccount(account)
   }
 
-  getCurrentAccount() {
+  getCurrentAccount = () => {
     return cloneDeep(this.store.currentAccount)
   }
 
-  setCurrentAccount(account?: Account | null) {
+  setCurrentAccount = (account?: Account | null) => {
     this.store.currentAccount = account
     if (account) {
       sessionService.broadcastEvent('accountsChanged', [account.address])
@@ -110,15 +110,15 @@ class PreferenceService {
     }
   }
 
-  setPopupOpen(isOpen: boolean) {
+  setPopupOpen = (isOpen: boolean) => {
     this.popupOpen = isOpen
   }
 
-  getPopupOpen() {
+  getPopupOpen = () => {
     return this.popupOpen
   }
 
-  updateAddressBalance(address: string, data: TotalBalanceResponse) {
+  updateAddressBalance = (address: string, data: TotalBalanceResponse) => {
     const balanceMap = this.store.balanceMap || {}
     this.store.balanceMap = {
       ...balanceMap,
@@ -126,7 +126,7 @@ class PreferenceService {
     }
   }
 
-  removeAddressBalance(address: string) {
+  removeAddressBalance = (address: string) => {
     const key = address
     if (key in this.store.balanceMap) {
       const map = this.store.balanceMap
@@ -135,24 +135,24 @@ class PreferenceService {
     }
   }
 
-  getAddressBalance(address: string): TotalBalanceResponse | null {
+  getAddressBalance = (address: string): TotalBalanceResponse | null => {
     const balanceMap = this.store.balanceMap || {}
     return balanceMap[address] || null
   }
 
-  getExternalLinkAck(): boolean {
+  getExternalLinkAck = (): boolean => {
     return this.store.externalLinkAck
   }
 
-  setExternalLinkAck(ack = false) {
+  setExternalLinkAck = (ack = false) => {
     this.store.externalLinkAck = ack
   }
 
-  getLocale() {
+  getLocale = () => {
     return this.store.locale
   }
 
-  setLocale(locale: string) {
+  setLocale = (locale: string) => {
     this.store.locale = locale
     i18n.changeLanguage(locale)
   }
@@ -161,19 +161,19 @@ class PreferenceService {
     return this.store.walletSavedList || []
   }
 
-  updateWalletSavedList(list: []) {
+  updateWalletSavedList = (list: []) => {
     this.store.walletSavedList = list
   }
 
-  getInitAlianNameStatus() {
+  getInitAlianNameStatus = () => {
     return this.store.initAlianNames
   }
 
-  changeInitAlianNameStatus() {
+  changeInitAlianNameStatus = () => {
     this.store.initAlianNames = true
   }
 
-  getIsFirstOpen() {
+  getIsFirstOpen = () => {
     if (!this.store.currentVersion || compareVersions(version, this.store.currentVersion)) {
       this.store.currentVersion = version
       this.store.firstOpen = true
@@ -181,7 +181,7 @@ class PreferenceService {
     return this.store.firstOpen
   }
 
-  updateIsFirstOpen() {
+  updateIsFirstOpen = () => {
     this.store.firstOpen = false
   }
 }

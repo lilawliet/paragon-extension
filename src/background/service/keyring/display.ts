@@ -9,12 +9,12 @@ class DisplayKeyring {
     this.type = keyring.type
   }
 
-  async unlock(): Promise<void> {
+  unlock = async (): Promise<void> => {
     const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
     if (keyring.unlock) await keyring.unlock()
   }
 
-  async getFirstPage() {
+  getFirstPage = async () => {
     const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
     if (keyring.getFirstPage) {
       return await keyring.getFirstPage()
@@ -23,7 +23,7 @@ class DisplayKeyring {
     }
   }
 
-  async getNextPage() {
+  getNextPage = async () => {
     const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
     if (keyring.getNextPage) {
       return await keyring.getNextPage()
@@ -32,12 +32,12 @@ class DisplayKeyring {
     }
   }
 
-  async getAccounts() {
+  getAccounts = async () => {
     const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
     return await keyring.getAccounts()
   }
 
-  async activeAccounts(indexes: number[]): Promise<string[]> {
+  activeAccounts = async (indexes: number[]): Promise<string[]> => {
     const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
     if (keyring.activeAccounts) {
       return keyring.activeAccounts(indexes)

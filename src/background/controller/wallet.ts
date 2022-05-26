@@ -43,7 +43,7 @@ export class WalletController extends BaseController {
   resolveApproval = notificationService.resolveApproval
   rejectApproval = notificationService.rejectApproval
 
-  async initAlianNames() {
+  initAlianNames = async () => {
     await preferenceService.changeInitAlianNameStatus()
     const contacts = await this.listContact()
     const keyrings = await keyringService.getAllTypedAccounts()
@@ -96,7 +96,7 @@ export class WalletController extends BaseController {
     }
   }
 
-  async unlock(password: string) {
+  unlock = async (password: string) => {
     const alianNameInited = await preferenceService.getInitAlianNameStatus()
     const alianNames = contactBookService.listAlias()
     await keyringService.submitPassword(password)
@@ -105,16 +105,16 @@ export class WalletController extends BaseController {
       this.initAlianNames()
     }
   }
-  isUnlocked() {
+  isUnlocked = () => {
     return keyringService.memStore.getState().isUnlocked
   }
 
-  async lockWallet() {
+  lockWallet = async () => {
     await keyringService.setLocked()
     sessionService.broadcastEvent('accountsChanged', [])
     sessionService.broadcastEvent('lock')
   }
-  setPopupOpen(isOpen: boolean) {
+  setPopupOpen = (isOpen: boolean) => {
     preferenceService.setPopupOpen(isOpen)
   }
   openIndexPage = openIndexPage
@@ -124,38 +124,38 @@ export class WalletController extends BaseController {
     if (!this.isUnlocked()) return null
     return pageStateCacheService.get()
   }
-  clearPageStateCache() {
+  clearPageStateCache = () => {
     pageStateCacheService.clear()
   }
-  setPageStateCache(cache: CacheState) {
+  setPageStateCache = (cache: CacheState) => {
     pageStateCacheService.set(cache)
   }
 
-  async getAddressBalance(address: string) {
+  getAddressBalance = async (address: string) => {
     console.log('getAddressBalance', address)
     const data = await openapiService.getAddressBalance(address)
     preferenceService.updateAddressBalance(address, data as any)
     return data
   }
-  getAddressCacheBalance(address: string | undefined) {
+  getAddressCacheBalance = (address: string | undefined) => {
     console.log('getAddressCacheBalance', address)
     if (!address) return null
     return preferenceService.getAddressBalance(address)
   }
 
-  getExternalLinkAck() {
+  getExternalLinkAck = () => {
     preferenceService.getExternalLinkAck()
   }
 
-  setExternalLinkAck(ack) {
+  setExternalLinkAck = (ack) => {
     preferenceService.setExternalLinkAck(ack)
   }
 
-  getLocale() {
+  getLocale = () => {
     return preferenceService.getLocale()
   }
 
-  setLocale(locale: string) {
+  setLocale = (locale: string) => {
     preferenceService.setLocale(locale)
   }
 
@@ -215,21 +215,21 @@ export class WalletController extends BaseController {
       data.origin
     )
   }
-  removeAllRecentConnectedSites() {
+  removeAllRecentConnectedSites = () => {
     const sites = permissionService.getRecentConnectedSites().filter((item) => !item.isTop)
     sites.forEach((item) => {
       this.removeConnectedSite(item.origin)
     })
   }
-  removeConnectedSite(origin: string) {
+  removeConnectedSite = (origin: string) => {
     sessionService.broadcastEvent('accountsChanged', [], origin)
     permissionService.removeConnectedSite(origin)
   }
   getSitesByDefaultChain = permissionService.getSitesByDefaultChain
-  topConnectedSite(origin: string) {
+  topConnectedSite = (origin: string) => {
     return permissionService.topConnectedSite(origin)
   }
-  unpinConnectedSite(origin: string) {
+  unpinConnectedSite = (origin: string) => {
     return permissionService.unpinConnectedSite(origin)
   }
 
@@ -253,7 +253,7 @@ export class WalletController extends BaseController {
     return seedWords
   }
 
-  async importPrivateKey(data: string) {
+  importPrivateKey = async (data: string) => {
     const error = new Error(i18n.t('the private key is invalid'))
     try {
       if (!novo.PrivateKey.isValid(data)) {
@@ -270,7 +270,7 @@ export class WalletController extends BaseController {
   // json format is from "https://github.com/SilentCicero/ethereumjs-accounts"
   // or "https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition"
   // for example: https://www.myetherwallet.com/create-wallet
-  async importJson(content: string, password: string) {
+  importJson = async (content: string, password: string) => {
     try {
       JSON.parse(content)
     } catch {
@@ -334,7 +334,7 @@ export class WalletController extends BaseController {
     return stashId
   }
 
-  addKyeringToStash(keyring: Keyring) {
+  addKyeringToStash = (keyring: Keyring) => {
     const stashId = Object.values(stashKeyrings).length
     stashKeyrings[stashId] = keyring
 
@@ -377,11 +377,11 @@ export class WalletController extends BaseController {
     return accounts.filter((x) => x).length
   }
 
-  async getTypedAccounts(type: string) {
+  getTypedAccounts = async (type: string) => {
     return Promise.all(keyringService.keyrings.filter((keyring) => !type || keyring.type === type).map((keyring) => keyringService.displayForKeyring(keyring)))
   }
 
-  async getAllVisibleAccounts(): Promise<DisplayedKeryring[]> {
+  getAllVisibleAccounts = async (): Promise<DisplayedKeryring[]> => {
     const typedAccounts = await keyringService.getAllTypedVisibleAccounts()
 
     return typedAccounts.map((account) => ({
@@ -390,11 +390,11 @@ export class WalletController extends BaseController {
     }))
   }
 
-  async getAllVisibleAccountsArray(): Promise<Account[]> {
+  getAllVisibleAccountsArray = async (): Promise<Account[]> => {
     return await keyringService.getAllVisibleAccountsArray()
   }
 
-  async getAllClassAccounts() {
+  getAllClassAccounts = async () => {
     const typedAccounts = await keyringService.getAllTypedAccounts()
 
     return typedAccounts.map((account) => ({
@@ -403,16 +403,16 @@ export class WalletController extends BaseController {
     }))
   }
 
-  changeAccount(account: Account) {
+  changeAccount = (account: Account) => {
     preferenceService.setCurrentAccount(account)
   }
 
-  async signTransaction(type: string, from: string, novoTx: novo.Transaction) {
+  signTransaction = async (type: string, from: string, novoTx: novo.Transaction) => {
     const keyring = await keyringService.getKeyringForAccount(from, type)
     return keyringService.signTransaction(keyring, novoTx, from)
   }
 
-  requestKeyring(type: string, methodName: string, keyringId: number | null, ...params) {
+  requestKeyring = (type: string, methodName: string, keyringId: number | null, ...params) => {
     let keyring
     if (keyringId !== null && keyringId !== undefined) {
       keyring = stashKeyrings[keyringId]
@@ -429,12 +429,12 @@ export class WalletController extends BaseController {
     }
   }
 
-  async getTransactionHistory(address: string) {
+  getTransactionHistory = async (address: string) => {
     const result = await openapiService.getAddressRecentHistory(address)
     return result
   }
 
-  private _getKeyringByType(type: string): Keyring {
+  private _getKeyringByType = (type: string): Keyring => {
     const keyring = keyringService.getKeyringsByType(type)[0]
 
     if (keyring) {
@@ -444,19 +444,19 @@ export class WalletController extends BaseController {
     throw new Error(`No ${type} keyring found`)
   }
 
-  addContact(data: ContactBookItem) {
+  addContact = (data: ContactBookItem) => {
     contactBookService.addContact(data)
   }
 
-  updateContact(data: ContactBookItem) {
+  updateContact = (data: ContactBookItem) => {
     contactBookService.updateContact(data)
   }
 
-  removeContact(address: string) {
+  removeContact = (address: string) => {
     contactBookService.removeContact(address)
   }
 
-  listContact(includeAlias = true) {
+  listContact = (includeAlias = true) => {
     const list = contactBookService.listContacts()
     if (includeAlias) {
       return list
@@ -465,15 +465,15 @@ export class WalletController extends BaseController {
     }
   }
 
-  getContactsByMap() {
+  getContactsByMap = () => {
     return contactBookService.getContactsByMap()
   }
 
-  getContactByAddress(address: string) {
+  getContactByAddress = (address: string) => {
     return contactBookService.getContactByAddress(address)
   }
 
-  private async _setCurrentAccountFromKeyring(keyring: Keyring, index = 0) {
+  private _setCurrentAccountFromKeyring = async (keyring: Keyring, index = 0) => {
     const accounts = await keyring.getAccounts()
     const account = accounts[index < 0 ? index + accounts.length : index]
 
@@ -491,58 +491,58 @@ export class WalletController extends BaseController {
     return [_account]
   }
 
-  getHighlightWalletList() {
+  getHighlightWalletList = () => {
     return preferenceService.getWalletSavedList()
   }
 
-  updateHighlightWalletList(list) {
+  updateHighlightWalletList = (list) => {
     return preferenceService.updateWalletSavedList(list)
   }
 
-  getAlianName(address: string) {
+  getAlianName = (address: string) => {
     const contactName = contactBookService.getContactByAddress(address)?.name
     return contactName
   }
 
-  updateAlianName(address: string, name: string) {
+  updateAlianName = (address: string, name: string) => {
     contactBookService.updateAlias({
       name,
       address
     })
   }
 
-  getAllAlianName() {
+  getAllAlianName = () => {
     return contactBookService.listAlias()
   }
 
-  getInitAlianNameStatus() {
+  getInitAlianNameStatus = () => {
     preferenceService.getInitAlianNameStatus()
   }
 
-  updateInitAlianNameStatus() {
+  updateInitAlianNameStatus = () => {
     preferenceService.changeInitAlianNameStatus()
   }
 
-  getIsFirstOpen() {
+  getIsFirstOpen = () => {
     return preferenceService.getIsFirstOpen()
   }
 
-  updateIsFirstOpen() {
+  updateIsFirstOpen = () => {
     return preferenceService.updateIsFirstOpen()
   }
 
-  async listChainAssets(address: string) {
+  listChainAssets = async (address: string) => {
     const { confirmed, unconfirmed } = await openapiService.getAddressBalance(address)
     const amount = (confirmed + unconfirmed) / 10000
     const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount, value: '$6.748.29' }]
     return assets
   }
 
-  reportErrors(error: string) {
+  reportErrors = (error: string) => {
     console.error('report not implemented')
   }
 
-  async sendNovo({ to, amount }: { to: string; amount: number }) {
+  sendNovo = async ({ to, amount }: { to: string; amount: number }) => {
     const account = await preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
 
@@ -575,7 +575,7 @@ export class WalletController extends BaseController {
     }
   }
 
-  async pushTx(rawtx: string) {
+  pushTx = async (rawtx: string) => {
     const txid = await this.openapi.pushTx(rawtx)
     return txid
   }
