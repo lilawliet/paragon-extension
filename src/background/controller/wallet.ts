@@ -1,5 +1,6 @@
 import { HdKeyring } from '@paragon/novo-hd-keyring'
 import * as novo from '@paragon/novocore-lib'
+import { Wallet } from '@paragon/novojs-wallet'
 import {
   contactBookService,
   keyringService,
@@ -13,11 +14,8 @@ import {
 import i18n from 'background/service/i18n'
 import { DisplayedKeryring, Keyring, KEYRING_CLASS } from 'background/service/keyring'
 import { CacheState } from 'background/service/pageStateCache'
-import { isSameAddress } from 'background/utils'
 import { openIndexPage } from 'background/webapi/tab'
-import * as bip39 from 'bip39'
 import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL } from 'consts'
-import Wallet, { thirdparty } from 'ethereumjs-wallet'
 import { groupBy } from 'lodash'
 import { ContactBookItem } from '../service/contactBook'
 import { OpenApiService } from '../service/openapi'
@@ -61,7 +59,7 @@ export class WalletController extends BaseController {
     if (keyrings.length > 0) {
       Object.keys(groupedWalletConnectList).forEach((key) => {
         groupedWalletConnectList[key].map((acc, index) => {
-          if (contacts.find((contact) => isSameAddress(contact.address, acc.address))) {
+          if (contacts.find((contact) => contact.address == acc.address)) {
             return
           }
           this.updateAlianName(acc?.address, `UNKOWN ${index + 1}`)
@@ -89,7 +87,7 @@ export class WalletController extends BaseController {
     }
     if (contacts.length !== 0 && keyrings.length !== 0) {
       const allAccounts = keyrings.map((item) => item.accounts).flat()
-      const sameAddressList = contacts.filter((item) => allAccounts.find((contact) => isSameAddress(contact.address, item.address)))
+      const sameAddressList = contacts.filter((item) => allAccounts.find((contact) => contact.address == item.address))
       if (sameAddressList.length > 0) {
         sameAddressList.forEach((item) => this.updateAlianName(item.address, item.name))
       }
@@ -277,12 +275,7 @@ export class WalletController extends BaseController {
       throw new Error(i18n.t('the input file is invalid'))
     }
 
-    let wallet
-    try {
-      wallet = thirdparty.fromEtherWallet(content, password)
-    } catch (e) {
-      wallet = await Wallet.fromV3(content, password, true)
-    }
+    const wallet = await Wallet.fromV3(content, password)
 
     const privateKey = wallet.getPrivateKeyString()
     const keyring = await keyringService.importPrivateKey(privateKey)
@@ -320,7 +313,7 @@ export class WalletController extends BaseController {
   }
 
   generateKeyringWithMnemonic = (mnemonic: string) => {
-    if (!bip39.validateMnemonic(mnemonic)) {
+    if (!novo.Mnemonic.isValid(mnemonic)) {
       throw new Error(i18n.t('mnemonic phrase is invalid'))
     }
 

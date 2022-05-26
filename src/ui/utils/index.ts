@@ -1,5 +1,5 @@
-export * from './WalletContext'
 export * from './hooks'
+export * from './WalletContext'
 
 const UI_TYPE = {
   Tab: 'index',
@@ -76,9 +76,4 @@ export const ellipsisOverflowedText = (str: string, length = 5, removeLastComma 
     }
   }
   return `${cut}...`
-}
-
-export const isSameAddress = (a: string, b: string) => {
-  if (!a || !b) return false
-  return a.toLowerCase() === b.toLowerCase()
 }
