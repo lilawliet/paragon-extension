@@ -39,7 +39,7 @@ const Transaction = ({
 
   return (
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
-      <div className="flex items-center px-2 h-13 box soft-black bg-opacity-20 w340">
+      <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
         <AccountSelect
           accountsList={accountsList}
           handleOnCancel={function (): void {

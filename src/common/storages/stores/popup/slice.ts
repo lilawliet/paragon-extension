@@ -4,13 +4,13 @@ import { AppThunk, RootState } from '../index'
 import { fetchCount } from './api'
 
 export type Panel = 'home' | 'nft' | 'transaction' | 'settings'
-export type Send = 'create' | 'confirm' | 'sending' | 'success' | 'error' | ''
+export type Sending = 'create' | 'confirm' | 'sending' | 'success' | 'error' | 'cancel' | ''
 
 export interface State {
   panel: Panel // main panel state
   conn: boolean // connected state
   account: Account | null
-  send: Send
+  sending: Sending
 }
 
 // typically used to make async requests.
@@ -23,7 +23,7 @@ const initialState: State = {
   panel: 'home',
   conn: false,
   account: null,
-  send: ''
+  sending: ''
 }
 
 export const slice = createSlice({
@@ -38,21 +38,34 @@ export const slice = createSlice({
     },
     setAccount: (state, action) => {
       state.account = action.payload
-    }
+    },
+    handleSetSending: (state, action: PayloadAction<Sending>) => {
+      state.sending = action.payload
+    },
   }
 })
 
-export const { handleSetPanel, setConn, setAccount } = slice.actions
+export const { handleSetPanel, setConn, setAccount, handleSetSending } = slice.actions
 
 export const getPanel = (state: RootState) => state.popup.panel
 export const getConn = (state: RootState) => state.popup.conn
 export const getAccount = (state: RootState) => state.popup.account
+export const getSending = (state: RootState) => state.popup.sending
 
 export const setPanel = (panel: Panel): AppThunk => {
   return (dispatch, getState) => {
     const current = getPanel(getState())
     if (current != panel) {
       dispatch(handleSetPanel(panel))
+    }
+  }
+}
+
+export const setSending = (sending: Sending): AppThunk => {
+  return (dispatch, getState) => {
+    const current = getSending(getState())
+    if (current != sending) {
+      dispatch(handleSetSending(sending))
     }
   }
 }

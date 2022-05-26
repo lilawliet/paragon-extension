@@ -1,7 +1,6 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount } from '@/common/storages/stores/popup/slice'
-import { useWallet } from '@/ui/utils'
+import { getAccount, setAccount } from '@/common/storages/stores/popup/slice'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,38 +14,25 @@ interface AccountSelectDrawerProps {
 }
 
 const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false }: AccountSelectDrawerProps) => {
-  const [checkedAccount, setCheckedAccount] = useState<Account | null>(null)
   const { t } = useTranslation()
-  const wallet = useWallet()
   const { Option } = Select
   const current = useAppSelector(getAccount)
-  const [value, setValue] = useState<Account | null>(null)
+  const [selected, setSelected] = useState(0)
   const dispatch = useAppDispatch()
 
-  const init = async () => {
-    //todo
-  }
-
-  const handleOnChange = async (index: number) => {
-    if (accountsList) {
-      console.log(accountsList[index])
+  const handleOnChange = (index: number) => {
+    if (accountsList && accountsList[index]){
+      dispatch(setAccount(accountsList[index]))
     }
-
-    // setValue(account)
-    // const { address, type, brandName } = account
-    // await wallet.changeAccount({ address, type, brandName })
-    // setCurrentAccount({ address, type, brandName })
-
-    // dispatch(setAccount(account))
   }
 
   useEffect(() => {
-    console.log(current)
+    accountsList?.map((account, index) => {
+      if (account == current) {
+        setSelected(index)
+      }
+    })
   }, [current])
-
-  useEffect(() => {
-    init()
-  }, [])
 
   return (
     <div className="flex items-center w-full">
@@ -56,7 +42,7 @@ const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false 
       <div className="flex-grow">
         <Select
           onChange={handleOnChange}
-          defaultValue={0}
+          defaultValue={selected}
           style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}
           bordered={false}
           suffixIcon={

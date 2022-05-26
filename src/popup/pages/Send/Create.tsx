@@ -20,8 +20,8 @@ export default ({ transaction, setTransaction, setStatus }: Props) => {
       <div className="w-15 h-15">
         <img className="w-full" src={'./images/Novo.svg'} alt="" />
       </div>
-      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default">
-        <Input className="font-semibold text-white p0" bordered={false} status="error" placeholder="Recipient’s NOVO address" />
+      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default hover">
+        <Input className="font-semibold text-white p0 hover:" bordered={false} status="error" placeholder="Recipient’s NOVO address" />
       </div>
       <div className="flex justify-between w-full mt-5 box text-soft-white">
         <span>Available</span>
@@ -29,7 +29,7 @@ export default ({ transaction, setTransaction, setStatus }: Props) => {
           <span className="font-semibold text-white">{transaction.amount}</span> Novo
         </span>
       </div>
-      <div className="flex items-center w-full p-5 h-15_5 box default">
+      <div className="flex items-center w-full p-5 h-15_5 box default hover">
         <Input className="font-semibold text-white p0" bordered={false} placeholder="Amount" />
       </div>
       <div className="flex justify-between w-full mt-5 text-soft-white">

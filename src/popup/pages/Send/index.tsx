@@ -30,7 +30,6 @@ const SendIndex = () => {
   })
 
   useEffect(() => {
-    console.log(status)
   }, [status])
 
   return (
