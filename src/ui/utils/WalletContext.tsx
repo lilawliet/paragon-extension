@@ -1,15 +1,63 @@
-import React, { ReactNode } from 'react'
-import { createContext, useContext } from 'react'
-import { Object } from 'ts-toolbelt'
+import { DisplayedKeryring } from '@/background/service/keyring'
+import DisplayKeyring from '@/background/service/keyring/display'
+import { NovoBalance } from '@/background/service/openapi'
+import { CacheState } from '@/background/service/pageStateCache'
+import { Account } from '@/background/service/preference'
+import * as novo from '@paragon/novocore-lib'
+import React, { createContext, ReactNode, useContext } from 'react'
+export type WalletController = {
+  openapi?: {
+    [key: string]: (...params: any) => Promise<any>
+  }
 
-export type WalletController = Object.Merge<
-  {
-    openapi?: {
-      [key: string]: (...params: any) => Promise<any>
-    }
-  },
-  Record<string, (...params: any) => Promise<any>>
->
+  boot(password: string): Promise<void>
+  isBooted(): void
+  verifyPassword(password: string): Promise<void>
+
+  unlock(password: string): Promise<void>
+  isUnlocked(): boolean
+  lockWallet(): Promise<void>
+  setPopupOpen(isOpen: boolean): void
+
+  openIndexPage(): Promise<number>
+  hasPageStateCache(): boolean
+  getPageStateCache(): CacheState
+  clearPageStateCache(): void
+  setPageStateCache(cache: CacheState): void
+
+  getAddressBalance(address: string): Promise<NovoBalance>
+  getAddressCacheBalance(address: string): NovoBalance
+
+  getLocale(): string
+  setLocale(locale: string): void
+
+  clearKeyrings(): Promise<void>
+  getPrivateKey(password: string, account: { address: string; type: string }): Promise<string>
+  getMnemonics(password: string): Promise<string>
+  importPrivateKey(data: string): Promise<{ address: string; type: string }[]>
+  getPreMnemonics(): Promise<any>
+  generatePreMnemonic(): Promise<string>
+  removePreMnemonics(): void
+  createKeyringWithMnemonics(mnemonic: string): Promise<{ address: string; type: string }[]>
+  removeAddress(address: string, type: string): Promise<void>
+  resetCurrentAccount(): Promise<void>
+  generateKeyringWithMnemonic(mnemonic: string): number
+  checkHasMnemonic(): boolean
+  deriveNewAccountFromMnemonic(): Promise<string[]>
+  getAccountsCount(): Promise<number>
+  getTypedAccounts(type: string): Promise<DisplayedKeryring[]>
+  getAllVisibleAccounts(): Promise<DisplayedKeryring[]>
+  getAllVisibleAccountsArray(): Promise<Account>
+  getAllClassAccounts(): Promise<DisplayedKeryring & { keyring: DisplayKeyring }[]>
+
+  changeAccount(account: Account): void
+  getCurrentAccount(): Promise<Account>
+  getAccounts(): Promise<{ address: string; type: string }[]>
+
+  signTransaction(type: string, from: string, novoTx: novo.Transaction): Promise<novo.Transaction>
+  sendNovo(data: { to: string; amount: number }): Promise<{ fee: number; rawtx: string }>
+  pushTx(rawtx: string): Promise<string>
+}
 
 const WalletContext = createContext<{
   wallet: WalletController

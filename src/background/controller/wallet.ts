@@ -29,6 +29,10 @@ function novoToSatoshis(amount: number) {
   return Math.ceil(amount * 10000)
 }
 
+function satoshisToNovo(amount: number) {
+  return amount / 10000
+}
+
 export class WalletController extends BaseController {
   openapi: OpenApiService = openapiService
 
@@ -130,13 +134,11 @@ export class WalletController extends BaseController {
   }
 
   getAddressBalance = async (address: string) => {
-    console.log('getAddressBalance', address)
     const data = await openapiService.getAddressBalance(address)
-    preferenceService.updateAddressBalance(address, data as any)
+    preferenceService.updateAddressBalance(address, data)
     return data
   }
   getAddressCacheBalance = (address: string | undefined) => {
-    console.log('getAddressCacheBalance', address)
     if (!address) return null
     return preferenceService.getAddressBalance(address)
   }
@@ -525,9 +527,8 @@ export class WalletController extends BaseController {
   }
 
   listChainAssets = async (address: string) => {
-    const { confirmed, unconfirmed } = await openapiService.getAddressBalance(address)
-    const amount = (confirmed + unconfirmed) / 10000
-    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount, value: '$6.748.29' }]
+    const balance = await openapiService.getAddressBalance(address)
+    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: satoshisToNovo(balance.amount), value: '$' + balance.usd_value }]
     return assets
   }
 
@@ -551,7 +552,7 @@ export class WalletController extends BaseController {
         address: accountAddress,
         satoshis: utxo.value,
         txId: utxo.txid,
-        outputIndex: utxo.outIndex
+        outputIndex: utxo.index
       })
     })
     txComposer.appendP2PKHOutput({
@@ -563,7 +564,7 @@ export class WalletController extends BaseController {
     this.signTransaction(account.type, account.address, txComposer.getTx())
 
     return {
-      fee: txComposer.getUnspentValue(),
+      fee: satoshisToNovo(txComposer.getUnspentValue()),
       rawtx: txComposer.getRawHex()
     }
   }

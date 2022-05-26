@@ -92,9 +92,11 @@ export interface Eip1559Tx {
   v?: string
 }
 
-export interface TotalBalanceResponse {
-  total_usd_value: number
-  chain_list: ChainWithBalance[]
+export interface NovoBalance {
+  confirm_amount: number
+  pending_amount: number
+  amount: number
+  usd_value: number
 }
 
 export interface TokenItem {
@@ -535,10 +537,7 @@ export class OpenApiService {
     return data.result
   }
 
-  async getAddressBalance(address: string): Promise<{
-    confirmed: number
-    unconfirmed: number
-  }> {
+  async getAddressBalance(address: string): Promise<NovoBalance> {
     const { status, data } = await this.request.get('/address/balance', {
       params: {
         address
@@ -547,7 +546,7 @@ export class OpenApiService {
     return data.result
   }
 
-  async getAddressUtxo(address: string): Promise<{ txid: string; outIndex: number; value: number }[]> {
+  async getAddressUtxo(address: string): Promise<{ txid: string; index: number; value: number }[]> {
     const { status, data } = await this.request.get('/address/utxo', {
       params: {
         address

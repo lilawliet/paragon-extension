@@ -1,43 +1,41 @@
+import { shortAddress } from '@/ui/utils'
 import { ArrowRightOutlined } from '@ant-design/icons'
-import { Button, Input } from 'antd'
-
-import { Transaction, Status } from './index'
+import { Button } from 'antd'
+import { Status, Transaction } from './index'
 
 interface Props {
   transaction: Transaction
-  setTransaction(transaction: Transaction): void
+  fromAddress: string
+  toAddress: string
+  toAmount: number
+  fee: number
+
+  sendTx(): void
   setStatus(status: Status): void
 }
 
-export default ({ transaction, setTransaction, setStatus }: Props) => {
-  const verify = () => {
-    // to verify
-    setStatus('sending')
-
-    // setStatus('success')
-  }
-
+export default ({ transaction, fromAddress, toAddress, toAmount, fee, sendTx, setStatus }: Props) => {
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex items-center px-2 text-2xl h-13">Confirm payment</div>
       <div className="w-full text-left text-soft-white">Recipient</div>
       <div className="justify-between w-full box nobor text-soft-white">
-        <span>{transaction.address}</span>
+        <span>{shortAddress(fromAddress)}</span>
         <span className="text-white">
           <ArrowRightOutlined />
         </span>
-        <span>{transaction.address}</span>
+        <span>{shortAddress(toAddress)}</span>
       </div>
-      <div className="w-full text-left text-soft-white">Recipient</div>
+      <div className="w-full text-left text-soft-white">Amount</div>
       <div className="justify-end w-full box nobor text-soft-white">
         <span>
-          <span className="font-semibold text-white">{transaction.amount}</span> Novo
+          <span className="font-semibold text-white">{toAmount}</span> Novo
         </span>
       </div>
-      <div className="w-full text-left text-soft-white">Recipient</div>
+      <div className="w-full text-left text-soft-white">Fee</div>
       <div className="justify-end w-full box nobor text-soft-white">
         <span>
-          <span className="font-semibold text-white">5000</span> Novo
+          <span className="font-semibold text-white">{fee}</span> Novo
         </span>
       </div>
 
@@ -46,9 +44,8 @@ export default ({ transaction, setTransaction, setStatus }: Props) => {
         type="primary"
         className="box w380"
         onClick={(e) => {
-          verify()
-        }}
-      >
+          sendTx()
+        }}>
         <div className="flex items-center justify-center text-lg">Next</div>
       </Button>
     </div>

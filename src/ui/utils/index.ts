@@ -77,3 +77,24 @@ export const ellipsisOverflowedText = (str: string, length = 5, removeLastComma 
   }
   return `${cut}...`
 }
+
+export const satoshisToNovo = (amount: number) => {
+  return amount / 10000
+}
+
+export const novoTosatoshis = (amount: number) => {
+  return Math.floor(amount * 10000)
+}
+
+export function shortAddress(address: string, len = 5) {
+  if (address.length <= len * 2) return address
+  return address.slice(0, len) + '...' + address.slice(address.length - len)
+}
+
+export async function sleep(timeSec: number) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(null)
+    }, timeSec * 1000)
+  })
+}
