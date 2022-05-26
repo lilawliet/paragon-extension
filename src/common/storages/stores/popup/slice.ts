@@ -4,11 +4,13 @@ import { AppThunk, RootState } from '../index'
 import { fetchCount } from './api'
 
 export type Panel = 'home' | 'nft' | 'transaction' | 'settings'
+export type Send = 'create' | 'confirm' | 'sending' | 'success' | 'error' | ''
 
 export interface State {
   panel: Panel // main panel state
   conn: boolean // connected state
   account: Account | null
+  send: Send
 }
 
 // typically used to make async requests.
@@ -20,7 +22,8 @@ export const makeAsync = createAsyncThunk('counter/fetchCount', async (amount: n
 const initialState: State = {
   panel: 'home',
   conn: false,
-  account: null
+  account: null,
+  send: ''
 }
 
 export const slice = createSlice({
