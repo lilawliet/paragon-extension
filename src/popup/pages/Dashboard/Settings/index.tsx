@@ -1,8 +1,11 @@
+import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
+import { setAlianName } from '@/common/storages/stores/account/slice'
+import { fetchCurrentAccount, getCurrentAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
 import VirtualList from 'rc-virtual-list'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
@@ -69,10 +72,10 @@ export default ({ current }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
-
-  const [name, setName] = useState('')
+  const currentAccount = useAppSelector(getCurrentAccount)
   const [editable, setEditable] = useState(false)
 
+  const dispatch = useAppDispatch()
   const addressInput = useRef<any>(null)
 
   const handleChangeAlianName = () => {
@@ -87,12 +90,19 @@ export default ({ current }: AccountsProps) => {
   //   }`
   // );
   useEffect(() => {
-    setName(current?.alianName ? current.alianName : current?.brandName ? current.brandName : '')
+    (async () => {
+      if (!currentAccount) {
+        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet}))
+        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)){
+          // pass
+        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)){
+          navigate('/welcome')
+        } 
+      }
+    })()
   }, [])
 
-  useEffect(() => {
-    setName(current?.alianName ? current.alianName : current?.brandName ? current.brandName : '')
-  }, [current?.alianName])
+  const name = useMemo(() => currentAccount?.alianName ? currentAccount.alianName : currentAccount?.brandName ? currentAccount.brandName : '', [currentAccount])
 
   useEffect(() => {
     if (editable) {
@@ -108,12 +118,14 @@ export default ({ current }: AccountsProps) => {
       // do something
     }
   }
-
+  
   const handleOnBlur = async (e) => {
-    if (current) {
-      console.log(current)
-      await wallet.updateAlianName(current.address, e.target.value)
-      setName(e.target.value)
+    if (currentAccount){
+      dispatch(updateAlianName({
+        wallet,
+        address: currentAccount.address,
+        alianName: e.target.value
+      }))
       setEditable(false)
     }
   }

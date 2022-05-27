@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react"
+
 export const copyToClipboard = (textToCopy: string) => {
   // navigator clipboard 需要https等安全上下文
   if (navigator.clipboard && window.isSecureContext) {
@@ -28,4 +30,30 @@ export const formatAddr = (address: string) => {
     return `${address.slice(0, 8)}...${address.slice(-8)}`
   }
   return address
+}
+
+type Callback<T> = (prev?: T) => void
+interface Config {
+  immdiate: Boolean
+}
+
+export const useWatch = <T>(data: T, callback: Callback<T>, config: Config = { immdiate: false }) => {
+  const prev = useRef<T>()
+  const { immdiate } = config
+  const inited = useRef(false)
+  const stop = useRef(false)
+  useEffect(() => {
+    const execute = () => callback(prev.current)
+    if (!stop.current) {
+      if (!inited.current) {
+        inited.current = true
+        immdiate && execute()
+      } else {
+        execute()
+      }
+      prev.current = data
+    }
+  }, [data])
+
+  return () => stop.current = true
 }

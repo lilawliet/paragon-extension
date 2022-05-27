@@ -1,6 +1,7 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount, setAccount } from '@/common/storages/stores/popup/slice'
+import { getCurrentAccount, setCurrentAccount } from '@/common/storages/stores/popup/slice'
+import { useWallet } from '@/ui/utils'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,24 +16,30 @@ interface AccountSelectDrawerProps {
 
 const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false }: AccountSelectDrawerProps) => {
   const { t } = useTranslation()
+  const wallet = useWallet()
   const { Option } = Select
-  const current = useAppSelector(getAccount)
+  const currentAccount = useAppSelector(getCurrentAccount)
   const [selected, setSelected] = useState(0)
   const dispatch = useAppDispatch()
 
   const handleOnChange = (index: number) => {
     if (accountsList && accountsList[index]) {
-      dispatch(setAccount(accountsList[index]))
+      setSelected(index)
+      dispatch(setCurrentAccount({account:accountsList[index], wallet}))
     }
   }
 
-  useEffect(() => {
+  const updateSelected = () => {
     accountsList?.map((account, index) => {
-      if (account == current) {
+      if (account == currentAccount) {
         setSelected(index)
       }
     })
-  }, [current])
+  }
+
+  useEffect(() => {
+    updateSelected()
+  }, [])  
 
   return (
     <div className="flex items-center w-full">
@@ -42,7 +49,7 @@ const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false 
       <div className="flex-grow">
         <Select
           onChange={handleOnChange}
-          defaultValue={selected}
+          value={selected}
           style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}
           bordered={false}
           suffixIcon={

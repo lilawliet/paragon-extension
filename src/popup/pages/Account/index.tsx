@@ -13,7 +13,7 @@ import { useWallet } from '@/ui/utils'
 import { BigNumber } from 'bignumber.js'
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount, setAccount } from '@/common/storages/stores/popup/slice'
+import { getCurrentAccount } from '@/common/storages/stores/popup/slice'
 
 export type Status = 'switch' | 'add' | 'import' | 'create'
 
@@ -24,7 +24,7 @@ const SendIndex = () => {
 
   const [status, setStatus] = useState<Status>('switch')
 
-  const current = useAppSelector(getAccount)
+  const current = useAppSelector(getCurrentAccount)
   const dispatch = useAppDispatch()
 
   const [accountsList, setAccountsList] = useState<Account[]>([])
@@ -38,7 +38,7 @@ const SendIndex = () => {
         }
         return {
           ...item,
-          balance: balance?.total_usd_value || 0
+          balance: balance?.amount || 0
         }
       })
     )

@@ -1,6 +1,6 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { getAccount, getPanel, setAccount } from '@/common/storages/stores/popup/slice'
+import { fetchCurrentAccount, getCurrentAccount, getPanel } from '@/common/storages/stores/popup/slice'
 import CFooter from '@/popup/components/CFooter'
 import CHeader from '@/popup/components/CHeader'
 import { useWallet } from '@/ui/utils'
@@ -24,20 +24,20 @@ const Dashboard = () => {
   const { t } = useTranslation()
   const wallet = useWallet()
   const navigate = useNavigate()
+  const currentAccount = useAppSelector(getCurrentAccount)
 
   const panel = useAppSelector(getPanel)
-  const current = useAppSelector(getAccount)
   const dispatch = useAppDispatch()
 
   // 改名
   // addressItems.current.forEach((item) => item.alianNameConfirm());
 
-  const [dashboardReload, setDashboardReload] = useState(false)
+  const [accountsList, setAccountsList] = useState<Account[]>([])
+
   const [pendingTxCount, setPendingTxCount] = useState(0)
   const [loadingAddress, setLoadingAddress] = useState(false)
   const [startEdit, setStartEdit] = useState(false)
   const [alianName, setAlianName] = useState<string>('')
-  const [accountsList, setAccountsList] = useState<Account[]>([])
   const [displayName, setDisplayName] = useState<string>('')
 
   const balanceList = async (accounts) => {
@@ -82,29 +82,20 @@ const Dashboard = () => {
     }
   }
 
-  const getCurrentAccount = async () => {
-    const _account = await wallet.getCurrentAccount()
-    if (!_account) {
-      navigate('/welcome')
-      return
-    }
-    dispatch(setAccount(_account))
-  }
-
   useEffect(() => {
-    if (dashboardReload) {
-      setDashboardReload(false)
-      getCurrentAccount()
+    (async () => {
       getAllKeyrings()
-    }
-  }, [dashboardReload])
-
-  useEffect(() => {
-    getAllKeyrings()
-    if (!current) {
-      getCurrentAccount()
-    }
+      if (!currentAccount) {
+        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet}))
+        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)){
+          // pass
+        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)){
+          navigate('/welcome')
+        } 
+      }
+    })()
   }, [])
+
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -112,13 +103,13 @@ const Dashboard = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919', overflowY: 'auto' }}>
         {panel == 'home' ? (
-          <Home current={current} accountsList={accountsList} />
+          <Home current={currentAccount} accountsList={accountsList} />
         ) : panel == 'transaction' ? (
-          <Transaction current={current} accountsList={accountsList} />
+          <Transaction current={currentAccount} accountsList={accountsList} />
         ) : panel == 'settings' ? (
-          <Settings current={current} />
+          <Settings current={currentAccount} />
         ) : (
-          <Home current={current} accountsList={accountsList} />
+          <Home current={currentAccount} accountsList={accountsList} />
         )}
       </Content>
       <Footer style={{ height: '5.625rem' }}>
