@@ -20,7 +20,7 @@ export default () => {
   const wallet = useWallet()
   const btnClick = async () => {
     try {
-      let _res = await wallet.getMnemonics(password)
+      const _res = await wallet.getMnemonics(password)
       setMnemonic(_res)
     } catch (e) {
       setError((e as any).message)
@@ -40,7 +40,7 @@ export default () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: `copied`
+        content: 'copied'
       })
     })
   }

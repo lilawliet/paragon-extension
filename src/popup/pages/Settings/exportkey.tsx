@@ -19,8 +19,8 @@ export default () => {
   const wallet = useWallet()
   const btnClick = async () => {
     try {
-      let account = await wallet.getCurrentAccount()
-      let _res = await wallet.getPrivateKey(password, account)
+      const account = await wallet.getCurrentAccount()
+      const _res = await wallet.getPrivateKey(password, account)
       setPrivateKey(_res)
     } catch (e) {
       setError((e as any).message)
@@ -40,7 +40,7 @@ export default () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: `copied`
+        content: 'copied'
       })
     })
   }

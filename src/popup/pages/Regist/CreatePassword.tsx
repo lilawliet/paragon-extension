@@ -1,8 +1,8 @@
-import { Button, Input, message } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
 import { useWallet, useWalletRequest } from '@/ui/utils'
+import { Button, Input, message } from 'antd'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 type Status = '' | 'error' | 'warning' | undefined
 
@@ -28,7 +28,8 @@ const CreatePassword = () => {
 
   const [run, loading] = useWalletRequest(wallet.boot, {
     onSuccess() {
-      navigate('/create-recovery', {
+      const next = localStorage.getItem('welcome-to') as string
+      navigate(next, {
         state: {
           create: true
         }
