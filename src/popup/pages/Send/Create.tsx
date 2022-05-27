@@ -1,5 +1,5 @@
 import { NovoBalance } from '@/background/service/openapi'
-import { satoshisToNovo } from '@/ui/utils'
+import { isValidAddress, satoshisToNovo } from '@/ui/utils'
 import { Button, Input } from 'antd'
 import { Status, Transaction } from './index'
 
@@ -9,13 +9,25 @@ interface Props {
   balance: NovoBalance
   fee: number
 
+  toAddress: string
+  toAmount: number
+  error: string
+  setError(val: string): void
   setToAddress(val: string): void
   setToAmount(val: number): void
   setStatus(status: Status): void
 }
 
-export default ({ transaction, balance, fee, setToAddress, setToAmount, setStatus }: Props) => {
+export default ({ transaction, balance, fee, toAddress, toAmount, error, setError, setToAddress, setToAmount, setStatus }: Props) => {
   const verify = () => {
+    if (!isValidAddress(toAddress)) {
+      setError('Invalid address')
+      return
+    }
+    if (toAmount <= 0 || toAmount > balance.amount / 10000) {
+      setError('Invalid amount')
+      return
+    }
     // to verify
     setStatus('confirm')
   }
@@ -60,15 +72,14 @@ export default ({ transaction, balance, fee, setToAddress, setToAmount, setStatu
           <span className="font-semibold text-white">{fee}</span> Novo
         </span>
       </div>
-
+      <span className="font-semibold text-white text-warn">{error}</span>
       <Button
         size="large"
         type="primary"
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">Next</div>
       </Button>
     </div>

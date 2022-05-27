@@ -1,6 +1,6 @@
 export * from './hooks'
 export * from './WalletContext'
-
+import * as novo from '@paragon/novocore-lib'
 const UI_TYPE = {
   Tab: 'index',
   Pop: 'popup',
@@ -97,4 +97,8 @@ export async function sleep(timeSec: number) {
       resolve(null)
     }, timeSec * 1000)
   })
+}
+
+export function isValidAddress(address: string) {
+  return (novo.Address as any).isValid(address, 'mainnet')
 }
