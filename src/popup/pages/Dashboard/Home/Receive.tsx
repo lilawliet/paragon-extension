@@ -15,7 +15,6 @@ const Receive = () => {
   const [searchParams] = useSearchParams()
 
   const wallet = useWallet()
-  const address = searchParams?.get('address') ?? ''
   const [size, setSize] = useState(210)
 
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
@@ -26,17 +25,10 @@ const Receive = () => {
       setSize((210 * parseFloat(getComputedStyle(html).fontSize)) / 16)
     }
     ;(async () => {
-      let account = await wallet.getCurrentAccount()
+      const account = await wallet.getCurrentAccount()
       setCurrentAccount(account)
     })()
   }, [])
-
-  useEffect(() => {
-    const html = document.getElementsByTagName('html')[0]
-    if (html && getComputedStyle(html).fontSize) {
-      setSize((210 * parseFloat(getComputedStyle(html).fontSize)) / 16)
-    }
-  }, [currentAccount])
 
   function copy(str: string) {
     copyToClipboard(str).then(() => {
