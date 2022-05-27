@@ -260,6 +260,12 @@ class KeyringService extends EventEmitter {
     return this.fullUpdate()
   }
 
+  changePassword = async (password: string, newPassword: string) => {
+    await this.verifyPassword(password)
+    this.password = newPassword
+    await this.persistAllKeyrings()
+  }
+
   /**
    * Verify Password
    *

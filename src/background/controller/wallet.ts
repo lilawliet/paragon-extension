@@ -40,7 +40,7 @@ export class WalletController extends BaseController {
   boot = (password) => keyringService.boot(password)
   isBooted = () => keyringService.isBooted()
   verifyPassword = (password: string) => keyringService.verifyPassword(password)
-
+  changePassword = (password: string, newPassword: string) => keyringService.changePassword(password, newPassword)
   getApproval = notificationService.getApproval
   resolveApproval = notificationService.resolveApproval
   rejectApproval = notificationService.rejectApproval
