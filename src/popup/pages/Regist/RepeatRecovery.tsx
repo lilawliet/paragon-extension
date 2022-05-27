@@ -66,7 +66,8 @@ const RepeatRecovery = () => {
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 
                                     ${hover == index ? ' border-white border-opacity-40 text-white' : ''} 
-                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}>
+                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}
+              >
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}

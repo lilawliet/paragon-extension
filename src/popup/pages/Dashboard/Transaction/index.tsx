@@ -79,7 +79,8 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
                 </div>
               ))}
             </div>
-          )}></List>
+          )}
+        ></List>
       </div>
     </div>
   )

@@ -80,7 +80,8 @@ export default () => {
                 className="p-5 font-semibold select-text box default text-4_5 w380 leading-6_5"
                 onClick={(e) => {
                   copy(privateKey)
-                }}>
+                }}
+              >
                 {privateKey}
               </div>
             </div>
@@ -94,7 +95,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back

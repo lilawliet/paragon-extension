@@ -26,11 +26,10 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
 
   const handleOnClick = (e) => {
     e.stopPropagation()
-    navigate('/settings/account');
+    navigate('/settings/account')
   }
 
   const handleOnChange = (index: number) => {
-    
     if (accountsList && accountsList[index]) {
       setSelected(index)
       dispatch(setCurrentAccount({ account: accountsList[index], wallet }))
@@ -51,7 +50,12 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
   }, [current])
 
   return (
-    <div className="flex items-center w-full" onClick={e=>{handleOnClick(e)}}>
+    <div
+      className="flex items-center w-full"
+      onClick={(e) => {
+        handleOnClick(e)
+      }}
+    >
       <span>
         <img src="./images/user-solid.svg" alt="" />
       </span>
@@ -65,7 +69,8 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
             <span className="text-white">
               <img src="./images/chevron-down-solid.png" alt="" />
             </span>
-          }>
+          }
+        >
           {accountsList?.map((account, index) => (
             <Option value={index} key={index}>
               {account.alianName ? account.alianName : account.brandName}{' '}

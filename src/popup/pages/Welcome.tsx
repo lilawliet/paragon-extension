@@ -33,7 +33,8 @@ const Welcome = () => {
           // backgroundImage:
           //   'linear-gradient(0deg, #1c1919 0%, #000000 50%, #1c1919 90.78%)',
         }
-      }>
+      }
+    >
       <div className="flex flex-col items-center">
         <div className="flex justify-center mb-15 gap-x-4 w-70">
           <img className="select-none w-15 h-12_5" src="./images/Diamond.svg" />
@@ -60,7 +61,8 @@ const Welcome = () => {
                   }
                 })
               }
-            }}>
+            }}
+          >
             {t('Create new wallet')}
           </Button>
           <Button
@@ -83,7 +85,8 @@ const Welcome = () => {
                   }
                 })
               }
-            }}>
+            }}
+          >
             {t('I already have a wallet')}
           </Button>
         </div>

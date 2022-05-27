@@ -73,7 +73,6 @@ export default ({ current }: AccountsProps) => {
   const wallet = useWallet()
   // const currentAccount = useAppSelector(getCurrentAccount)
   const [editable, setEditable] = useState(false)
-  const [reflesh, setReflesh ] = useState(false)
 
   const dispatch = useAppDispatch()
   const addressInput = useRef<any>(null)
@@ -96,14 +95,13 @@ export default ({ current }: AccountsProps) => {
   //   })()
   // }, [])
 
-  useEffect(() => {
-    if(reflesh) {
-      setName(alianName)
-    }
-  }, [setReflesh])
+  useEffect(()=> {
+    setName(alianName)
+  }, [])
+
 
   const alianName = useMemo(() => (current?.alianName ? current.alianName : current?.brandName ? current.brandName : ''), [current])
-  const [name, setName] = useState(alianName)
+  const [name, setName] = useState('')
 
   useEffect(() => {
     if (editable) {
@@ -137,10 +135,14 @@ export default ({ current }: AccountsProps) => {
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
-        <div className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${editable? 'bg-primary-active border-opacity-60': 'bg-soft-black border-opacity-20'}`}
-            onClick={(e) => {
-              handleChangeAlianName()
-            }}>
+        <div
+          className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${
+            editable ? 'bg-primary-active border-opacity-60' : 'bg-soft-black border-opacity-20'
+          }`}
+          onClick={(e) => {
+            handleChangeAlianName()
+          }}
+        >
           {editable ? (
             <Input
               ref={addressInput}
@@ -153,15 +155,9 @@ export default ({ current }: AccountsProps) => {
               onPressEnter={(e) => handleOnBlur(e)}
             />
           ) : (
-            <span
-              className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60"
-            >
-              {name}
-            </span>
+            <span className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60">{name}</span>
           )}
-          <div
-            className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable? 'opacity-100' : 'opacity-60'}`}
-          >
+          <div className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
             <EditOutlined />
           </div>
         </div>

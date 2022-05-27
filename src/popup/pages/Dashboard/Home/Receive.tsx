@@ -55,7 +55,8 @@ const Receive = () => {
               className="grid w-full grid-cols-6 px-10 box default py-2_5"
               onClick={(e) => {
                 copy(currentAccount?.address || '')
-              }}>
+              }}
+            >
               <div className="flex items-center">
                 <img src="./images/copy-solid.png" alt="" />
               </div>
@@ -75,7 +76,8 @@ const Receive = () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back
