@@ -83,15 +83,15 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       getAllKeyrings()
       if (!currentAccount) {
-        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet}))
-        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)){
+        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
+        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
           // pass
-        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)){
+        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
           navigate('/welcome')
-        } 
+        }
       }
     })()
   }, [])

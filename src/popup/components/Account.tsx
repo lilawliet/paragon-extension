@@ -25,7 +25,7 @@ const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false 
   const handleOnChange = (index: number) => {
     if (accountsList && accountsList[index]) {
       setSelected(index)
-      dispatch(setCurrentAccount({account:accountsList[index], wallet}))
+      dispatch(setCurrentAccount({ account: accountsList[index], wallet }))
     }
   }
 
@@ -39,7 +39,7 @@ const AccountSelect = ({ accountsList, handleOnCancel, title, isLoading = false 
 
   useEffect(() => {
     updateSelected()
-  }, [])  
+  }, [])
 
   return (
     <div className="flex items-center w-full">

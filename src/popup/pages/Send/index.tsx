@@ -111,14 +111,16 @@ const SendIndex = () => {
             backgroundColor: '#1C1919',
             textAlign: 'center',
             width: '100%'
-          }}>
+          }}
+        >
           <Button
             size="large"
             type="default"
             className="box w440"
             onClick={(e) => {
               window.history.go(-1)
-            }}>
+            }}
+          >
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
               &nbsp;Back

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 
 export const copyToClipboard = (textToCopy: string) => {
   // navigator clipboard 需要https等安全上下文
@@ -34,7 +34,7 @@ export const formatAddr = (address: string) => {
 
 type Callback<T> = (prev?: T) => void
 interface Config {
-  immdiate: Boolean
+  immdiate: boolean
 }
 
 export const useWatch = <T>(data: T, callback: Callback<T>, config: Config = { immdiate: false }) => {
@@ -55,5 +55,5 @@ export const useWatch = <T>(data: T, callback: Callback<T>, config: Config = { i
     }
   }, [data])
 
-  return () => stop.current = true
+  return () => (stop.current = true)
 }

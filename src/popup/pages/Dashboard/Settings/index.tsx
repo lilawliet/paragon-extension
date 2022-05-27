@@ -90,19 +90,19 @@ export default ({ current }: AccountsProps) => {
   //   }`
   // );
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (!currentAccount) {
-        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet}))
-        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)){
+        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
+        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
           // pass
-        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)){
+        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
           navigate('/welcome')
-        } 
+        }
       }
     })()
   }, [])
 
-  const name = useMemo(() => currentAccount?.alianName ? currentAccount.alianName : currentAccount?.brandName ? currentAccount.brandName : '', [currentAccount])
+  const name = useMemo(() => (currentAccount?.alianName ? currentAccount.alianName : currentAccount?.brandName ? currentAccount.brandName : ''), [currentAccount])
 
   useEffect(() => {
     if (editable) {
@@ -118,14 +118,16 @@ export default ({ current }: AccountsProps) => {
       // do something
     }
   }
-  
+
   const handleOnBlur = async (e) => {
-    if (currentAccount){
-      dispatch(updateAlianName({
-        wallet,
-        address: currentAccount.address,
-        alianName: e.target.value
-      }))
+    if (currentAccount) {
+      dispatch(
+        updateAlianName({
+          wallet,
+          address: currentAccount.address,
+          alianName: e.target.value
+        })
+      )
       setEditable(false)
     }
   }

@@ -18,7 +18,7 @@ interface fetchCurrentAccountArgs {
   wallet: WalletController
 }
 
-export const fetchCurrentAccount = createAsyncThunk('fetchCurrentAccount', async (args:fetchCurrentAccountArgs, thunkAPI) => {
+export const fetchCurrentAccount = createAsyncThunk('fetchCurrentAccount', async (args: fetchCurrentAccountArgs, thunkAPI) => {
   const _current = args.wallet.getCurrentAccount()
   if (_current) {
     return _current
@@ -43,11 +43,10 @@ interface setCurrentAccountArgs {
 }
 
 export const setCurrentAccount = createAsyncThunk<Account, setCurrentAccountArgs>('setCurrentAccount', async (args) => {
-  const { address, type, brandName } = args.account;
-  args.wallet.changeAccount({ address, type, brandName });
+  const { address, type, brandName } = args.account
+  args.wallet.changeAccount({ address, type, brandName })
   return args.account
 })
-
 
 const initialState: State = {
   panel: 'home',
@@ -68,21 +67,24 @@ export const slice = createSlice({
     },
     handleSetSending: (state, action: PayloadAction<Sending>) => {
       state.sending = action.payload
-    },
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchCurrentAccount.fulfilled, (state, action) => {
-      state.currentAccount = action.payload
-    }).addCase(updateAlianName.rejected, (state, action) => {
-      console.log('reject')
-    }).addCase(updateAlianName.fulfilled, (state, action) => {
-      console.log('alian')
-      // const dispatch = useAppDispatch()
-      // dispatch(fetchCurrentAccount())
-    }).addCase(setCurrentAccount.fulfilled, (state, action) => {
-      state.currentAccount = action.payload
-    })
-
+    builder
+      .addCase(fetchCurrentAccount.fulfilled, (state, action) => {
+        state.currentAccount = action.payload
+      })
+      .addCase(updateAlianName.rejected, (state, action) => {
+        console.log('reject')
+      })
+      .addCase(updateAlianName.fulfilled, (state, action) => {
+        console.log('alian')
+        // const dispatch = useAppDispatch()
+        // dispatch(fetchCurrentAccount())
+      })
+      .addCase(setCurrentAccount.fulfilled, (state, action) => {
+        state.currentAccount = action.payload
+      })
   }
 })
 
@@ -102,7 +104,6 @@ export const setPanel = (panel: Panel): AppThunk => {
   }
 }
 
-
 export const setSending = (sending: Sending): AppThunk => {
   return (dispatch, getState) => {
     const current = getSending(getState())
@@ -111,6 +112,5 @@ export const setSending = (sending: Sending): AppThunk => {
     }
   }
 }
-
 
 export default slice.reducer
