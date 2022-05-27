@@ -83,9 +83,7 @@ const SendIndex = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(status)
-  }, [status])
+  useEffect(() => {}, [status])
 
   return (
     <Layout className="h-full">

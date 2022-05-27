@@ -23,7 +23,6 @@ export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
     return new Promise((resolve, reject) => {
       // sending
       setTimeout(() => {
-        console.log('sending2')
         setResult('success')
       }, 3000)
     })
@@ -35,11 +34,9 @@ export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
 
   useEffect(() => {
     if (result == 'sending') {
-      console.log('sending1')
     }
     // sending
     else if (result == 'success') {
-      console.log('success')
       setStatus('success')
     } else {
       setStatus('error')

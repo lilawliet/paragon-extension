@@ -1,16 +1,16 @@
 import { Account } from '@/background/service/preference'
-import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { fetchCurrentAccount, getCurrentAccount, setCurrentAccount } from '@/common/storages/stores/popup/slice'
+import { useAppDispatch } from '@/common/storages/hooks'
+import { changeAccount } from '@/common/storages/stores/popup/slice'
 import { formatAddr } from '@/common/utils'
 import { useWallet } from '@/ui/utils'
 import { CheckOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
-import BigNumber from 'bignumber.js'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import VirtualList from 'rc-virtual-list'
 
 import { Status } from '.'
+import BigNumber from 'bignumber.js'
 
 interface MyItemProps {
   index: number
@@ -19,7 +19,7 @@ interface MyItemProps {
   setCurrency(num: number): void
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, account, currency, setCurrency }, ref) => {
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, account, currency, setCurrency }: MyItemProps, ref) => {
   return (
     <Button
       key={index}
@@ -67,15 +67,16 @@ type ListRef = {
 
 export default ({ setStatus }: Props) => {
   const wallet = useWallet()
-  const currentAccount = useAppSelector(getCurrentAccount)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const listRef = useRef<ListRef>(null)
 
+  const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
   const [currency, setCurrency] = useState(0)
   const [accountsList, setAccountsList] = useState<Account[]>([])
 
   const ForwardMyItem = forwardRef(MyItem)
+
   const balanceList = async (accounts) => {
     return await Promise.all<Account>(
       accounts.map(async (item) => {
@@ -113,31 +114,33 @@ export default ({ setStatus }: Props) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
       })
       setAccountsList(withBalanceList)
-
-      withBalanceList.map((_account, index) => {
-        if (currentAccount && currentAccount.address == _account.address) {
-          setCurrency(index)
-        }
-      })
     }
   }
 
   useEffect(() => {
+    currentAccount &&
+      accountsList &&
+      accountsList.map((_account, index) => {
+        if (currentAccount && currentAccount.address == _account.address) {
+          setCurrency(index)
+        }
+      })
+  }, [currentAccount, accountsList])
+
+  useEffect(() => {
     ;(async () => {
       if (!currentAccount) {
-        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
-        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
-          // pass
-        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
-          navigate('/welcome')
-        }
+        setCurrentAccount(await wallet.getCurrentAccount())
       }
-      await getAllKeyrings()
+      getAllKeyrings()
     })()
   }, [])
 
   useEffect(() => {
-    dispatch(setCurrentAccount({ account: accountsList[currency], wallet }))
+    if (accountsList && accountsList[currency]?.address != currentAccount?.address) {
+      dispatch(changeAccount({ account: accountsList[currency], wallet }))
+      setCurrentAccount(accountsList[currency])
+    }
   }, [currency])
 
   const verify = () => {

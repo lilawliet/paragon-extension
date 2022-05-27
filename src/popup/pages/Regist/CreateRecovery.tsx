@@ -35,7 +35,6 @@ const CreateRecovery = () => {
 
   const btnClick = async () => {
     const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
-    console.log(accounts)
     navigate('/dashboard', {
       state: {
         accounts,

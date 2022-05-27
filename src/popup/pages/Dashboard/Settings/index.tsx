@@ -71,7 +71,6 @@ export default ({ current }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
-  // const currentAccount = useAppSelector(getCurrentAccount)
   const [editable, setEditable] = useState(false)
 
   const dispatch = useAppDispatch()
@@ -79,29 +78,14 @@ export default ({ current }: AccountsProps) => {
 
   const handleChangeAlianName = () => {
     setEditable(true)
-    //todo
   }
-  // useEffect(() => {
-  //   ;(async () => {
-  //     if (!currentAccount) {
-  //       const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
-  //       if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
-  //         // pass
-  //         setReflesh(true)
-  //       } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
-  //         navigate('/welcome')
-  //       }
-  //     }
-  //   })()
-  // }, [])
-
-  useEffect(()=> {
-    setName(alianName)
-  }, [])
-
 
   const alianName = useMemo(() => (current?.alianName ? current.alianName : current?.brandName ? current.brandName : ''), [current])
   const [name, setName] = useState('')
+
+  useEffect(() => {
+    setName(alianName)
+  }, [current])
 
   useEffect(() => {
     if (editable) {

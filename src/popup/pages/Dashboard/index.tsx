@@ -127,25 +127,31 @@ const Dashboard = () => {
       const withBalanceList = result.sort((a, b) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
       })
-      console.log(withBalanceList)
       setAccountsList(withBalanceList)
     }
   }
 
   useEffect(() => {
     ;(async () => {
+      const _currentAccount = await wallet.getCurrentAccount()
+      setCurrentAccount(_currentAccount)
       await getAllKeyrings()
-      const account = await wallet.getCurrentAccount()
-      if (account) {
-        setCurrentAccount(account)
-      } else {
-        if (!account) {
-          const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
-          if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
-            // pass
-          } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
-            navigate('/welcome')
-          }
+    })()
+  }, [panel])
+
+  useEffect(() => {
+    ;(async () => {
+      await getAllKeyrings()
+
+      if (!currentAccount) {
+        const _currentAccount = await wallet.getCurrentAccount()
+        setCurrentAccount(_currentAccount)
+
+        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
+        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
+          // pass
+        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
+          navigate('/welcome')
         }
       }
     })()

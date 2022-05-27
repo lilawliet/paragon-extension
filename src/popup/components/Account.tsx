@@ -1,6 +1,6 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch } from '@/common/storages/hooks'
-import { setCurrentAccount } from '@/common/storages/stores/popup/slice'
+import { changeAccount } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
@@ -32,7 +32,7 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
   const handleOnChange = (index: number) => {
     if (accountsList && accountsList[index]) {
       setSelected(index)
-      dispatch(setCurrentAccount({ account: accountsList[index], wallet }))
+      dispatch(changeAccount({ account: accountsList[index], wallet }))
       wallet.changeAccount(accountsList[index])
     }
   }

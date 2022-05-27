@@ -7,23 +7,6 @@ const Welcome = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
-  // const navigate = useNavigate()
-  // const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
-
-  // const getCurrentAccount = async () => {
-  //   const account = await wallet.getCurrentAccount();
-  //   if (account) {
-  //     navigate('/login');
-  //     return;
-  //   }
-  //   setCurrentAccount(account);
-  // };
-
-  // useEffect(() => {
-  //   if (!currentAccount) {
-  //     getCurrentAccount();
-  //   }
-  // }, []);
 
   return (
     <div

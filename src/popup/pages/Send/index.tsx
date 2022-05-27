@@ -63,7 +63,6 @@ const SendIndex = () => {
       console.log('start')
       await sleep(3)
       setStatus('success')
-      console.log('sss')
     } catch (e) {
       console.error(e)
       setStatus('error')

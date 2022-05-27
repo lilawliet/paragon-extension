@@ -20,7 +20,6 @@ const RepeatRecovery = () => {
   const verify = async () => {
     const mnemonics = keys.join(' ')
     const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
-    console.log(accounts)
     navigate('/dashboard', {
       state: {
         accounts,
@@ -30,7 +29,6 @@ const RepeatRecovery = () => {
       }
     })
     // to verify
-    console.log('verify', keys)
     // path move
     // navigate('/create-password')
   }

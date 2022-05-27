@@ -36,14 +36,13 @@ export const updateAlianName = createAsyncThunk<string, updateAlianNameArgs>('up
   return args.alianName
 })
 
-interface setCurrentAccountArgs {
+interface changeAccountAgs {
   wallet: WalletController
   account: Account
 }
 
-export const setCurrentAccount = createAsyncThunk<Account, setCurrentAccountArgs>('setCurrentAccount', async (args) => {
-  const { address, type, brandName } = args.account
-  args.wallet.changeAccount({ address, type, brandName })
+export const changeAccount = createAsyncThunk<Account, changeAccountAgs>('changeAccount', async (args) => {
+  args.wallet.changeAccount(args.account)
   return args.account
 })
 
@@ -81,7 +80,7 @@ export const slice = createSlice({
         // const dispatch = useAppDispatch()
         // dispatch(fetchCurrentAccount())
       })
-      .addCase(setCurrentAccount.fulfilled, (state, action) => {
+      .addCase(changeAccount.fulfilled, (state, action) => {
         state.currentAccount = action.payload
       })
   }
