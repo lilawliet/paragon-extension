@@ -1,26 +1,42 @@
-import { Button, Divider, Layout, message, Statistic } from 'antd'
-import { useTranslation } from 'react-i18next'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import { ArrowLeftOutlined, CopyOutlined } from '@ant-design/icons'
-import CHeader from '@/popup/components/CHeader'
-import QRCode from 'qrcode.react'
-import { useSearchParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Account } from '@/background/service/preference'
 import { copyToClipboard } from '@/common/utils'
+import CHeader from '@/popup/components/CHeader'
+import { shortAddress, useWallet } from '@/ui/utils'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { Button, Layout, message } from 'antd'
+import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import QRCode from 'qrcode.react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'react-router-dom'
 
 const Receive = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
 
+  const wallet = useWallet()
   const address = searchParams?.get('address') ?? ''
   const [size, setSize] = useState(210)
+
+  const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
 
   useEffect(() => {
     const html = document.getElementsByTagName('html')[0]
     if (html && getComputedStyle(html).fontSize) {
       setSize((210 * parseFloat(getComputedStyle(html).fontSize)) / 16)
     }
+    ;(async () => {
+      let account = await wallet.getCurrentAccount()
+      setCurrentAccount(account)
+    })()
   }, [])
+
+  useEffect(() => {
+    const html = document.getElementsByTagName('html')[0]
+    if (html && getComputedStyle(html).fontSize) {
+      setSize((210 * parseFloat(getComputedStyle(html).fontSize)) / 16)
+    }
+  }, [currentAccount])
 
   function copy(str: string) {
     copyToClipboard(str).then(() => {
@@ -40,21 +56,20 @@ const Receive = () => {
         <div className="flex flex-col items-center gap-10 mx-auto mt-5 justify-evenly w-110">
           <div className="flex items-center px-2 text-2xl h-13 w340">Deposit Novo</div>
           <div className="flex items-center justify-center bg-white rounded-2xl h-60 w-60">
-            <QRCode value={address} renderAs="svg" size={size}></QRCode>
+            <QRCode value={currentAccount?.address || ''} renderAs="svg" size={size}></QRCode>
           </div>
           <div className="flex flex-col w-full gap-5">
             <div
               className="grid w-full grid-cols-6 px-10 box default py-2_5"
               onClick={(e) => {
-                copy('address')
-              }}
-            >
+                copy(currentAccount?.address || '')
+              }}>
               <div className="flex items-center">
                 <img src="./images/copy-solid.png" alt="" />
               </div>
               <div className="flex flex-col flex-grow col-span-5 items-begin">
-                <span className="font-semibold">account name</span>
-                <span className="text-soft-white">{address}</span>
+                <span className="font-semibold">{currentAccount?.alianName}</span>
+                <span className="text-soft-white">{shortAddress(currentAccount?.address || '')}</span>
               </div>
             </div>
             <div className="text-base text-center text-soft-white">This address can only receive Novo</div>
@@ -68,8 +83,7 @@ const Receive = () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}
-        >
+          }}>
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back
