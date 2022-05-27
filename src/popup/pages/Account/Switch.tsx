@@ -6,25 +6,84 @@ import { useWallet } from '@/ui/utils'
 import { CheckOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
 import BigNumber from 'bignumber.js'
-import { useEffect, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import VirtualList from 'rc-virtual-list'
 
 import { Status } from '.'
+
+interface MyItemProps {
+  index: number
+  account: Account
+  currency: number
+  setCurrency(num:number): void
+}
+
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = (
+  {
+    index,
+    account,
+    currency,
+    setCurrency
+  },
+  ref,
+) => {
+  return (
+    <Button
+      key={index}
+      size="large"
+      type="default"
+      className="p-5 box w-115 default mb-3_75 btn-89"
+      onClick={(e) => {
+        setCurrency(index)
+      }}
+    >
+      <div className="flex items-center justify-between text-base font-semibold">
+        <div className="flex flex-col flex-grow text-left">
+          <span>{account.brandName} </span>
+          <span className="font-normal opacity-60">({formatAddr(account.address)})</span>
+        </div>
+        {currency == index ? <CheckOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
+      </div>
+    </Button>
+  );
+};
 
 interface Props {
   setStatus(status: Status): void
 }
+
+export type ScrollAlign = 'top' | 'bottom' | 'auto';
+
+export type ScrollConfig =
+  | {
+      index: number;
+      align?: ScrollAlign;
+      offset?: number;
+    }
+  | {
+      key: React.Key;
+      align?: ScrollAlign;
+      offset?: number;
+    };
+
+export type ScrollTo = (arg: number | ScrollConfig) => void;
+
+type ListRef = {
+  scrollTo: ScrollTo;
+};
 
 export default ({ setStatus }: Props) => {
   const wallet = useWallet()
   const currentAccount = useAppSelector(getCurrentAccount)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
+  const listRef = useRef<ListRef>(null);
+  
   const [currency, setCurrency] = useState(0)
   const [accountsList, setAccountsList] = useState<Account[]>([])
 
-
+  const ForwardMyItem = forwardRef(MyItem);
   const balanceList = async (accounts) => {
     return await Promise.all<Account>(
       accounts.map(async (item) => {
@@ -98,27 +157,31 @@ export default ({ setStatus }: Props) => {
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex items-center px-2 text-2xl h-13">Switch Account</div>
-      {accountsList &&
-        accountsList.map((_account, _index) => {
-          return (
-            <Button
-              key={_index}
-              size="large"
-              type="default"
-              className="box w-115 default"
-              onClick={(e) => {
-                setCurrency(_index)
-              }}
-            >
-              <div className="flex items-center justify-between text-base font-semibold">
-                <div className="flex-grow text-left">
-                  {_account.brandName} <span className="font-normal opacity-60">({formatAddr(_account.address)})</span>
-                </div>
-                {currency == _index ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
-              </div>
-            </Button>
-          )
-        })}
+      
+      <VirtualList
+          data={accountsList}
+          data-id="list"
+          height={372}
+          itemHeight={20}
+          itemKey="id"
+          // disabled={animating}
+          ref={listRef}
+          style={{
+            boxSizing: 'border-box',
+          }}
+          // onSkipRender={onAppear}
+          // onItemRemove={onAppear}
+        >
+          {(item, index) => (
+            <ForwardMyItem
+              key={index}
+              account={item}
+              index={index}
+              currency={currency}
+              setCurrency={setCurrency}
+            />
+          )}
+        </VirtualList>
       <Button
         size="large"
         type="primary"

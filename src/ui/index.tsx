@@ -1,6 +1,7 @@
 import '@/common/styles/antd.less'
 // 全局公用样式
 import '@/common/styles/tailwind.less'
+import '@/common/styles/rc-virtual-list.less'
 import eventBus from '@/eventBus'
 import Popup from '@/popup'
 import { Message } from '@/utils'
