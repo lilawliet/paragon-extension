@@ -455,6 +455,11 @@ interface GetTxResponse {
 
 const maxRPS = 100
 
+enum API_STATUS {
+  FAILED = 0,
+  SUCCESS = 1
+}
+
 export class OpenApiService {
   store!: OpenApiStore
 
@@ -534,6 +539,9 @@ export class OpenApiService {
     const { status, data } = await this.request.get('/wallet/config', {
       params: {}
     })
+    if (data.status == API_STATUS.FAILED) {
+      throw new Error(data.messaage)
+    }
     return data.result
   }
 
@@ -543,6 +551,9 @@ export class OpenApiService {
         address
       }
     })
+    if (data.status == API_STATUS.FAILED) {
+      throw new Error(data.messaage)
+    }
     return data.result
   }
 
@@ -552,6 +563,9 @@ export class OpenApiService {
         address
       }
     })
+    if (data.status == API_STATUS.FAILED) {
+      throw new Error(data.messaage)
+    }
     return data.result
   }
 
@@ -569,13 +583,19 @@ export class OpenApiService {
         address
       }
     })
+    if (data.status == API_STATUS.FAILED) {
+      throw new Error(data.messaage)
+    }
     return data.result
   }
 
   async pushTx(rawtx: string): Promise<string> {
-    const { status, data } = await this.request.post('/tx/broadcast', {
+    const { data } = await this.request.post('/tx/broadcast', {
       rawtx
     })
+    if (data.status == API_STATUS.FAILED) {
+      throw new Error(data.messaage)
+    }
     return data.result
   }
 }

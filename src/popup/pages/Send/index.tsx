@@ -58,8 +58,8 @@ const SendIndex = () => {
   const sendTx = useCallback(async () => {
     try {
       setStatus('sending')
-      // const txid = await wallet.pushTx(ref.current.rawtx)
-      // ref.current.txid = txid
+      const txid = await wallet.pushTx(ref.current.rawtx)
+      ref.current.txid = txid
       console.log('start')
       await sleep(3)
       setStatus('success')
@@ -111,16 +111,14 @@ const SendIndex = () => {
             backgroundColor: '#1C1919',
             textAlign: 'center',
             width: '100%'
-          }}
-        >
+          }}>
           <Button
             size="large"
             type="default"
             className="box w440"
             onClick={(e) => {
               window.history.go(-1)
-            }}
-          >
+            }}>
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
               &nbsp;Back

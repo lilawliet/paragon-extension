@@ -561,7 +561,7 @@ export class WalletController extends BaseController {
     })
     txComposer.appendChangeOutput(accountAddress)
 
-    this.signTransaction(account.type, account.address, txComposer.getTx())
+    await this.signTransaction(account.type, account.address, txComposer.getTx())
 
     return {
       fee: satoshisToNovo(txComposer.getUnspentValue()),
