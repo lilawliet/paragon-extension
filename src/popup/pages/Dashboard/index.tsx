@@ -128,6 +128,8 @@ const Dashboard = () => {
           navigate('/welcome')
         }
       }
+      let account = await wallet.getCurrentAccount()
+      setCurrentAddress(account.address)
     })()
   }, [])
 
