@@ -3,14 +3,13 @@ import { useAppDispatch } from '@/common/storages/hooks'
 import { changeAccount } from '@/common/storages/stores/popup/slice'
 import { formatAddr } from '@/common/utils'
 import { useWallet } from '@/ui/utils'
-import { CheckOutlined, RightOutlined } from '@ant-design/icons'
-import { Button, Input } from 'antd'
+import { CheckOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
+import BigNumber from 'bignumber.js'
+import VirtualList from 'rc-virtual-list'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import VirtualList from 'rc-virtual-list'
-
 import { Status } from '.'
-import BigNumber from 'bignumber.js'
 
 interface MyItemProps {
   index: number
@@ -28,8 +27,7 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         setCurrency(index)
-      }}
-    >
+      }}>
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName ? account.alianName : account.brandName} </span>
@@ -155,7 +153,7 @@ export default ({ setStatus }: Props) => {
       <VirtualList
         data={accountsList}
         data-id="list"
-        height={372}
+        height={330}
         itemHeight={20}
         itemKey="id"
         // disabled={animating}
@@ -174,8 +172,7 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">Add New Account</div>
       </Button>
     </div>

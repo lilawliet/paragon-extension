@@ -1,19 +1,19 @@
-import { Button, Divider, Input, Layout, Statistic } from 'antd'
-import { useTranslation } from 'react-i18next'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import { ArrowLeftOutlined } from '@ant-design/icons'
-import CHeader from '@/popup/components/CHeader'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import AccountSwitch from './Switch'
-import AccountAdd from './Add'
-import AccountCreate from './Create'
-import AccountImport from './Import'
-import { useWallet } from '@/ui/utils'
-import { BigNumber } from 'bignumber.js'
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
 import { getCurrentAccount } from '@/common/storages/stores/popup/slice'
+import CHeader from '@/popup/components/CHeader'
+import { useWallet } from '@/ui/utils'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { Button, Layout } from 'antd'
+import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { BigNumber } from 'bignumber.js'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import AccountAdd from './Add'
+import AccountCreate from './Create'
+import AccountImport from './Import'
+import AccountSwitch from './Switch'
 
 export type Status = 'switch' | 'add' | 'import' | 'create'
 
@@ -109,16 +109,14 @@ const SendIndex = () => {
           backgroundColor: '#1C1919',
           textAlign: 'center',
           width: '100%'
-        }}
-      >
+        }}>
         <Button
           size="large"
           type="default"
           className="box w440"
           onClick={(e) => {
             statusBack()
-          }}
-        >
+          }}>
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back
