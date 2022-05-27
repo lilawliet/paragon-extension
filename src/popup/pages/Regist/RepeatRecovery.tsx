@@ -9,9 +9,9 @@ const RepeatRecovery = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const tmp = 'venue tattoo cloth cash learn diary add hurry success actress case lobster'
-  const [keys, setKeys] = useState<Array<string>>(tmp.split(' '))
-  // const [keys, setKeys] = useState<Array<string>>(new Array(12).fill(''))
+  // const tmp = 'venue tattoo cloth cash learn diary add hurry success actress case lobster'
+  // const [keys, setKeys] = useState<Array<string>>(tmp.split(' '))
+  const [keys, setKeys] = useState<Array<string>>(new Array(12).fill(''))
   const [active, setActive] = useState(999)
   const [hover, setHover] = useState(999)
   const [disabled, setDisabled] = useState(true)
@@ -64,8 +64,7 @@ const RepeatRecovery = () => {
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 
                                     ${hover == index ? ' border-white border-opacity-40 text-white' : ''} 
-                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}
-              >
+                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}>
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}

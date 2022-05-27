@@ -38,7 +38,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
       <div className="w-15 h-15">
         <img className="w-full" src={'./images/Novo.svg'} alt="" />
       </div>
-      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default">
+      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default hover">
         <Input
           className="font-semibold text-white p0"
           bordered={false}
@@ -55,7 +55,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
           <span className="font-semibold text-white">{satoshisToNovo(balance.amount)}</span> Novo
         </span>
       </div>
-      <div className="flex items-center w-full p-5 h-15_5 box default">
+      <div className="flex items-center w-full p-5 h-15_5 box default hover">
         <Input
           className="font-semibold text-white p0"
           bordered={false}
