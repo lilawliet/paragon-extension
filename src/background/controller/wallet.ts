@@ -49,26 +49,11 @@ export class WalletController extends BaseController {
     await preferenceService.changeInitAlianNameStatus()
     const contacts = await this.listContact()
     const keyrings = await keyringService.getAllTypedAccounts()
-    const walletConnectKeyrings = keyrings.filter((item) => item.type === 'WalletConnect')
     const catergoryGroupAccount = keyrings.map((item) => ({
       type: item.type,
       accounts: item.accounts
     }))
-    let walletConnectList: DisplayedKeryring['accounts'] = []
-    for (let i = 0; i < walletConnectKeyrings.length; i++) {
-      const keyring = walletConnectKeyrings[i]
-      walletConnectList = [...walletConnectList, ...keyring.accounts]
-    }
-    const groupedWalletConnectList = groupBy(walletConnectList, 'brandName')
     if (keyrings.length > 0) {
-      Object.keys(groupedWalletConnectList).forEach((key) => {
-        groupedWalletConnectList[key].map((acc, index) => {
-          if (contacts.find((contact) => contact.address == acc.address)) {
-            return
-          }
-          this.updateAlianName(acc?.address, `UNKOWN ${index + 1}`)
-        })
-      })
       const catergories = groupBy(
         catergoryGroupAccount.filter((group) => group.type !== 'WalletConnect'),
         'type'
@@ -83,11 +68,13 @@ export class WalletController extends BaseController {
           )
         )
         .map((item) => item.flat(1))
+      console.log(result, 'heiheihei1')
       result.forEach((group) =>
         group.forEach((acc, index) => {
           this.updateAlianName(acc?.address, `${BRAND_ALIAN_TYPE_TEXT[acc?.type]} ${index + 1}`)
         })
       )
+      console.log(result, 'heiheihei2')
     }
     if (contacts.length !== 0 && keyrings.length !== 0) {
       const allAccounts = keyrings.map((item) => item.accounts).flat()
@@ -99,7 +86,7 @@ export class WalletController extends BaseController {
   }
 
   unlock = async (password: string) => {
-    const alianNameInited = await preferenceService.getInitAlianNameStatus()
+    const alianNameInited = preferenceService.getInitAlianNameStatus()
     const alianNames = contactBookService.listAlias()
     await keyringService.submitPassword(password)
     sessionService.broadcastEvent('unlock')
@@ -476,10 +463,13 @@ export class WalletController extends BaseController {
       throw new Error('the current account is empty')
     }
 
-    const _account = {
+    const alianName = this.getAlianName(account)
+    const _account: Account = {
       address: account,
       type: keyring.type,
-      brandName: keyring.type
+      brandName: keyring.type,
+      alianName,
+      index
     }
     preferenceService.setCurrentAccount(_account)
 
@@ -511,7 +501,7 @@ export class WalletController extends BaseController {
   }
 
   getInitAlianNameStatus = () => {
-    preferenceService.getInitAlianNameStatus()
+    return preferenceService.getInitAlianNameStatus()
   }
 
   updateInitAlianNameStatus = () => {
@@ -572,6 +562,15 @@ export class WalletController extends BaseController {
   pushTx = async (rawtx: string) => {
     const txid = await this.openapi.pushTx(rawtx)
     return txid
+  }
+
+  getAccounts = async () => {
+    let accounts: Account[] = await keyringService.getAllVisibleAccountsArray()
+    accounts.forEach((v) => {
+      v.alianName = this.getAlianName(v.address)
+    })
+
+    return accounts
   }
 }
 

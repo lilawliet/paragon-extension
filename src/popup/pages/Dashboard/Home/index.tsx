@@ -17,6 +17,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box soft-black bg-opacity-20 w340">
         <AccountSelect
+          current={current}
           accountsList={accountsList}
           handleOnCancel={function (): void {
             throw new Error('Function not implemented.')
@@ -33,8 +34,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
-          }}
-        >
+          }}>
           <span>
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
@@ -44,8 +44,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate('/send/index')
-          }}
-        >
+          }}>
           <span>
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>

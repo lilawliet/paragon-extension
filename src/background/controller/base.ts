@@ -24,7 +24,7 @@ class BaseController {
     return preferenceService.getCurrentAccount() || null
   }
 
-  getAccounts = () => {
+  getAccounts = (): Promise<Account[]> => {
     return keyringService.getAllVisibleAccountsArray()
   }
 }

@@ -55,6 +55,7 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
         <AccountSelect
+          current={current}
           accountsList={accountsList}
           handleOnCancel={function (): void {
             throw new Error('Function not implemented.')

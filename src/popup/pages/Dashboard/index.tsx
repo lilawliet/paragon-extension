@@ -1,7 +1,8 @@
 import { NovoBalance, TxHistoryItem } from '@/background/service/openapi'
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { fetchCurrentAccount, getCurrentAccount, getPanel } from '@/common/storages/stores/popup/slice'
+import { fetchCurrentAccount, getPanel } from '@/common/storages/stores/popup/slice'
+import eventBus from '@/eventBus'
 import CFooter from '@/popup/components/CFooter'
 import CHeader from '@/popup/components/CHeader'
 import { useWallet } from '@/ui/utils'
@@ -33,8 +34,6 @@ const Dashboard = () => {
   const { t } = useTranslation()
   const wallet = useWallet()
   const navigate = useNavigate()
-  const currentAccount = useAppSelector(getCurrentAccount)
-
   const panel = useAppSelector(getPanel)
   const dispatch = useAppDispatch()
 
@@ -48,7 +47,8 @@ const Dashboard = () => {
   const [startEdit, setStartEdit] = useState(false)
   const [alianName, setAlianName] = useState<string>('')
   const [displayName, setDisplayName] = useState<string>('')
-  const [currentAddress, setCurrentAddress] = useState('')
+
+  const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
 
   const balanceList = async (accounts) => {
     return await Promise.all<Account>(
@@ -74,29 +74,35 @@ const Dashboard = () => {
     }[]
   >([])
   const loadAccountAssets = async () => {
-    const _res = await wallet.listChainAssets(currentAddress)
-    setAccountAssets(_res)
+    if (currentAccount) {
+      const _res = await wallet.listChainAssets(currentAccount?.address)
+      setAccountAssets(_res)
+    }
   }
 
   const [accountBalance, setAccountBalance] = useState<NovoBalance>({ amount: 0, pending_amount: 0, confirm_amount: 0, usd_value: 0 })
   const loadAccountBalance = async () => {
-    const _res = await wallet.getAddressBalance(currentAddress)
-    setAccountBalance(_res)
+    if (currentAccount) {
+      const _res = await wallet.getAddressBalance(currentAccount?.address)
+      setAccountBalance(_res)
+    }
   }
 
   const [accountHistory, setAccountHistory] = useState<TxHistoryItem[]>([])
   const loadAccountHistory = async () => {
-    const _res = await wallet.getTransactionHistory(currentAddress)
-    setAccountHistory(_res)
+    if (currentAccount) {
+      const _res = await wallet.getTransactionHistory(currentAccount.address)
+      setAccountHistory(_res)
+    }
   }
 
   useEffect(() => {
-    if (currentAddress) {
+    if (currentAccount) {
       loadAccountAssets()
       loadAccountBalance()
       loadAccountHistory()
     }
-  }, [currentAddress])
+  }, [currentAccount])
 
   const getAllKeyrings = async () => {
     setLoadingAddress(true)
@@ -129,17 +135,30 @@ const Dashboard = () => {
   useEffect(() => {
     ;(async () => {
       await getAllKeyrings()
-      if (!currentAccount) {
-        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
-        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
-          // pass
-        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
-          navigate('/welcome')
+      const account = await wallet.getCurrentAccount()
+      if (account) {
+        setCurrentAccount(account)
+      } else {
+        if (!account) {
+          const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
+          if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
+            // pass
+          } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
+            navigate('/welcome')
+          }
         }
       }
-      const account = await wallet.getCurrentAccount()
-      setCurrentAddress(account.address)
     })()
+
+    const accountChangeHandler = (account: Account) => {
+      if (account && account.address) {
+        setCurrentAccount(account)
+      }
+    }
+    eventBus.addEventListener('accountsChanged', accountChangeHandler)
+    return () => {
+      eventBus.removeEventListener('accountsChanged', accountChangeHandler)
+    }
   }, [])
 
   return (
