@@ -22,16 +22,6 @@ const CreatePassword = () => {
   const [disabled, setDisabled] = useState(true)
   const [active, setActive] = useState('')
 
-  // const init = async () => {
-  //   if ((await wallet.isBooted()) && !(await wallet.isUnlocked())) {
-  //     navigate('/login');
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   init();
-  // }, []);
-
   message.config({
     maxCount: 1
   })

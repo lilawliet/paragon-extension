@@ -1,7 +1,6 @@
 import { Account } from '@/background/service/preference'
 import { WalletController } from '@/ui/utils'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { useAppDispatch } from '../../hooks'
 import { AppThunk, RootState } from '../index'
 
 export type Panel = 'home' | 'nft' | 'transaction' | 'settings'

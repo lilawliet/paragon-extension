@@ -113,6 +113,7 @@ const Dashboard = () => {
       const withBalanceList = result.sort((a, b) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
       })
+      console.log(withBalanceList)
       setAccountsList(withBalanceList)
     }
   }

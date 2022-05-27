@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { setAlianName } from '@/common/storages/stores/account/slice'
 import { fetchCurrentAccount, getCurrentAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
@@ -167,7 +166,7 @@ export default ({ current }: AccountsProps) => {
           </div>
         </div>
 
-        <div className="w-full text-center text-soft-white mt-2_5">({'addressaddressaddress'})</div>
+        <div className="w-full text-center text-soft-white mt-2_5">( {currentAccount?.address} )</div>
       </div>
       <div className="h-125 ">
         <List>

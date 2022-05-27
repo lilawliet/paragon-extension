@@ -94,13 +94,13 @@ const SendIndex = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         {status == 'switch' ? (
-          <AccountSwitch account={current} setStatus={setStatus} />
+          <AccountSwitch setStatus={setStatus} />
         ) : status == 'add' ? (
-          <AccountAdd account={current} setStatus={setStatus} />
+          <AccountAdd setStatus={setStatus} />
         ) : status == 'import' ? (
-          <AccountImport account={current} setStatus={setStatus} />
+          <AccountImport setStatus={setStatus} />
         ) : status == 'create' ? (
-          <AccountCreate account={current} setStatus={setStatus} />
+          <AccountCreate setStatus={setStatus} />
         ) : (
           <div>error</div>
         )}

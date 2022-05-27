@@ -2,15 +2,13 @@ import { RightOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
-import { Account, Status } from './index'
+import { Status } from '.'
 
 interface Props {
-  account: Account
-  setAccount(account: Account): void
   setStatus(status: Status): void
 }
 
-export default ({ account, setAccount, setStatus }: Props) => {
+export default ({ setStatus }: Props) => {
   const navigate = useNavigate()
 
   const verify = () => {

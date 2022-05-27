@@ -14,5 +14,8 @@
     },
     "Unlock": {
       "message": "解锁"
+    },
+    "Successfully__created": {
+      "message": "创建成功"
     }
 }

@@ -1,4 +1,6 @@
 import { Account } from '@/background/service/preference'
+import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
+import { fetchCurrentAccount, getCurrentAccount, setCurrentAccount } from '@/common/storages/stores/popup/slice'
 import { formatAddr } from '@/common/utils'
 import { useWallet } from '@/ui/utils'
 import { CheckOutlined, RightOutlined } from '@ant-design/icons'
@@ -7,19 +9,21 @@ import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Status } from './index'
+import { Status } from '.'
 
 interface Props {
-  account: Account
-  setAccount(account: Account): void
   setStatus(status: Status): void
 }
 
-export default ({ account, setAccount, setStatus }: Props) => {
-  const [currency, setCurrency] = useState(0)
+export default ({ setStatus }: Props) => {
   const wallet = useWallet()
+  const currentAccount = useAppSelector(getCurrentAccount)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
+  const [currency, setCurrency] = useState(0)
   const [accountsList, setAccountsList] = useState<Account[]>([])
+
 
   const balanceList = async (accounts) => {
     return await Promise.all<Account>(
@@ -30,7 +34,7 @@ export default ({ account, setAccount, setStatus }: Props) => {
         }
         return {
           ...item,
-          balance: balance?.total_usd_value || 0
+          balance: balance?.amount || 0
         }
       })
     )
@@ -62,14 +66,29 @@ export default ({ account, setAccount, setStatus }: Props) => {
   }
 
   useEffect(() => {
+    ;(async () => {
+      if (!currentAccount) {
+        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
+        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
+          // pass
+        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
+          navigate('/welcome')
+        }
+      }
+    })()
+
     getAllKeyrings().then(() => {
       accountsList.map((_account, index) => {
-        if (account == _account) {
+        if (currentAccount && currentAccount == _account) {
           setCurrency(index)
         }
       })
     })
   }, [])
+
+  useEffect(() => {
+    dispatch(setCurrentAccount({ account: accountsList[currency], wallet }))
+  }, [currency])
 
   const verify = () => {
     // to verify
