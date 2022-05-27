@@ -243,7 +243,8 @@ export class WalletController extends BaseController {
   importPrivateKey = async (data: string) => {
     const error = new Error(i18n.t('the private key is invalid'))
     try {
-      if (!novo.PrivateKey.isValid(data)) {
+      let key = new novo.PrivateKey(data)
+      if (key.toString() != data) {
         throw error
       }
     } catch {
@@ -565,7 +566,7 @@ export class WalletController extends BaseController {
   }
 
   getAccounts = async () => {
-    let accounts: Account[] = await keyringService.getAllVisibleAccountsArray()
+    const accounts: Account[] = await keyringService.getAllVisibleAccountsArray()
     accounts.forEach((v) => {
       v.alianName = this.getAlianName(v.address)
     })

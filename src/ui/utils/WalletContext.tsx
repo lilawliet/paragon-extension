@@ -44,7 +44,7 @@ export type WalletController = {
   clearKeyrings(): Promise<void>
   getPrivateKey(password: string, account: { address: string; type: string }): Promise<string>
   getMnemonics(password: string): Promise<string>
-  importPrivateKey(data: string): Promise<{ address: string; type: string }[]>
+  importPrivateKey(data: string): Promise<Account[]>
   getPreMnemonics(): Promise<any>
   generatePreMnemonic(): Promise<string>
   removePreMnemonics(): void

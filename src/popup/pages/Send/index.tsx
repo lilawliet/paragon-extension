@@ -1,6 +1,6 @@
 import { NovoBalance } from '@/background/service/openapi'
 import CHeader from '@/popup/components/CHeader'
-import { sleep, useWallet } from '@/ui/utils'
+import { isValidAddress, sleep, useWallet } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Layout } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
@@ -40,7 +40,7 @@ const SendIndex = () => {
   })
 
   const [status, setStatus] = useState<Status>('create')
-
+  const [error, setError] = useState('')
   useEffect(() => {
     //todo
   }, [status])
@@ -70,13 +70,22 @@ const SendIndex = () => {
   }, [ref.current.rawtx])
 
   useEffect(() => {
-    if (!toAddress) {
+    setError('')
+    if (!isValidAddress(toAddress)) {
       return
     }
-    if (toAmount <= 0 || toAmount > balance.amount) {
+    if (toAmount <= 0 || toAmount > balance.amount / 10000) {
       return
     }
     const run = async () => {
+      if (!isValidAddress(toAddress)) {
+        setError('Invalid address')
+        return
+      }
+      if (toAmount <= 0 || toAmount > balance.amount / 10000) {
+        setError('Invalid amount')
+        return
+      }
       const { fee, rawtx } = await wallet.sendNovo({ to: toAddress, amount: toAmount })
       setFee(fee)
       ref.current.rawtx = rawtx
@@ -92,7 +101,18 @@ const SendIndex = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         {status == 'create' ? (
-          <SendCreate transaction={ref.current} balance={balance} fee={fee} setToAddress={setToAddress} setToAmount={setToAmount} setStatus={setStatus} />
+          <SendCreate
+            transaction={ref.current}
+            balance={balance}
+            fee={fee}
+            setToAddress={setToAddress}
+            setToAmount={setToAmount}
+            setStatus={setStatus}
+            toAddress={toAddress}
+            toAmount={toAmount}
+            setError={setError}
+            error={error}
+          />
         ) : status == 'confirm' ? (
           <SendConfirm transaction={ref.current} fromAddress={fromAddress} toAddress={toAddress} toAmount={toAmount} fee={fee} setStatus={setStatus} sendTx={sendTx} />
         ) : status == 'sending' ? (
@@ -110,16 +130,20 @@ const SendIndex = () => {
             backgroundColor: '#1C1919',
             textAlign: 'center',
             width: '100%'
-          }}
-        >
+          }}>
           <Button
             size="large"
             type="default"
             className="box w440"
             onClick={(e) => {
-              window.history.go(-1)
-            }}
-          >
+              if (status == 'create') {
+                window.history.go(-1)
+              } else if (status == 'confirm') {
+                setStatus('create')
+              } else if (status == 'success') {
+                window.history.go(-1)
+              }
+            }}>
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
               &nbsp;Back
