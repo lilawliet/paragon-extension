@@ -12,7 +12,7 @@ export type WalletController = {
   }
 
   boot(password: string): Promise<void>
-  isBooted(): void
+  isBooted(): boolean
   verifyPassword(password: string): Promise<void>
 
   unlock(password: string): Promise<void>
