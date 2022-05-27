@@ -71,37 +71,39 @@ export default ({ current }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
-  const currentAccount = useAppSelector(getCurrentAccount)
+  // const currentAccount = useAppSelector(getCurrentAccount)
   const [editable, setEditable] = useState(false)
+  const [reflesh, setReflesh ] = useState(false)
 
   const dispatch = useAppDispatch()
   const addressInput = useRef<any>(null)
 
   const handleChangeAlianName = () => {
-    setEditable(!editable)
+    setEditable(true)
     //todo
   }
+  // useEffect(() => {
+  //   ;(async () => {
+  //     if (!currentAccount) {
+  //       const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
+  //       if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
+  //         // pass
+  //         setReflesh(true)
+  //       } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
+  //         navigate('/welcome')
+  //       }
+  //     }
+  //   })()
+  // }, [])
 
-  // await wallet.updateAlianName(
-  //   account[0]?.toLowerCase(),
-  //   `${BRAND_ALIAN_TYPE_TEXT[KEYRING_CLASS.MNEMONIC]} ${
-  //     mnemonLengh + 1
-  //   }`
-  // );
   useEffect(() => {
-    ;(async () => {
-      if (!currentAccount) {
-        const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
-        if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
-          // pass
-        } else if (fetchCurrentAccount.rejected.match(fetchCurrentAccountAction)) {
-          navigate('/welcome')
-        }
-      }
-    })()
-  }, [])
+    if(reflesh) {
+      setName(alianName)
+    }
+  }, [setReflesh])
 
-  const name = useMemo(() => (currentAccount?.alianName ? currentAccount.alianName : currentAccount?.brandName ? currentAccount.brandName : ''), [currentAccount])
+  const alianName = useMemo(() => (current?.alianName ? current.alianName : current?.brandName ? current.brandName : ''), [current])
+  const [name, setName] = useState(alianName)
 
   useEffect(() => {
     if (editable) {
@@ -119,14 +121,15 @@ export default ({ current }: AccountsProps) => {
   }
 
   const handleOnBlur = async (e) => {
-    if (currentAccount) {
+    if (current) {
       dispatch(
         updateAlianName({
           wallet,
-          address: currentAccount.address,
+          address: current.address,
           alianName: e.target.value
         })
       )
+      setName(e.target.value)
       setEditable(false)
     }
   }
@@ -134,7 +137,10 @@ export default ({ current }: AccountsProps) => {
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
-        <div className="grid items-center grid-cols-6 p-5 mt-5 h-15_5 box default hover w380">
+        <div className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${editable? 'bg-primary-active border-opacity-60': 'bg-soft-black border-opacity-20'}`}
+            onClick={(e) => {
+              handleChangeAlianName()
+            }}>
           {editable ? (
             <Input
               ref={addressInput}
@@ -149,24 +155,18 @@ export default ({ current }: AccountsProps) => {
           ) : (
             <span
               className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60"
-              onClick={(e) => {
-                navigate('/settings/account')
-              }}
             >
               {name}
             </span>
           )}
           <div
-            className="flex items-center justify-center cursor-pointer opacity-60 hover:opacity-100"
-            onClick={(e) => {
-              handleChangeAlianName()
-            }}
+            className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable? 'opacity-100' : 'opacity-60'}`}
           >
             <EditOutlined />
           </div>
         </div>
 
-        <div className="w-full text-center text-soft-white mt-2_5">( {currentAccount?.address} )</div>
+        <div className="w-full text-center text-soft-white mt-2_5">( {current?.address} )</div>
       </div>
       <div className="h-125 ">
         <List>

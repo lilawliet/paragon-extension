@@ -33,14 +33,14 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = (
       key={index}
       size="large"
       type="default"
-      className="p-5 box w-115 default mb-3_75 btn-89"
+      className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         setCurrency(index)
       }}
     >
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
-          <span>{account.brandName} </span>
+          <span>{account.alianName ? account.alianName : account.brandName} </span>
           <span className="font-normal opacity-60">({formatAddr(account.address)})</span>
         </div>
         {currency == index ? <CheckOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
@@ -121,6 +121,12 @@ export default ({ setStatus }: Props) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
       })
       setAccountsList(withBalanceList)
+      
+      withBalanceList.map((_account, index) => {
+        if (currentAccount && currentAccount.address == _account.address) {
+          setCurrency(index)
+        }
+      })
     }
   }
 
@@ -134,15 +140,9 @@ export default ({ setStatus }: Props) => {
           navigate('/welcome')
         }
       }
+      await getAllKeyrings()
     })()
 
-    getAllKeyrings().then(() => {
-      accountsList.map((_account, index) => {
-        if (currentAccount && currentAccount == _account) {
-          setCurrency(index)
-        }
-      })
-    })
   }, [])
 
   useEffect(() => {

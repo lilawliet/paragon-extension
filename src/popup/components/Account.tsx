@@ -5,6 +5,7 @@ import { useWallet } from '@/ui/utils'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 interface AccountSelectDrawerProps {
   current?: Account | null
@@ -18,11 +19,18 @@ interface AccountSelectDrawerProps {
 const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading = false }: AccountSelectDrawerProps) => {
   const { t } = useTranslation()
   const wallet = useWallet()
+  const navigate = useNavigate()
   const { Option } = Select
   const [selected, setSelected] = useState(accountsList?.findIndex((v) => v.address == current?.address))
   const dispatch = useAppDispatch()
 
+  const handleOnClick = (e) => {
+    e.stopPropagation()
+    navigate('/settings/account');
+  }
+
   const handleOnChange = (index: number) => {
+    
     if (accountsList && accountsList[index]) {
       setSelected(index)
       dispatch(setCurrentAccount({ account: accountsList[index], wallet }))
@@ -43,7 +51,7 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
   }, [current])
 
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full" onClick={e=>{handleOnClick(e)}}>
       <span>
         <img src="./images/user-solid.svg" alt="" />
       </span>
