@@ -28,6 +28,14 @@ export type WalletController = {
 
   getAddressBalance(address: string): Promise<NovoBalance>
   getAddressCacheBalance(address: string): NovoBalance
+  listChainAssets: (address: string) => Promise<
+    {
+      name: string
+      symbol: string
+      amount: number
+      value: string
+    }[]
+  >
 
   getLocale(): string
   setLocale(locale: string): void

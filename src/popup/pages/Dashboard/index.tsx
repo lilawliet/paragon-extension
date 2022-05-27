@@ -1,3 +1,4 @@
+import { NovoBalance } from '@/background/service/openapi'
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
 import { fetchCurrentAccount, getCurrentAccount, getPanel } from '@/common/storages/stores/popup/slice'
@@ -18,6 +19,13 @@ export interface AccountsProps {
   current: Account | null
   accountsList?: Account[]
   handleOnChange?(account: Account): void
+  accountAssets?: {
+    name: string
+    symbol: string
+    amount: number
+    value: string
+  }[]
+  accountBalance?: NovoBalance
 }
 
 const Dashboard = () => {
@@ -39,6 +47,7 @@ const Dashboard = () => {
   const [startEdit, setStartEdit] = useState(false)
   const [alianName, setAlianName] = useState<string>('')
   const [displayName, setDisplayName] = useState<string>('')
+  const [currentAddress, setCurrentAddress] = useState('')
 
   const balanceList = async (accounts) => {
     return await Promise.all<Account>(
@@ -54,6 +63,32 @@ const Dashboard = () => {
       })
     )
   }
+
+  const [accountAssets, setAccountAssets] = useState<
+    {
+      name: string
+      symbol: string
+      amount: number
+      value: string
+    }[]
+  >([])
+  const loadAccountAssets = async () => {
+    const _res = await wallet.listChainAssets(currentAddress)
+    setAccountAssets(_res)
+  }
+
+  const [accountBalance, setAccountBalance] = useState<NovoBalance>({ amount: 0, pending_amount: 0, confirm_amount: 0, usd_value: 0 })
+  const loadAccountBalance = async () => {
+    const _res = await wallet.getAddressBalance(currentAddress)
+    setAccountBalance(_res)
+  }
+
+  useEffect(() => {
+    if (currentAddress) {
+      loadAccountAssets()
+      loadAccountBalance()
+    }
+  }, [currentAddress])
 
   const getAllKeyrings = async () => {
     setLoadingAddress(true)
@@ -103,7 +138,7 @@ const Dashboard = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919', overflowY: 'auto' }}>
         {panel == 'home' ? (
-          <Home current={currentAccount} accountsList={accountsList} />
+          <Home current={currentAccount} accountsList={accountsList} accountAssets={accountAssets} accountBalance={accountBalance} />
         ) : panel == 'transaction' ? (
           <Transaction current={currentAccount} accountsList={accountsList} />
         ) : panel == 'settings' ? (
