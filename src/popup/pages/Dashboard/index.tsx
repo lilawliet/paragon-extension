@@ -1,4 +1,4 @@
-import { NovoBalance } from '@/background/service/openapi'
+import { NovoBalance, TxHistoryItem } from '@/background/service/openapi'
 import { Account } from '@/background/service/preference'
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
 import { fetchCurrentAccount, getCurrentAccount, getPanel } from '@/common/storages/stores/popup/slice'
@@ -26,6 +26,7 @@ export interface AccountsProps {
     value: string
   }[]
   accountBalance?: NovoBalance
+  accountHistory?: TxHistoryItem[]
 }
 
 const Dashboard = () => {
@@ -83,10 +84,17 @@ const Dashboard = () => {
     setAccountBalance(_res)
   }
 
+  const [accountHistory, setAccountHistory] = useState<TxHistoryItem[]>([])
+  const loadAccountHistory = async () => {
+    const _res = await wallet.getTransactionHistory(currentAddress)
+    setAccountHistory(_res)
+  }
+
   useEffect(() => {
     if (currentAddress) {
       loadAccountAssets()
       loadAccountBalance()
+      loadAccountHistory()
     }
   }, [currentAddress])
 
@@ -119,7 +127,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     ;(async () => {
-      getAllKeyrings()
+      await getAllKeyrings()
       if (!currentAccount) {
         const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
         if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
@@ -128,7 +136,7 @@ const Dashboard = () => {
           navigate('/welcome')
         }
       }
-      let account = await wallet.getCurrentAccount()
+      const account = await wallet.getCurrentAccount()
       setCurrentAddress(account.address)
     })()
   }, [])
@@ -142,7 +150,7 @@ const Dashboard = () => {
         {panel == 'home' ? (
           <Home current={currentAccount} accountsList={accountsList} accountAssets={accountAssets} accountBalance={accountBalance} />
         ) : panel == 'transaction' ? (
-          <Transaction current={currentAccount} accountsList={accountsList} />
+          <Transaction current={currentAccount} accountsList={accountsList} accountHistory={accountHistory} />
         ) : panel == 'settings' ? (
           <Settings current={currentAccount} />
         ) : (

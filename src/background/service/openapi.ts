@@ -222,58 +222,15 @@ export interface UserCollection {
 }
 
 export interface TxHistoryItem {
-  cate_id: string | null
-  chain: string
-  debt_liquidated: null
-  id: string
-  other_addr: string
-  project_id: null | string
-  receives: {
+  txid: string
+  time: number
+  date: string
+  assets_transferred: {
     amount: number
-    from_addr: string
-    token_id: string
+    symbol: string
   }[]
-  sends: {
-    amount: number
-    to_addr: string
-    token_id: string
-  }[]
-  time_at: number
-  token_approve: {
-    spender: string
-    token_id: string
-    value: number
-  } | null
-  tx: {
-    eth_gas_fee: number
-    from_addr: string
-    name: string
-    params: any[]
-    status: number
-    to_addr: string
-    usd_gas_fee: number
-    value: number
-  } | null
-}
-export interface TxHistoryResult {
-  cate_dict: Record<string, { id: string; name: string }>
-  history_list: TxHistoryItem[]
-  project_dict: Record<
-    string,
-    {
-      chain: string
-      id: string
-      logo_url: string
-      name: string
-    }
-  >
-  token_dict: Record<string, TokenItem>
-}
-
-export interface TxDisplayItem extends TxHistoryItem {
-  projectDict: TxHistoryResult['project_dict']
-  cateDict: TxHistoryResult['cate_dict']
-  tokenDict: TxHistoryResult['token_dict']
+  from_addrs: string[]
+  to_addrs: string[]
 }
 
 export interface GasResult {
@@ -569,15 +526,7 @@ export class OpenApiService {
     return data.result
   }
 
-  async getAddressRecentHistory(address: string): Promise<
-    {
-      txid: string
-      time: number
-      assets_transferred: { amount: string; symbol: string }[]
-      from_addrs: string[]
-      to_addrs: string[]
-    }[]
-  > {
+  async getAddressRecentHistory(address: string): Promise<TxHistoryItem[]> {
     const { status, data } = await this.request.get('/address/recent-history', {
       params: {
         address
