@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const wallet = useWallet()
   const [, resolveApproval] = useApproval()
 
@@ -22,23 +21,19 @@ const Login = () => {
     }
   })
 
-  const btnClick = () => {
-    // to create wallet
-    run(password)
-    // jump to dashboard
-    // navigate("/dashboard")
+  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if('Enter' == e.key){
+      btnClick()
+    }
   }
 
-  const verify = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // to verify
-    setPassword(e.target.value)
+  const btnClick = () => {
+    run(password)
   }
 
   useEffect(() => {
     if (password) {
-      // if (true) {
       setDisabled(false)
-      // }
     }
   }, [password])
 
@@ -52,7 +47,7 @@ const Login = () => {
         <div className="grid gap-5">
           <div className="text-2xl text-center text-white">Enter your password</div>
           <div>
-            <Input.Password placeholder="Password" onChange={verify} />
+            <Input.Password placeholder="Password" onChange={e=>setPassword(e.target.value)} onKeyUp={e=>handleOnKeyUp(e)}/>
           </div>
           <div>
             <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
