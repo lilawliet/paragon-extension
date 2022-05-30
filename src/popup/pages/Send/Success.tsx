@@ -10,13 +10,6 @@ interface Props {
 }
 
 export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
-  const verify = () => {
-    // to verify
-    setStatus('success')
-
-    // setStatus('success')
-  }
-
   const [result, setResult] = useState('sending')
 
   const sending = () => {
@@ -34,6 +27,7 @@ export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
 
   useEffect(() => {
     if (result == 'sending') {
+      // do something
     }
     // sending
     else if (result == 'success') {

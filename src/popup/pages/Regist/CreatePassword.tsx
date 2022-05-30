@@ -68,7 +68,7 @@ const CreatePassword = () => {
         }
       }
     }
-    
+
     setStatus1('')
     setStatus2('')
   }, [password, password2])
@@ -97,7 +97,7 @@ const CreatePassword = () => {
             verify(e.target.value)
           }}
         />
-        <div className='mt-2_5'>
+        <div className="mt-2_5">
           <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
             {t('Continue')}
           </Button>

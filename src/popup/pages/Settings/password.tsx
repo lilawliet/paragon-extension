@@ -37,40 +37,34 @@ export default () => {
         if (password !== password2) {
           message.warning('Entered passwords differ')
           setStatus2('error')
-          return 
+          return
         }
         setStatus2('')
       }
 
-      if( passwordC ){
+      if (passwordC) {
         setDisabled(false)
       }
     }
-    
   }, [passwordC, password, password2])
 
   const handleOnBlur = (e, type: string) => {
-    switch(type) {
+    switch (type) {
       case 'password':
         setPassword(e.target.value)
-        break;
+        break
       case 'password2':
         setPassword2(e.target.value)
-        break;
+        break
       case 'passwordC':
         setPasswordC(e.target.value)
-        break;
+        break
     }
   }
 
-  const verify = ()=>{
-    run(passwordC, password)
-  }
-
-
   const [run, loading] = useWalletRequest(wallet.changePassword, {
     onSuccess() {
-      message.success(t('Success'), undefined, ()=>{
+      message.success(t('Success'), undefined, () => {
         navigate('/dashboard')
       })
     },
@@ -78,7 +72,11 @@ export default () => {
       message.error(err.message)
     }
   })
-  
+
+  const verify = () => {
+    run(passwordC, password)
+  }
+
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -87,39 +85,39 @@ export default () => {
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
           <div className="flex items-center px-2 text-2xl h-13">Change Password</div>
-            <Input.Password
-              status={statusC}
-              className="font-semibold text-white mt-1_25 box focus:active"
-              placeholder="Current Password"
-              onBlur={(e) => {
-                handleOnBlur(e, 'passwordC')
-              }}
-              onPressEnter={(e) => {
-                handleOnBlur(e, 'passwordC')
-              }}
-            />
-            <Input.Password
-              status={status1}
-              className="font-semibold text-white mt-1_25 box focus:active"
-              placeholder="New Password"
-              onBlur={(e) => {
-                handleOnBlur(e, 'password')
-              }}
-              onPressEnter={(e) => {
-                handleOnBlur(e, 'password')
-              }}
-            />
-            <Input.Password
-              status={status2}
-              className="font-semibold text-white mt-1_25 box focus:active"
-              placeholder="Confirm Password"
-              onBlur={(e) => {
-                handleOnBlur(e, 'password2')
-              }}
-              onPressEnter={(e) => {
-                handleOnBlur(e, 'password2')
-              }}
-            />
+          <Input.Password
+            status={statusC}
+            className="font-semibold text-white mt-1_25 box focus:active"
+            placeholder="Current Password"
+            onBlur={(e) => {
+              handleOnBlur(e, 'passwordC')
+            }}
+            onPressEnter={(e) => {
+              handleOnBlur(e, 'passwordC')
+            }}
+          />
+          <Input.Password
+            status={status1}
+            className="font-semibold text-white mt-1_25 box focus:active"
+            placeholder="New Password"
+            onBlur={(e) => {
+              handleOnBlur(e, 'password')
+            }}
+            onPressEnter={(e) => {
+              handleOnBlur(e, 'password')
+            }}
+          />
+          <Input.Password
+            status={status2}
+            className="font-semibold text-white mt-1_25 box focus:active"
+            placeholder="Confirm Password"
+            onBlur={(e) => {
+              handleOnBlur(e, 'password2')
+            }}
+            onPressEnter={(e) => {
+              handleOnBlur(e, 'password2')
+            }}
+          />
           <Button
             disabled={disabled}
             size="large"
@@ -127,7 +125,8 @@ export default () => {
             className="box w380"
             onClick={() => {
               verify()
-            }}>
+            }}
+          >
             <div className="flex items-center justify-center text-lg">Change Password</div>
           </Button>
         </div>
@@ -139,7 +138,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back

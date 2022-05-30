@@ -38,7 +38,7 @@ const RepeatRecovery = () => {
   const handleEventPaste = (event, index: number) => {
     const copyText = event.clipboardData?.getData('text/plain')
     const textArr = copyText.trim().split(' ')
-    let newKeys = [...keys]
+    const newKeys = [...keys]
     if (textArr) {
       for (let i = 0; i < keys.length - index; i++) {
         if (textArr.length == i) {
@@ -82,7 +82,8 @@ const RepeatRecovery = () => {
               <div
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 box hover
-                                    ${active == index ? ' active' : ''}`}>
+                                    ${active == index ? ' active' : ''}`}
+              >
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}

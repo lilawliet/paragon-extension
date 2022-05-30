@@ -24,19 +24,19 @@ export default ({ setStatus }: Props) => {
     }
   }
 
-  useEffect(()=>{
-    if(privateKey){
+  useEffect(() => {
+    if (privateKey) {
       setDisabled(false)
-      return 
+      return
     }
     setDisabled(true)
-  },[privateKey])
+  }, [privateKey])
 
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex flex-col items-center px-2 text-2xl">
         Import Private Key
-      <div className="text-base text-soft-white mt-2_5">Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase.</div>
+        <div className="text-base text-soft-white mt-2_5">Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase.</div>
       </div>
       <Input
         className="p-5 font-semibold text-white mt-1_25 h-15_5 box default"
@@ -45,9 +45,7 @@ export default ({ setStatus }: Props) => {
           setPrivateKey(e.target.value)
         }}
       />
-      {
-        inputError ? <div className="text-base text-error">{inputError}</div> : <></>
-      }
+      {inputError ? <div className="text-base text-error">{inputError}</div> : <></>}
       <Button
         disabled={disabled}
         size="large"
@@ -55,7 +53,8 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}>
+        }}
+      >
         <div className="flex items-center justify-center text-lg">Import Private Key</div>
       </Button>
     </div>

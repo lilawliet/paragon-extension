@@ -14,7 +14,7 @@ export default () => {
   const [currency, setCurrency] = useState('USD')
   useEffect(() => {
     ;(async () => {
-      let currency = await wallet.getCurrency()
+      const currency = await wallet.getCurrency()
       setCurrency(currency)
     })()
   }, [])
@@ -41,7 +41,8 @@ export default () => {
               className="box w-115 default"
               onClick={(e) => {
                 onBtnSetCurrency(v.symbol)
-              }}>
+              }}
+            >
               <div className="flex items-center justify-between text-base font-semibold">
                 <div className="flex-grow text-left">{`${v.name} (${v.symbol})`}</div>
                 {currency == v.symbol ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
@@ -57,7 +58,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back

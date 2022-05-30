@@ -4,7 +4,6 @@ import { Provider } from 'react-redux'
 import message from 'antd/lib/message'
 const AsyncMainRoute = lazy(() => import('./MainRoute'))
 
-
 message.config({
   maxCount: 1
 })

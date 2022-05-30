@@ -92,7 +92,7 @@ export default ({ current }: AccountsProps) => {
   const [currency, setCurrency] = useState('USD')
   useEffect(() => {
     ;(async () => {
-      let currency = await wallet.getCurrency()
+      const currency = await wallet.getCurrency()
       setCurrency(currency)
     })()
   }, [])
@@ -131,7 +131,8 @@ export default ({ current }: AccountsProps) => {
           }`}
           onClick={(e) => {
             handleChangeAlianName()
-          }}>
+          }}
+        >
           {editable ? (
             <Input
               ref={addressInput}
@@ -163,7 +164,8 @@ export default ({ current }: AccountsProps) => {
                 className={`mt-3_75 box w-115 default ${item.right ? 'btn-settings' : ''}`}
                 onClick={(e) => {
                   navigate(`/settings/${item.route}`)
-                }}>
+                }}
+              >
                 <div className="flex items-center justify-between font-semibold text-4_5">
                   <div className="flex flex-col text-left gap-2_5">
                     <span>{item.label}</span>

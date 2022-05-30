@@ -83,8 +83,6 @@ const SendIndex = () => {
     }
   }
 
-  useEffect(() => {}, [status])
-
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -109,14 +107,16 @@ const SendIndex = () => {
           backgroundColor: '#1C1919',
           textAlign: 'center',
           width: '100%'
-        }}>
+        }}
+      >
         <Button
           size="large"
           type="default"
           className="box w440"
           onClick={(e) => {
             statusBack()
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back

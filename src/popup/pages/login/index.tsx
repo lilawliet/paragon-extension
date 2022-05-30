@@ -20,14 +20,14 @@ const Login = () => {
     }
   })
 
+  const btnClick = () => {
+    run(password)
+  }
+
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if ('Enter' == e.key) {
       btnClick()
     }
-  }
-
-  const btnClick = () => {
-    run(password)
   }
 
   useEffect(() => {

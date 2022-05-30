@@ -52,7 +52,7 @@ export default ({ setStatus }: Props) => {
   }
 
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if('Enter' == e.key){
+    if ('Enter' == e.key) {
       handleOnClick()
     }
   }
@@ -74,7 +74,7 @@ export default ({ setStatus }: Props) => {
         onChange={(e) => {
           setAlianName(e.target.value)
         }}
-        onKeyUp={e=>handleOnKeyUp(e)}
+        onKeyUp={(e) => handleOnKeyUp(e)}
       />
       <Button
         size="large"

@@ -27,7 +27,8 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         setCurrency(index)
-      }}>
+      }}
+    >
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName ? account.alianName : account.brandName} </span>
@@ -172,7 +173,8 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}>
+        }}
+      >
         <div className="flex items-center justify-center text-lg">Add New Account</div>
       </Button>
     </div>

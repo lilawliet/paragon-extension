@@ -84,7 +84,8 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
         className="box w380"
         onClick={(e) => {
           verify()
-        }}>
+        }}
+      >
         <div className="flex items-center justify-center text-lg">Next</div>
       </Button>
     </div>

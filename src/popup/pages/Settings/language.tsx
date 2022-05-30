@@ -39,16 +39,16 @@ export default () => {
   const [lang, setLang] = useState('en')
 
   const handleSwitchLang = async (value: string) => {
-      await wallet.setLocale(value);
-      await addResourceBundle(value);
-      i18n.changeLanguage(value);
-      window.location.reload()
-  };
+    await wallet.setLocale(value)
+    await addResourceBundle(value)
+    i18n.changeLanguage(value)
+    window.location.reload()
+  }
 
   const init = async () => {
-    const locale = await wallet.getLocale();
-    setLang(locale);
-  };
+    const locale = await wallet.getLocale()
+    setLang(locale)
+  }
 
   // useEffect(() => {
   //   if(reload) {
@@ -57,8 +57,8 @@ export default () => {
   // }, [reload])
 
   useEffect(() => {
-    init();
-  }, []);
+    init()
+  }, [])
 
   return (
     <Layout className="h-full">
@@ -77,7 +77,8 @@ export default () => {
                 className="box w-115 default"
                 onClick={(e) => {
                   handleSwitchLang(item.value)
-                }}>
+                }}
+              >
                 <div className="flex items-center justify-between text-base font-semibold">
                   <div className="flex-grow text-left">{item.label}</div>
                   {item.value == lang ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
@@ -94,7 +95,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             &nbsp;Back
