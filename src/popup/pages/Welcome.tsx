@@ -1,7 +1,6 @@
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { Button } from 'antd'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,15 +10,6 @@ const Welcome = () => {
   const wallet = useWallet()
 
   const [newAccountMode, setNewAccountMode] = useGlobalState('newAccountMode')
-
-  useEffect(() => {
-    ;(async () => {
-      let hasVault = await wallet.hasVault()
-      if (hasVault) {
-        navigate('/login')
-      }
-    })()
-  }, [])
 
   return (
     <div

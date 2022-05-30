@@ -19,34 +19,37 @@ const RepeatRecovery = () => {
   const wallet = useWallet()
   const verify = async () => {
     const mnemonics = keys.join(' ')
-    const accounts = await wallet.createKeyringWithMnemonics(mnemonics).catch(()=>{
+    try {
+      const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
+      navigate('/dashboard', {
+        state: {
+          accounts,
+          title: t('Successfully created'),
+          editing: true,
+          importedAccount: true
+        }
+      })
+    } catch (e) {
+      console.log(mnemonics, e)
       message.error('mnemonic phrase is invalid')
-    })
-    navigate('/dashboard', {
-      state: {
-        accounts,
-        title: t('Successfully created'),
-        editing: true,
-        importedAccount: true
-      }
-    })
+    }
   }
 
-  const handleEventPaste = (event, index: number)=> {
+  const handleEventPaste = (event, index: number) => {
     const copyText = event.clipboardData?.getData('text/plain')
     const textArr = copyText.trim().split(' ')
     let newKeys = [...keys]
     if (textArr) {
-      for (let i=0; i < keys.length - index; i ++){
-        if (textArr.length == i){
+      for (let i = 0; i < keys.length - index; i++) {
+        if (textArr.length == i) {
           break
         }
         newKeys[index + i] = textArr[i]
       }
       setKeys(newKeys)
     }
-    
-    event.preventDefault();
+
+    event.preventDefault()
   }
 
   const onChange = (e: any, index: any) => {
@@ -57,7 +60,6 @@ const RepeatRecovery = () => {
 
   useEffect(() => {
     // to verify key
-    console.log('verify')
     setDisabled(
       keys.filter((key) => {
         return key == ''
@@ -87,7 +89,9 @@ const RepeatRecovery = () => {
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}
                   bordered={false}
                   value={_}
-                  onPaste={(e)=>{handleEventPaste(e, index)}}
+                  onPaste={(e) => {
+                    handleEventPaste(e, index)
+                  }}
                   onChange={(e) => {
                     onChange(e, index)
                   }}
