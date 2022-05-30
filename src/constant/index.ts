@@ -150,3 +150,12 @@ export const GASPRICE_RANGE = {
 
 export const COIN_NAME = 'Novo'
 export const COIN_SYMBOL = 'NOVO'
+
+export const CURRENCIES = [
+  { name: 'US Dollar', symbol: 'USD' },
+  { name: 'Euro', symbol: 'EUR' },
+  { name: 'Japanese Yen', symbol: 'JPY' },
+  { name: 'British Pound', symbol: 'GBP' },
+  { name: 'Swiss Franc', symbol: 'CHF' },
+  { name: 'Canadian Dollar', symbol: 'CAD' }
+]

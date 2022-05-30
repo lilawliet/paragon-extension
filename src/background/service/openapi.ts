@@ -9,16 +9,18 @@ interface OpenApiConfigValue {
   params?: string[]
 }
 
+export type ExchangeRate = {
+  EUR: number
+  JPY: number
+  GBP: number
+  CHF: number
+  CAD: number
+}
+
 interface OpenApiStore {
   host: string
-  config: {
-    exchange_rate: {
-      EUR: number
-      JPY: number
-      GBP: number
-      CHF: number
-      CAD: number
-    }
+  config?: {
+    exchange_rate: ExchangeRate
   }
 }
 
@@ -455,12 +457,15 @@ export class OpenApiService {
     return this.store.host
   }
 
+  getExchangeRate = () => {
+    return this.store.config?.exchange_rate
+  }
+
   init = async () => {
     this.store = await createPersistStore({
       name: 'openapi',
       template: {
-        host: INITIAL_OPENAPI_URL,
-        config: {}
+        host: INITIAL_OPENAPI_URL
       }
     })
 
@@ -509,13 +514,7 @@ export class OpenApiService {
   }
 
   async getWalletConfig(): Promise<{
-    exchange_rate: {
-      EUR: number
-      JPY: number
-      GBP: number
-      CHF: number
-      CAD: number
-    }
+    exchange_rate: ExchangeRate
   }> {
     const { status, data } = await this.request.get('/v1/wallet/config', {
       params: {}

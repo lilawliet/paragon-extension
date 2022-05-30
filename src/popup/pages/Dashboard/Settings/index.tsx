@@ -1,5 +1,6 @@
 import { useAppDispatch } from '@/common/storages/hooks'
 import { changeAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
+import { CURRENCIES } from '@/constant'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
@@ -88,6 +89,14 @@ export default ({ current }: AccountsProps) => {
     }
   }, [editable])
 
+  const [currency, setCurrency] = useState('USD')
+  useEffect(() => {
+    ;(async () => {
+      let currency = await wallet.getCurrency()
+      setCurrency(currency)
+    })()
+  }, [])
+
   const ContainerHeight = 500
   const ItemHeight = 90
 
@@ -105,8 +114,8 @@ export default ({ current }: AccountsProps) => {
           address: current.address,
           alianName: e.target.value
         })
-      ).then(()=>{
-        dispatch(changeAccount({ account: {...current, alianName: e.target.value }, wallet }))
+      ).then(() => {
+        dispatch(changeAccount({ account: { ...current, alianName: e.target.value }, wallet }))
       })
       setName(e.target.value)
       setEditable(false)
@@ -122,8 +131,7 @@ export default ({ current }: AccountsProps) => {
           }`}
           onClick={(e) => {
             handleChangeAlianName()
-          }}
-        >
+          }}>
           {editable ? (
             <Input
               ref={addressInput}
@@ -155,12 +163,11 @@ export default ({ current }: AccountsProps) => {
                 className={`mt-3_75 box w-115 default ${item.right ? 'btn-settings' : ''}`}
                 onClick={(e) => {
                   navigate(`/settings/${item.route}`)
-                }}
-              >
+                }}>
                 <div className="flex items-center justify-between font-semibold text-4_5">
                   <div className="flex flex-col text-left gap-2_5">
                     <span>{item.label}</span>
-                    <span className="font-normal opacity-60">{item.value}</span>
+                    <span className="font-normal opacity-60">{item.action == 'currency' ? CURRENCIES.find((v) => v.symbol == currency)?.name : item.value}</span>
                   </div>
                   <div className="flex-grow">{item.desc}</div>
                   {item.right ? <RightOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}

@@ -1,7 +1,7 @@
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook'
 import { DisplayedKeryring } from '@/background/service/keyring'
 import DisplayKeyring from '@/background/service/keyring/display'
-import { NovoBalance, TxHistoryItem } from '@/background/service/openapi'
+import { ExchangeRate, NovoBalance, TxHistoryItem } from '@/background/service/openapi'
 import { CacheState } from '@/background/service/pageStateCache'
 import { Account } from '@/background/service/preference'
 import * as novo from '@paragon/novocore-lib'
@@ -41,6 +41,11 @@ export type WalletController = {
 
   getLocale(): string
   setLocale(locale: string): void
+
+  getExchangeRate(): Promise<ExchangeRate>
+
+  getCurrency(): Promise<string>
+  setCurrency(currency: string): Promise<void>
 
   clearKeyrings(): Promise<void>
   getPrivateKey(password: string, account: { address: string; type: string }): Promise<string>

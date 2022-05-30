@@ -32,6 +32,7 @@ export interface PreferenceStore {
   initAlianNames: boolean
   currentVersion: string
   firstOpen: boolean
+  currency: string
 }
 
 const SUPPORT_LOCALES = ['en']
@@ -55,13 +56,18 @@ class PreferenceService {
         alianNames: {},
         initAlianNames: false,
         currentVersion: '0',
-        firstOpen: false
+        firstOpen: false,
+        currency: 'USD'
       }
     })
     if (!this.store.locale || this.store.locale !== defaultLang) {
       this.store.locale = defaultLang
     }
     i18n.changeLanguage(this.store.locale)
+
+    if (!this.store.currency) {
+      this.store.currency = 'USD'
+    }
 
     if (!this.store.initAlianNames) {
       this.store.initAlianNames = false
@@ -155,6 +161,14 @@ class PreferenceService {
   setLocale = (locale: string) => {
     this.store.locale = locale
     i18n.changeLanguage(locale)
+  }
+
+  getCurrency = () => {
+    return this.store.currency
+  }
+
+  setCurrency = (currency: string) => {
+    this.store.currency = currency
   }
 
   getWalletSavedList = () => {
