@@ -1,5 +1,7 @@
+import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { Button } from 'antd'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,6 +9,17 @@ const Welcome = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
+
+  const [newAccountMode, setNewAccountMode] = useGlobalState('newAccountMode')
+
+  useEffect(() => {
+    ;(async () => {
+      let hasVault = await wallet.hasVault()
+      if (hasVault) {
+        navigate('/login')
+      }
+    })()
+  }, [])
 
   return (
     <div
@@ -16,8 +29,7 @@ const Welcome = () => {
           // backgroundImage:
           //   'linear-gradient(0deg, #1c1919 0%, #000000 50%, #1c1919 90.78%)',
         }
-      }
-    >
+      }>
       <div className="flex flex-col items-center">
         <div className="flex justify-center mb-15 gap-x-4 w-70">
           <img className="select-none w-15 h-12_5" src="./images/Diamond.svg" />
@@ -37,15 +49,14 @@ const Welcome = () => {
                   }
                 })
               } else {
-                localStorage.setItem('welcome-to', '/create-recovery')
+                setNewAccountMode('create')
                 navigate('/create-password', {
                   state: {
                     create: true
                   }
                 })
               }
-            }}
-          >
+            }}>
             {t('Create new wallet')}
           </Button>
           <Button
@@ -61,15 +72,14 @@ const Welcome = () => {
                   }
                 })
               } else {
-                localStorage.setItem('welcome-to', '/repeat-recovery')
+                setNewAccountMode('import')
                 navigate('/create-password', {
                   state: {
                     create: true
                   }
                 })
               }
-            }}
-          >
+            }}>
             {t('I already have a wallet')}
           </Button>
         </div>

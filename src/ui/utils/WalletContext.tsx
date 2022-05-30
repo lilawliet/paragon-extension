@@ -12,7 +12,8 @@ export type WalletController = {
   }
 
   boot(password: string): Promise<void>
-  isBooted(): boolean
+  isBooted(): Promise<boolean>
+  hasVault(): Promise<boolean>
   verifyPassword(password: string): Promise<void>
   changePassword: (password: string, newPassword: string) => Promise<void>
   unlock(password: string): Promise<void>

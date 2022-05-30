@@ -155,7 +155,7 @@ export default ({ setStatus }: Props) => {
         data-id="list"
         height={330}
         itemHeight={20}
-        itemKey="id"
+        itemKey={(item) => item.address}
         // disabled={animating}
         ref={listRef}
         style={{

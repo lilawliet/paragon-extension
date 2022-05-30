@@ -11,7 +11,15 @@ interface OpenApiConfigValue {
 
 interface OpenApiStore {
   host: string
-  config: Record<string, OpenApiConfigValue>
+  config: {
+    exchange_rate: {
+      EUR: number
+      JPY: number
+      GBP: number
+      CHF: number
+      CAD: number
+    }
+  }
 }
 
 export interface Chain {
@@ -93,9 +101,9 @@ export interface Eip1559Tx {
 }
 
 export interface NovoBalance {
-  confirm_amount: number
-  pending_amount: number
-  amount: number
+  confirm_amount: string
+  pending_amount: string
+  amount: string
   usd_value: number
 }
 
@@ -221,16 +229,24 @@ export interface UserCollection {
   list: NFTItem[]
 }
 
+// export interface TxHistoryItem {
+//   txid: string
+//   time: number
+//   date: string
+//   assets_transferred: {
+//     amount: number
+//     symbol: string
+//   }[]
+//   from_addrs: string[]
+//   to_addrs: string[]
+// }
+
 export interface TxHistoryItem {
   txid: string
   time: number
   date: string
-  assets_transferred: {
-    amount: number
-    symbol: string
-  }[]
-  from_addrs: string[]
-  to_addrs: string[]
+  amount: string
+  symbol: string
 }
 
 export interface GasResult {
@@ -423,7 +439,7 @@ export class OpenApiService {
   request = rateLimit(
     axios.create({
       headers: {
-        'X-Client': 'Rabby',
+        'X-Client': 'Paragon',
         'X-Version': process.env.release!
       }
     }),
@@ -492,8 +508,16 @@ export class OpenApiService {
     getConfig()
   }
 
-  async getWalletConfig() {
-    const { status, data } = await this.request.get('/wallet/config', {
+  async getWalletConfig(): Promise<{
+    exchange_rate: {
+      EUR: number
+      JPY: number
+      GBP: number
+      CHF: number
+      CAD: number
+    }
+  }> {
+    const { status, data } = await this.request.get('/v1/wallet/config', {
       params: {}
     })
     if (data.status == API_STATUS.FAILED) {
@@ -503,7 +527,7 @@ export class OpenApiService {
   }
 
   async getAddressBalance(address: string): Promise<NovoBalance> {
-    const { status, data } = await this.request.get('/address/balance', {
+    const { status, data } = await this.request.get('/v1/address/balance', {
       params: {
         address
       }
@@ -514,8 +538,8 @@ export class OpenApiService {
     return data.result
   }
 
-  async getAddressUtxo(address: string): Promise<{ txid: string; index: number; value: number }[]> {
-    const { status, data } = await this.request.get('/address/utxo', {
+  async getAddressUtxo(address: string): Promise<{ txId: string; outputIndex: number; satoshis: number }[]> {
+    const { status, data } = await this.request.get('/v1/address/utxo', {
       params: {
         address
       }
@@ -527,7 +551,7 @@ export class OpenApiService {
   }
 
   async getAddressRecentHistory(address: string): Promise<TxHistoryItem[]> {
-    const { status, data } = await this.request.get('/address/recent-history', {
+    const { status, data } = await this.request.get('/v1/address/recent-history', {
       params: {
         address
       }
@@ -539,7 +563,7 @@ export class OpenApiService {
   }
 
   async pushTx(rawtx: string): Promise<string> {
-    const { data } = await this.request.post('/tx/broadcast', {
+    const { data } = await this.request.post('/v1/tx/broadcast', {
       rawtx
     })
     if (data.status == API_STATUS.FAILED) {

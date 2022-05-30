@@ -2,7 +2,6 @@ import { useApproval, useWallet, useWalletRequest } from '@/ui/utils'
 import { Button, Input, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const { t } = useTranslation()
@@ -22,7 +21,7 @@ const Login = () => {
   })
 
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if('Enter' == e.key){
+    if ('Enter' == e.key) {
       btnClick()
     }
   }
@@ -47,7 +46,7 @@ const Login = () => {
         <div className="grid gap-5">
           <div className="text-2xl text-center text-white">{t('Enter your password')}</div>
           <div>
-            <Input.Password placeholder="Password" onChange={e=>setPassword(e.target.value)} onKeyUp={e=>handleOnKeyUp(e)}/>
+            <Input.Password placeholder="Password" onChange={(e) => setPassword(e.target.value)} onKeyUp={(e) => handleOnKeyUp(e)} />
           </div>
           <div>
             <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>

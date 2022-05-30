@@ -124,7 +124,7 @@ export const INTERNAL_REQUEST_SESSION = {
   icon: './images/icon-128.png'
 }
 
-export const INITIAL_OPENAPI_URL = 'https://api.paragon.li'
+export const INITIAL_OPENAPI_URL = 'https://api.paragon.li/v1'
 
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',

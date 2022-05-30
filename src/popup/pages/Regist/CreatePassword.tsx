@@ -1,3 +1,4 @@
+import { useGlobalState } from '@/ui/state/state'
 import { useWallet, useWalletRequest } from '@/ui/utils'
 import { Button, Input, message } from 'antd'
 import { useEffect, useState } from 'react'
@@ -22,13 +23,14 @@ const CreatePassword = () => {
   const [disabled, setDisabled] = useState(true)
   const [active, setActive] = useState('')
 
+  const [newAccountMode] = useGlobalState('newAccountMode')
   message.config({
     maxCount: 1
   })
 
   const [run, loading] = useWalletRequest(wallet.boot, {
     onSuccess() {
-      const next = localStorage.getItem('welcome-to') as string
+      const next = newAccountMode == 'create' ? '/create-recovery' : '/repeat-recovery'
       navigate(next, {
         state: {
           create: true

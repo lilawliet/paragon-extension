@@ -73,7 +73,7 @@ const Dashboard = () => {
     }
   }
 
-  const [accountBalance, setAccountBalance] = useState<NovoBalance>({ amount: 0, pending_amount: 0, confirm_amount: 0, usd_value: 0 })
+  const [accountBalance, setAccountBalance] = useState<NovoBalance>({ amount: '0', pending_amount: '0', confirm_amount: '0', usd_value: 0 })
   const loadAccountBalance = async () => {
     if (currentAccount) {
       const _res = await wallet.getAddressBalance(currentAccount?.address)

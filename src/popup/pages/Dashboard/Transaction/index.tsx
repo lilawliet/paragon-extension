@@ -36,15 +36,9 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
       lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [] }
       historyGroups.push(lastGroup)
     }
-    const amount = v.assets_transferred[0].amount
-    const symbol = v.assets_transferred[0].symbol
-    let address
-    if (amount > 0) {
-      address = v.from_addrs[0]
-    } else {
-      address = v.to_addrs[0]
-    }
-    address = address || current?.address
+    const amount = parseFloat(v.amount)
+    const symbol = v.symbol
+    const address = current?.address || ''
     lastGroup.historyItems.push({
       address,
       amount,

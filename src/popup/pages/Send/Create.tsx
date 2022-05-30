@@ -1,5 +1,5 @@
 import { NovoBalance } from '@/background/service/openapi'
-import { isValidAddress, satoshisToNovo } from '@/ui/utils'
+import { isValidAddress } from '@/ui/utils'
 import { Button, Input } from 'antd'
 import { Status, Transaction } from './index'
 
@@ -24,7 +24,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
       setError('Invalid address')
       return
     }
-    if (toAmount <= 0 || toAmount > balance.amount / 10000) {
+    if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
       setError('Invalid amount')
       return
     }
@@ -52,7 +52,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
       <div className="flex justify-between w-full mt-5 box text-soft-white">
         <span>Available</span>
         <span>
-          <span className="font-semibold text-white">{satoshisToNovo(balance.amount)}</span> Novo
+          <span className="font-semibold text-white">{balance.amount}</span> Novo
         </span>
       </div>
       <div className="flex items-center w-full p-5 h-15_5 box default hover">

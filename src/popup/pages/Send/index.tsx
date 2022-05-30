@@ -24,9 +24,9 @@ const SendIndex = () => {
   const navigate = useNavigate()
 
   const [balance, setBalance] = useState<NovoBalance>({
-    confirm_amount: 0,
-    pending_amount: 0,
-    amount: 0,
+    confirm_amount: '0',
+    pending_amount: '0',
+    amount: '0',
     usd_value: 0
   })
   const [fromAddress, setFromAddress] = useState('')
@@ -74,7 +74,7 @@ const SendIndex = () => {
     if (!isValidAddress(toAddress)) {
       return
     }
-    if (toAmount <= 0 || toAmount > balance.amount / 10000) {
+    if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
       return
     }
     const run = async () => {
@@ -82,7 +82,7 @@ const SendIndex = () => {
         setError('Invalid address')
         return
       }
-      if (toAmount <= 0 || toAmount > balance.amount / 10000) {
+      if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
         setError('Invalid amount')
         return
       }

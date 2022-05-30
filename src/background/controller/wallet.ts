@@ -39,6 +39,7 @@ export class WalletController extends BaseController {
   /* wallet */
   boot = (password) => keyringService.boot(password)
   isBooted = () => keyringService.isBooted()
+  hasVault = () => keyringService.hasVault()
   verifyPassword = (password: string) => keyringService.verifyPassword(password)
   changePassword = (password: string, newPassword: string) => keyringService.changePassword(password, newPassword)
   getApproval = notificationService.getApproval
@@ -519,7 +520,7 @@ export class WalletController extends BaseController {
 
   listChainAssets = async (address: string) => {
     const balance = await openapiService.getAddressBalance(address)
-    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: satoshisToNovo(balance.amount), value: '$' + balance.usd_value }]
+    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: '$' + balance.usd_value }]
     return assets
   }
 
@@ -541,9 +542,9 @@ export class WalletController extends BaseController {
     utxos.forEach((utxo) => {
       txComposer.appendP2PKHInput({
         address: accountAddress,
-        satoshis: utxo.value,
-        txId: utxo.txid,
-        outputIndex: utxo.index
+        satoshis: utxo.satoshis,
+        txId: utxo.txId,
+        outputIndex: utxo.outputIndex
       })
     })
     txComposer.appendP2PKHOutput({
