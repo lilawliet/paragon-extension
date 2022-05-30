@@ -5,7 +5,6 @@ const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 const tsImportPluginFactory = require('ts-import-plugin');
 const AssetReplacePlugin = require('./plugins/AssetReplacePlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { version } = require('../_raw/manifest.json');
 const path = require('path');
 const fs = require('fs');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
@@ -23,6 +22,7 @@ const stylusModuleRegex = /\.module\.styl$/;
 const { getBrowserPaths } = require('./paths');
 
 const config = (env) => {
+  const version = env.version;
   const paths = getBrowserPaths(env.browser);
 
   // Check if Tailwind config exists

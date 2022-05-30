@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "clean": "mkdir -p dist && rm -rf dist/* && cp -r _raw/* dist",
-    "build:chrome:dev": "webpack --progress --env browser=chrome config=dev",
-    "build:firefox:dev": "webpack --progress --env browser=firefox config=dev",
-    "build:brave:dev": "webpack --progress --env browser=brave config=dev",
-    "build:edge:dev": "webpack --progress --env browser=edge config=dev",
-    "build:chrome:pro": "webpack --progress --env browser=chrome config=pro",
+    "build:chrome:dev": "webpack --progress --env browser=chrome config=dev version=1",
+    "build:chrome": "gulp build --env=pro --browser=chrome",
+    "build:firefox": "gulp build --env=pro --browser=firefox",
+    "build:brave": "gulp build --env=pro --browser=brave",
+    "build:opera": "gulp build --env=pro --browser=opera",
+    "translate":"node build/pull_translation",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
@@ -20,7 +21,7 @@
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
     "@metamask/obs-store": "^7.0.0",
-    "@paragon/novo-hd-keyring": "^0.1.3",
+    "@paragon/novo-hd-keyring": "^0.1.4",
     "@paragon/novojs-wallet": "0.1.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@reduxjs/toolkit": "^1.8.1",
@@ -109,7 +110,7 @@
     "ts-loader": "9.1.1",
     "ts-toolbelt": "^9.6.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
-    "typescript": "^4.6.4",
+    "typescript": "^4.7.2",
     "typescript-transform-paths": "^3.3.1",
     "web-vitals": "^2.1.4",
     "webextension-polyfill": "^0.9.0",
@@ -197,6 +198,7 @@
     ]
   },
   "devDependencies": {
+    "@notionhq/client": "^1.0.4",
     "@types/less": "^3.0.3",
     "@types/lodash": "^4.14.182",
     "@types/node-sass": "^4.11.2",
@@ -212,8 +214,14 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-jsoncombine": "^1.0.4",
+    "gulp-uglify": "^3.0.2",
+    "gulp-zip": "^5.1.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
+    "minimist": "^1.2.6",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.13",
     "prettier": "^2.6.2",
@@ -221,6 +229,7 @@
     "stylus": "^0.57.0",
     "stylus-loader": "^6.2.0",
     "tailwindcss": "^3.0.24",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-stream": "^7.0.0"
   }
 }
