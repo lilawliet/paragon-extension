@@ -1,7 +1,6 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useWallet, getUiType, useApproval } from 'ui/utils'
+import { getUiType, useApproval, useWallet } from 'ui/utils'
 import Welcome from './Welcome'
 
 const SortHat = () => {
@@ -29,12 +28,16 @@ const SortHat = () => {
       approval = undefined
     }
 
-    if (!(await wallet.isBooted())) {
+    const isBooted = await wallet.isBooted()
+    const hasVault = await wallet.hasVault()
+    const isUnlocked = await wallet.isUnlocked()
+
+    if (!hasVault) {
       navigate('/welcome')
       return
     }
 
-    if (!(await wallet.isUnlocked())) {
+    if (!isUnlocked) {
       navigate('/login')
       return
     }

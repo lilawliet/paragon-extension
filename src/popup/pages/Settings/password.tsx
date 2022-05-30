@@ -5,11 +5,13 @@ import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { FocusEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 type Status = '' | 'error' | 'warning' | undefined
 
 export default () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [passwordC, setPasswordC] = useState('')
   const [password, setPassword] = useState('')
@@ -29,21 +31,20 @@ export default () => {
         return
       }
 
+      setStatus1('')
+
       if (password2) {
         if (password !== password2) {
           message.warning('Entered passwords differ')
           setStatus2('error')
           return 
         }
+        setStatus2('')
       }
-    } else {
-      setStatus1('')
-      setStatus2('')
-      return  
-    }
-    
-    if( passwordC ){
-      setDisabled(false)
+
+      if( passwordC ){
+        setDisabled(false)
+      }
     }
     
   }, [passwordC, password, password2])
@@ -69,18 +70,14 @@ export default () => {
 
   const [run, loading] = useWalletRequest(wallet.changePassword, {
     onSuccess() {
-      navigate('/dashboard')
+      message.success(t('Success'), undefined, ()=>{
+        navigate('/dashboard')
+      })
     },
     onError(err) {
-      message.error(err)
+      message.error(err.message)
     }
   })
-
-  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if ('Enter' == e.key) {
-      verify()
-    }
-  }
   
   return (
     <Layout className="h-full">

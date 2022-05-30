@@ -1,9 +1,9 @@
+import { useWallet } from '@/ui/utils'
 import { Button, Checkbox, message } from 'antd'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
-import { useWallet, useWalletRequest } from '@/ui/utils'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const CreateRecovery = () => {
   const { t } = useTranslation()
@@ -16,17 +16,6 @@ const CreateRecovery = () => {
   const init = async (state: any) => {
     const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic())
     setMnemonics(_mnemonics)
-
-    // if (state?.create) {
-    //   const _mnemonics = (await wallet.generatePreMnemonic())
-    //   setMnemonics(_mnemonics)
-    //   // run(_mnemonics.trim())
-    //   console.log('create')
-    // } else {
-    //   const _mnemonics = (await wallet.getPreMnemonics())
-    //   setMnemonics(_mnemonics)
-    //   console.log('getPreMnemonics')
-    // }
   }
 
   useEffect(() => {
@@ -34,15 +23,19 @@ const CreateRecovery = () => {
   }, [])
 
   const btnClick = async () => {
-    const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
-    navigate('/dashboard', {
-      state: {
-        accounts,
-        title: t('Successfully created'),
-        editing: true,
-        importedAccount: true
-      }
-    })
+    try {
+      const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
+      navigate('/dashboard', {
+        state: {
+          accounts,
+          title: t('Successfully created'),
+          editing: true,
+          importedAccount: true
+        }
+      })
+    } catch (e) {
+      message.error((e as any).message)
+    }
   }
 
   const [checked, setChecked] = useState(false)

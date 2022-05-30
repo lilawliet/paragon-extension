@@ -124,7 +124,7 @@ export const INTERNAL_REQUEST_SESSION = {
   icon: './images/icon-128.png'
 }
 
-export const INITIAL_OPENAPI_URL = 'https://api.paragon.li/v1'
+export const INITIAL_OPENAPI_URL = 'https://api.paragon.li'
 
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',
@@ -150,3 +150,12 @@ export const GASPRICE_RANGE = {
 
 export const COIN_NAME = 'Novo'
 export const COIN_SYMBOL = 'NOVO'
+
+export const CURRENCIES = [
+  { name: 'US Dollar', symbol: 'USD' },
+  { name: 'Euro', symbol: 'EUR' },
+  { name: 'Japanese Yen', symbol: 'JPY' },
+  { name: 'British Pound', symbol: 'GBP' },
+  { name: 'Swiss Franc', symbol: 'CHF' },
+  { name: 'Canadian Dollar', symbol: 'CAD' }
+]

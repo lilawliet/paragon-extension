@@ -147,6 +147,16 @@ export class WalletController extends BaseController {
     preferenceService.setLocale(locale)
   }
 
+  getExchangeRate = () => this.openapi.getExchangeRate()
+
+  getCurrency = () => {
+    return preferenceService.getCurrency()
+  }
+
+  setCurrency = (currency: string) => {
+    preferenceService.setCurrency(currency)
+  }
+
   /* connectedSites */
 
   getConnectedSite = permissionService.getConnectedSite
