@@ -1,7 +1,10 @@
 import { NovoBalance } from '@/background/service/openapi'
 import { isValidAddress } from '@/ui/utils'
 import { Button, Input } from 'antd'
+import { useState } from 'react'
 import { Status, Transaction } from './index'
+
+type InputState = '' | 'error' | 'warning' | undefined
 
 interface Props {
   transaction: Transaction
@@ -19,12 +22,19 @@ interface Props {
 }
 
 export default ({ transaction, balance, fee, toAddress, toAmount, error, setError, setToAddress, setToAmount, setStatus }: Props) => {
+  const [statueAdd, setStatueAdd] = useState<InputState>('')
+  const [statueAmt, setStatueAmt] = useState<InputState>('')
+
   const verify = () => {
+    setStatueAdd('')
+    setStatueAmt('')
     if (!isValidAddress(toAddress)) {
+      setStatueAdd('error')
       setError('Invalid address')
       return
     }
     if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
+      setStatueAmt('error')
       setError('Invalid amount')
       return
     }
@@ -38,41 +48,36 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
       <div className="w-15 h-15">
         <img className="w-full" src={'./images/Novo.svg'} alt="" />
       </div>
-      <div className="flex items-center w-full p-5 mt-5 h-15_5 box default hover">
-        <Input
-          className="font-semibold text-white p0"
-          bordered={false}
-          status="error"
-          placeholder="Recipient’s NOVO address"
-          onChange={async (e) => {
-            setToAddress(e.target.value)
-          }}
-        />
-      </div>
+      <Input
+        className="mt-5 font-semibold text-white h-15_5 box default hover"
+        placeholder="Recipient’s NOVO address"
+        status={statueAdd}
+        onChange={async (e) => {
+          setToAddress(e.target.value)
+        }}
+      />
       <div className="flex justify-between w-full mt-5 box text-soft-white">
         <span>Available</span>
         <span>
           <span className="font-semibold text-white">{balance.amount}</span> Novo
         </span>
       </div>
-      <div className="flex items-center w-full p-5 h-15_5 box default hover">
-        <Input
-          className="font-semibold text-white p0"
-          bordered={false}
-          placeholder="Amount"
-          onChange={async (e) => {
-            const val = parseFloat(e.target.value)
-            setToAmount(val)
-          }}
-        />
-      </div>
+      <Input
+        className="font-semibold text-white h-15_5 box default hover"
+        placeholder="Amount"
+        status={statueAmt}
+        onChange={async (e) => {
+          const val = parseFloat(e.target.value)
+          setToAmount(val)
+        }}
+      />
       <div className="flex justify-between w-full mt-5 text-soft-white">
         <span>Fee</span>
         <span>
           <span className="font-semibold text-white">{fee}</span> Novo
         </span>
       </div>
-      <span className="font-semibold text-white text-warn">{error}</span>
+      <span className="text-base text-error">{error}</span>
       <Button
         size="large"
         type="primary"

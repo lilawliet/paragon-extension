@@ -1,3 +1,7 @@
+html {
+    --antd-wave-shadow-color: rgba(255, 255, 255, 0.2) !important;
+}
+
 .ant-input-affix-wrapper {
     font-size: 1.125rem !important;
     line-height: 1.375rem !important;
@@ -13,6 +17,13 @@
     font-size: 1.125rem !important;
     line-height: 1.375rem !important;
     font-weight: 600;
+    // box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
+    box-shadow: unset !important;
+}
+
+.ant-input:focus, .ant-input-focused{
+    background: #383535 !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover{

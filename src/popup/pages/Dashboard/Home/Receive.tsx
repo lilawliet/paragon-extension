@@ -52,7 +52,7 @@ const Receive = () => {
           </div>
           <div className="flex flex-col w-full gap-5">
             <div
-              className="grid w-full grid-cols-6 px-10 box default py-2_5"
+              className="grid w-full grid-cols-6 px-10 box default py-2_5 hover"
               onClick={(e) => {
                 copy(currentAccount?.address || '')
               }}

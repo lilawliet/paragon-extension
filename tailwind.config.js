@@ -18,7 +18,8 @@ module.exports = {
         'custom-green': '#4BB21A',
         'custom-green-rgba': 'rgba(75, 178, 26, 0.05)',
         'warn': '#FA701A',
-        'warning': '#FA701A'
+        'warning': '#FA701A',
+        'error': '#CC3333'
       },
       fontSize: {
         '4_5': '1.125rem',
@@ -62,6 +63,7 @@ module.exports = {
       },
       margin: {
         '15': '3.75rem',
+        '12_5': '3.125rem',
         '3_75': '0.9375rem',
         '2_5': '0.625rem',
         '1_25': '0.3125rem'

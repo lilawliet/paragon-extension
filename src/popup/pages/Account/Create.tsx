@@ -68,18 +68,14 @@ export default ({ setStatus }: Props) => {
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex items-center px-2 text-2xl h-13">Create a new account</div>
-      <div className="flex items-center w-full p-5 mt-1_25 h-15_5 box default">
-        <Input
-          className="font-semibold text-white p0"
-          bordered={false}
-          status="error"
-          placeholder="Account name"
-          onChange={(e) => {
-            setAlianName(e.target.value)
-          }}
-          onKeyUp={e=>handleOnKeyUp(e)}
-        />
-      </div>
+      <Input
+        className="font-semibold text-white mt-1_25 h-15_5 box default focus:active"
+        placeholder="Account name"
+        onChange={(e) => {
+          setAlianName(e.target.value)
+        }}
+        onKeyUp={e=>handleOnKeyUp(e)}
+      />
       <Button
         size="large"
         type="primary"

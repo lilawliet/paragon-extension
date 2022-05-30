@@ -21,12 +21,8 @@ const CreatePassword = () => {
   const [status2, setStatus2] = useState<Status>('')
 
   const [disabled, setDisabled] = useState(true)
-  const [active, setActive] = useState('')
 
   const [newAccountMode] = useGlobalState('newAccountMode')
-  // message.config({
-  //   maxCount: 1
-  // })
 
   const [run, loading] = useWalletRequest(wallet.boot, {
     onSuccess() {
@@ -47,7 +43,7 @@ const CreatePassword = () => {
   }
 
   const verify = (pwd2: string) => {
-    if (pwd2 !== password) {
+    if (pwd2 && pwd2 !== password) {
       setStatus2('error')
       message.warning('Entered passwords differ')
     }
@@ -63,65 +59,45 @@ const CreatePassword = () => {
         return
       }
 
-      setStatus1('')
-
       if (password2) {
         if (password === password2) {
+          setStatus1('')
           setStatus2('')
           setDisabled(false)
+          return
         }
       }
     }
+    
+    setStatus1('')
+    setStatus2('')
   }, [password, password2])
-
-  useEffect(() => {
-    setPlaceholder1('Password')
-    setPlaceholder2('Confirm Password')
-
-    if ('password1' == active) {
-      setActive('password1')
-      setPlaceholder1('')
-    } else if ('password2' == active) {
-      setActive('password2')
-      setPlaceholder2('')
-    }
-  }, [active])
 
   return (
     <div className="flex justify-center pt-45">
-      <div className="flex flex-col justify-center gap-5 text-center">
+      <div className="flex flex-col justify-center text-center gap-2_5">
         <div className="text-2xl text-white box w380">Create a password</div>
         <div className="text-base text-soft-white box w380">You will use this to unlock your wallet</div>
-        <div className="mt-12">
-          <Input.Password
-            status={status1}
-            className={active == 'password1' ? 'active' : ''}
-            placeholder={placeholder1}
-            onFocus={(e) => {
-              setActive('password1')
-            }}
-            onBlur={(e) => {
-              setPassword(e.target.value)
-            }}
-          />
-        </div>
-        <div>
-          <Input.Password
-            status={status2}
-            className={active == 'password2' ? 'active' : ''}
-            placeholder={placeholder2}
-            onFocus={(e) => {
-              setActive('password2')
-            }}
-            onChange={(e) => {
-              setPassword2(e.target.value)
-            }}
-            onBlur={(e) => {
-              verify(e.target.value)
-            }}
-          />
-        </div>
-        <div>
+        <Input.Password
+          status={status1}
+          className="font-semibold text-white mt-12_5 box focus:active"
+          placeholder={placeholder1}
+          onBlur={(e) => {
+            setPassword(e.target.value)
+          }}
+        />
+        <Input.Password
+          status={status2}
+          className="font-semibold text-white mt-2_5 box focus:active"
+          placeholder={placeholder2}
+          onChange={(e) => {
+            setPassword2(e.target.value)
+          }}
+          onBlur={(e) => {
+            verify(e.target.value)
+          }}
+        />
+        <div className='mt-2_5'>
           <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
             {t('Continue')}
           </Button>
