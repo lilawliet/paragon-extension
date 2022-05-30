@@ -41,13 +41,6 @@ const Dashboard = () => {
   // addressItems.current.forEach((item) => item.alianNameConfirm());
 
   const [accountsList, setAccountsList] = useState<Account[]>([])
-
-  const [pendingTxCount, setPendingTxCount] = useState(0)
-  const [loadingAddress, setLoadingAddress] = useState(false)
-  const [startEdit, setStartEdit] = useState(false)
-  const [alianName, setAlianName] = useState<string>('')
-  const [displayName, setDisplayName] = useState<string>('')
-
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
 
   const balanceList = async (accounts) => {
@@ -105,7 +98,6 @@ const Dashboard = () => {
   }, [currentAccount])
 
   const getAllKeyrings = async () => {
-    setLoadingAddress(true)
     const _accounts = await wallet.getAllVisibleAccounts()
     const allAlianNames = await wallet.getAllAlianName()
     const allContactNames = await wallet.getContactsByMap()
@@ -122,7 +114,6 @@ const Dashboard = () => {
       )
       .flat(1)
     const result = await balanceList(templist)
-    setLoadingAddress(false)
     if (result) {
       const withBalanceList = result.sort((a, b) => {
         return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()

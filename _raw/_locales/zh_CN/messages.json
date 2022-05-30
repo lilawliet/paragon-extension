@@ -17,5 +17,38 @@
     },
     "Successfully__created": {
       "message": "创建成功"
+    },
+    "Enter__your__password":{
+      "message": "输入你的密码"
+    },
+    "Language": {
+      "message": "语言"
+    },
+    "English": {
+      "message": "英语"
+    },
+    "Chinese": {
+      "message": "中文"
+    },
+    "Japanese": {
+      "message": "日语"
+    },
+    "Spanish": {
+      "message": "西班牙语"
+    },
+    "Currency": {
+      "message": "货币"
+    },
+    "Change__Password": {
+      "message": "修改密码"
+    },
+    "Change__your__lockscreen__password": {
+      "message": "修改你的锁屏密码"
+    },
+    "Show__Secret__Recovery__Phrase": {
+      "message": "查看助记词"
+    },
+    "Export__Private__Key": {
+      "message": "导出密钥"
     }
 }

@@ -45,7 +45,7 @@ const Login = () => {
           <img src="./images/Paragon.svg" className="select-none" alt="" />
         </div>
         <div className="grid gap-5">
-          <div className="text-2xl text-center text-white">Enter your password</div>
+          <div className="text-2xl text-center text-white">{t('Enter your password')}</div>
           <div>
             <Input.Password placeholder="Password" onChange={e=>setPassword(e.target.value)} onKeyUp={e=>handleOnKeyUp(e)}/>
           </div>

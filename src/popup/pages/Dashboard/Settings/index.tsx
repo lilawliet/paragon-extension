@@ -1,19 +1,14 @@
-import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { changeAccount, fetchCurrentAccount, getCurrentAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
+import { useAppDispatch } from '@/common/storages/hooks'
+import { changeAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
+import { t } from 'i18next'
 import VirtualList from 'rc-virtual-list'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
-
-interface Transaction {
-  time: number
-  address: string
-  amount: string
-}
 
 interface Setting {
   label?: string
@@ -26,15 +21,15 @@ interface Setting {
 
 const SettingList: Setting[] = [
   {
-    label: 'Language',
-    value: 'English',
+    label: t('Language'),
+    value: t('English'),
     desc: '',
     action: 'language',
     route: 'language',
     right: true
   },
   {
-    label: 'Currency',
+    label: t('Currency'),
     value: 'US Dollar',
     desc: '',
     action: 'currency',
@@ -42,8 +37,8 @@ const SettingList: Setting[] = [
     right: true
   },
   {
-    label: 'Change Password',
-    value: 'Change your lockscreen password',
+    label: t('Change Password'),
+    value: t('Change your lockscreen password'),
     desc: '',
     action: 'password',
     route: 'password',
@@ -52,7 +47,7 @@ const SettingList: Setting[] = [
   {
     label: '',
     value: '',
-    desc: 'Show Secret Recovery Phrase',
+    desc: t('Show Secret Recovery Phrase'),
     action: 'recovery',
     route: 'recovery',
     right: false
@@ -60,7 +55,7 @@ const SettingList: Setting[] = [
   {
     label: '',
     value: '',
-    desc: 'Export Private Key',
+    desc: t('Export Private Key'),
     action: 'export-key',
     route: 'export-key',
     right: false

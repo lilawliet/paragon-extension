@@ -8,6 +8,7 @@ import { Message } from '@/utils'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import en from 'antd/es/locale/en_US'
+import zh_CN from 'antd/es/locale/zh_CN'
 import { EVENTS } from 'consts'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -61,23 +62,23 @@ if (
   })
 }
 
-function initAppMeta() {
-  const head = document.querySelector('head')
-  const icon = document.createElement('link')
-  icon.href = 'https://rabby.io/assets/images/logo-128.png'
-  icon.rel = 'icon'
-  head?.appendChild(icon)
-  const name = document.createElement('meta')
-  name.name = 'name'
-  name.content = 'Rabby'
-  head?.appendChild(name)
-  const description = document.createElement('meta')
-  description.name = 'description'
-  description.content = i18n.t('appDescription')
-  head?.appendChild(description)
-}
+// function initAppMeta() {
+//   const head = document.querySelector('head')
+//   const icon = document.createElement('link')
+//   icon.href = 'https://rabby.io/assets/images/logo-128.png'
+//   icon.rel = 'icon'
+//   head?.appendChild(icon)
+//   const name = document.createElement('meta')
+//   name.name = 'name'
+//   name.content = 'Rabby'
+//   head?.appendChild(name)
+//   const description = document.createElement('meta')
+//   description.name = 'description'
+//   description.content = i18n.t('appDescription')
+//   head?.appendChild(description)
+// }
 
-initAppMeta()
+// initAppMeta()
 
 const { PortMessage } = Message
 
@@ -132,8 +133,10 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
     params: data.data
   })
 })
+
 wallet.getLocale().then((locale) => {
   addResourceBundle(locale).then(() => {
+    console.log('locale', locale)
     i18n.changeLanguage(locale)
     // ReactDOM.render(<Views wallet={wallet} />, document.getElementById('root'));
     const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

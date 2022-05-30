@@ -21,7 +21,7 @@ export default ({ setStatus }: Props) => {
 
   const [disabled, setDisabled] = useState(true)
   const [alianName, setAlianName] = useState('')
-  const verify = async () => {
+  const handleOnClick = async () => {
     // to verify
     if ('' == alianName) {
       return
@@ -51,6 +51,12 @@ export default ({ setStatus }: Props) => {
     }
   }
 
+  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if('Enter' == e.key){
+      handleOnClick()
+    }
+  }
+
   useEffect(() => {
     setDisabled(true)
 
@@ -71,6 +77,7 @@ export default ({ setStatus }: Props) => {
           onChange={(e) => {
             setAlianName(e.target.value)
           }}
+          onKeyUp={e=>handleOnKeyUp(e)}
         />
       </div>
       <Button
@@ -79,7 +86,7 @@ export default ({ setStatus }: Props) => {
         disabled={disabled}
         className="box w380"
         onClick={(e) => {
-          verify()
+          handleOnClick()
         }}
       >
         <div className="flex items-center justify-center text-lg">Create Account</div>
