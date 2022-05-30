@@ -1,54 +1,54 @@
 {
-    "Get__Started": {
-      "message": "Get Started",
-      "description": "write your description"
-    },
-    "Create__new__wallet": {
-      "message": "Create new wallet"
-    },
-    "Continue": {
-      "message": "Continue"
-    },
-    "Import__wallet": {
-      "message": "Import wallet"
-    },
-    "Unlock": {
-      "message": "Unlock"
-    },
-    "Successfully__created": {
-      "message": "Successfully created"
-    },
-    "Enter__your__password": {
-      "message": "Enter your password"
-    },
-    "Language": {
-      "message": "Language"
-    },
-    "English": {
-      "message": "English"
-    },
-    "Chinese": {
-      "message": "Chinese"
-    },
-    "Japanese": {
-      "message": "Japanese"
-    },
-    "Spanish": {
-      "message": "Spanish"
-    },
-    "Currency": {
-      "message": "Currency"
-    },
-    "Change__Password": {
-      "message": "Change Password"
-    },
-    "Change__your__lockscreen__password": {
-      "message": "Change your lockscreen password"
-    },
-    "Show__Secret__Recovery__Phrase": {
-      "message": "Show Secret Recovery Phrase"
-    },
-    "Export__Private__Key": {
-      "message": "Export Private Key"
-    }
+  "Get__Started": {
+    "message": "Get Started",
+    "description": "write your description"
+  },
+  "Create__new__wallet": {
+    "message": "Create new wallet"
+  },
+  "Continue": {
+    "message": "Continue"
+  },
+  "Import__wallet": {
+    "message": "Import wallet"
+  },
+  "Unlock": {
+    "message": "Unlock"
+  },
+  "Successfully__created": {
+    "message": "Successfully created"
+  },
+  "Enter__your__password": {
+    "message": "Enter your password"
+  },
+  "Language": {
+    "message": "Language"
+  },
+  "English": {
+    "message": "English"
+  },
+  "Chinese": {
+    "message": "Chinese"
+  },
+  "Japanese": {
+    "message": "Japanese"
+  },
+  "Spanish": {
+    "message": "Spanish"
+  },
+  "Currency": {
+    "message": "Currency"
+  },
+  "Change__Password": {
+    "message": "Change Password"
+  },
+  "Change__your__lockscreen__password": {
+    "message": "Change your lockscreen password"
+  },
+  "Show__Secret__Recovery__Phrase": {
+    "message": "Show Secret Recovery Phrase"
+  },
+  "Export__Private__Key": {
+    "message": "Export Private Key"
+  }
 }

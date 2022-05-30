@@ -6,8 +6,8 @@ let notion = new Client({ auth: token });
 const Languages = [
     { name: "English", symbol: "en",messages:{} },
     { name: "Chinese", symbol: "zh_CN",messages:{} },
-    { name: "Japanese", symbol: "jp" ,messages:{}},
-    { name: "Spanish", symbol: "sp" ,messages:{}},
+    { name: "Japanese", symbol: "ja" ,messages:{}},
+    { name: "Spanish", symbol: "es" ,messages:{}},
 ]
 
 function getPropertyPlainText(property) {

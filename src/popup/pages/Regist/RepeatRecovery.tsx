@@ -1,5 +1,5 @@
 import { useWallet } from '@/ui/utils'
-import { Button, Input } from 'antd'
+import { Button, Input, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -19,7 +19,9 @@ const RepeatRecovery = () => {
   const wallet = useWallet()
   const verify = async () => {
     const mnemonics = keys.join(' ')
-    const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
+    const accounts = await wallet.createKeyringWithMnemonics(mnemonics).catch(()=>{
+      message.error('mnemonic phrase is invalid')
+    })
     navigate('/dashboard', {
       state: {
         accounts,
@@ -28,9 +30,23 @@ const RepeatRecovery = () => {
         importedAccount: true
       }
     })
-    // to verify
-    // path move
-    // navigate('/create-password')
+  }
+
+  const handleEventPaste = (event, index: number)=> {
+    const copyText = event.clipboardData?.getData('text/plain')
+    const textArr = copyText.trim().split(' ')
+    let newKeys = [...keys]
+    if (textArr) {
+      for (let i=0; i < keys.length - index; i ++){
+        if (textArr.length == i){
+          break
+        }
+        newKeys[index + i] = textArr[i]
+      }
+      setKeys(newKeys)
+    }
+    
+    event.preventDefault();
   }
 
   const onChange = (e: any, index: any) => {
@@ -41,6 +57,7 @@ const RepeatRecovery = () => {
 
   useEffect(() => {
     // to verify key
+    console.log('verify')
     setDisabled(
       keys.filter((key) => {
         return key == ''
@@ -70,6 +87,7 @@ const RepeatRecovery = () => {
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}
                   bordered={false}
                   value={_}
+                  onPaste={(e)=>{handleEventPaste(e, index)}}
                   onChange={(e) => {
                     onChange(e, index)
                   }}

@@ -136,7 +136,6 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 
 wallet.getLocale().then((locale) => {
   addResourceBundle(locale).then(() => {
-    console.log('locale', locale)
     i18n.changeLanguage(locale)
     // ReactDOM.render(<Views wallet={wallet} />, document.getElementById('root'));
     const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
