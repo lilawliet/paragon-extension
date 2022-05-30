@@ -39,7 +39,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           <span>
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
-          &nbsp;Receive
+          &nbsp;{t('Receive')}
         </div>
         <div
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
@@ -50,7 +50,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           <span>
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>
-          &nbsp;Send
+          &nbsp;{t('Send')}
         </div>
       </div>
       <div className="mt-2">

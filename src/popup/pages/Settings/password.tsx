@@ -1,38 +1,87 @@
+import { handleInputBlur, handleInputFocus } from '@/common/utils'
 import CHeader from '@/popup/components/CHeader'
-import { useWallet } from '@/ui/utils'
+import { useWallet, useWalletRequest } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import { useState } from 'react'
+import { FocusEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+type Status = '' | 'error' | 'warning' | undefined
 
 export default () => {
   const navigate = useNavigate()
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
+  const [passwordC, setPasswordC] = useState('')
+  const [password, setPassword] = useState('')
+  const [password2, setPassword2] = useState('')
+  const [statusC, setStatusC] = useState<Status>('')
+  const [status1, setStatus1] = useState<Status>('')
+  const [status2, setStatus2] = useState<Status>('')
+  const [disabled, setDisabled] = useState(true)
   const wallet = useWallet()
 
-  const changePassword = async () => {
-    message.error('not implemented')
-    return
-    if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/.test(newPassword)) {
-      message.warning('at least six characters and must contain uppercase and lowercase letters and digits')
-      return
+  useEffect(() => {
+    setDisabled(true)
+    if (password) {
+      if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
+        message.warning('at least six characters and must contain uppercase and lowercase letters and digits')
+        setStatus1('error')
+        return
+      }
+
+      if (password2) {
+        if (password !== password2) {
+          message.warning('Entered passwords differ')
+          setStatus2('error')
+          return 
+        }
+      }
+    } else {
+      setStatus1('')
+      setStatus2('')
+      return  
     }
-    if (newPassword != confirmPassword) {
-      message.warning('Entered passwords differ')
-      return
+    
+    if( passwordC ){
+      setDisabled(false)
     }
-    try {
-      let _res = await wallet.changePassword(currentPassword, newPassword)
-      message.success('success')
-    } catch (e) {
-      message.warning((e as any).message)
-      return
+    
+  }, [passwordC, password, password2])
+
+  const handleOnBlur = (e, type: string) => {
+    switch(type) {
+      case 'password':
+        setPassword(e.target.value)
+        break;
+      case 'password2':
+        setPassword2(e.target.value)
+        break;
+      case 'passwordC':
+        setPasswordC(e.target.value)
+        break;
     }
   }
+
+  const verify = ()=>{
+    run(passwordC, password)
+  }
+
+
+  const [run, loading] = useWalletRequest(wallet.changePassword, {
+    onSuccess() {
+      navigate('/dashboard')
+    },
+    onError(err) {
+      message.error(err)
+    }
+  })
+
+  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ('Enter' == e.key) {
+      verify()
+    }
+  }
+  
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -41,45 +90,46 @@ export default () => {
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
           <div className="flex items-center px-2 text-2xl h-13">Change Password</div>
-          <div className="flex items-center w-full p-5 mt-1_25 h-15_5 box default">
             <Input.Password
-              className="font-semibold text-white p0"
-              bordered={false}
-              status="error"
+              status={statusC}
+              className="font-semibold text-white mt-1_25 box focus:active"
               placeholder="Current Password"
-              onChange={(e) => {
-                setCurrentPassword(e.target.value)
+              onBlur={(e) => {
+                handleOnBlur(e, 'passwordC')
+              }}
+              onPressEnter={(e) => {
+                handleOnBlur(e, 'passwordC')
               }}
             />
-          </div>
-          <div className="flex items-center w-full p-5 mt-1_25 h-15_5 box default">
             <Input.Password
-              className="font-semibold text-white p0"
-              bordered={false}
-              status="error"
+              status={status1}
+              className="font-semibold text-white mt-1_25 box focus:active"
               placeholder="New Password"
-              onChange={(e) => {
-                setNewPassword(e.target.value)
+              onBlur={(e) => {
+                handleOnBlur(e, 'password')
+              }}
+              onPressEnter={(e) => {
+                handleOnBlur(e, 'password')
               }}
             />
-          </div>
-          <div className="flex items-center w-full p-5 mt-1_25 h-15_5 box default">
             <Input.Password
-              className="font-semibold text-white p0"
-              bordered={false}
-              status="error"
+              status={status2}
+              className="font-semibold text-white mt-1_25 box focus:active"
               placeholder="Confirm Password"
-              onChange={(e) => {
-                setConfirmPassword(e.target.value)
+              onBlur={(e) => {
+                handleOnBlur(e, 'password2')
+              }}
+              onPressEnter={(e) => {
+                handleOnBlur(e, 'password2')
               }}
             />
-          </div>
           <Button
+            disabled={disabled}
             size="large"
             type="primary"
             className="box w380"
             onClick={() => {
-              changePassword()
+              verify()
             }}>
             <div className="flex items-center justify-center text-lg">Change Password</div>
           </Button>

@@ -57,3 +57,11 @@ export const useWatch = <T>(data: T, callback: Callback<T>, config: Config = { i
 
   return () => (stop.current = true)
 }
+
+export const handleInputFocus = (e) => {
+  e.target.setAttribute('class', `${e.target.getAttribute('class')} active`)
+}
+
+export const handleInputBlur = (e) => {
+  e.target.setAttribute('class', `${e.target.getAttribute('class')?.split('active').join('').trim()}`)
+}

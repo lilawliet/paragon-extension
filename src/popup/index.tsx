@@ -1,7 +1,13 @@
 import { lazy } from 'react'
 import { store } from '@/common/storages/stores'
 import { Provider } from 'react-redux'
+import message from 'antd/lib/message'
 const AsyncMainRoute = lazy(() => import('./MainRoute'))
+
+
+message.config({
+  maxCount: 1
+})
 
 function Popup() {
   return (

@@ -26,7 +26,6 @@ export const I18N_NS = 'translations'
 
 export const addResourceBundle = async (locale: string) => {
   if (i18n.hasResourceBundle(locale, I18N_NS)) return
-  console.log('addResourceBundle', locale)
   const bundle = await fetchLocale(locale)
 
   i18n.addResourceBundle(locale, 'translations', bundle)

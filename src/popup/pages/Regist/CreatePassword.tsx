@@ -24,9 +24,9 @@ const CreatePassword = () => {
   const [active, setActive] = useState('')
 
   const [newAccountMode] = useGlobalState('newAccountMode')
-  message.config({
-    maxCount: 1
-  })
+  // message.config({
+  //   maxCount: 1
+  // })
 
   const [run, loading] = useWalletRequest(wallet.boot, {
     onSuccess() {

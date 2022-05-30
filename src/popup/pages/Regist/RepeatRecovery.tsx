@@ -19,17 +19,21 @@ const RepeatRecovery = () => {
   const wallet = useWallet()
   const verify = async () => {
     const mnemonics = keys.join(' ')
-    const accounts = await wallet.createKeyringWithMnemonics(mnemonics).catch(()=>{
-      message.error('mnemonic phrase is invalid')
+    const accounts = await wallet.createKeyringWithMnemonics(mnemonics)
+    .catch((err)=>{
+      message.error(err.message)
     })
-    navigate('/dashboard', {
-      state: {
-        accounts,
-        title: t('Successfully created'),
-        editing: true,
-        importedAccount: true
-      }
-    })
+
+    if (accounts) {
+      navigate('/dashboard', {
+        state: {
+          accounts,
+          title: t('Successfully created'),
+          editing: true,
+          importedAccount: true
+        }
+      })
+    }
   }
 
   const handleEventPaste = (event, index: number)=> {
@@ -57,7 +61,6 @@ const RepeatRecovery = () => {
 
   useEffect(() => {
     // to verify key
-    console.log('verify')
     setDisabled(
       keys.filter((key) => {
         return key == ''
@@ -79,9 +82,8 @@ const RepeatRecovery = () => {
             return (
               <div
                 key={index}
-                className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 
-                                    ${hover == index ? ' border-white border-opacity-40 text-white' : ''} 
-                                    ${active == index ? ' border-white border-opacity-40 bg-primary-active text-white' : ''}`}>
+                className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 box hover
+                                    ${active == index ? ' active' : ''}`}>
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}
