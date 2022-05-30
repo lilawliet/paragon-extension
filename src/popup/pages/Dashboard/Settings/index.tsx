@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/common/storages/hooks'
-import { fetchCurrentAccount, getCurrentAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
+import { changeAccount, fetchCurrentAccount, getCurrentAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
@@ -110,7 +110,9 @@ export default ({ current }: AccountsProps) => {
           address: current.address,
           alianName: e.target.value
         })
-      )
+      ).then(()=>{
+        dispatch(changeAccount({ account: {...current, alianName: e.target.value }, wallet }))
+      })
       setName(e.target.value)
       setEditable(false)
     }
