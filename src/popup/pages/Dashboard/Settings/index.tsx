@@ -54,7 +54,8 @@ const SettingList: Setting[] = [
     desc: t('Remove Account'),
     action: 'remove-account',
     route: 'remove-account',
-    right: false
+    right: false,
+    keyringType: KEYRING_CLASS.PRIVATE_KEY
   },
   {
     label: '',
@@ -226,7 +227,7 @@ export default ({ current }: AccountsProps) => {
       </div>
       <div className="h-121_25 mt-3_75">
         <VirtualList
-          data={SettingList}
+          data={toRenderSettings}
           data-id="list"
           height={virtualListHeight}
           itemHeight={20}
