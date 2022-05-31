@@ -71,15 +71,6 @@ const SettingList: Setting[] = [
     action: 'export-key',
     route: 'export-key',
     right: false
-  },
-  {
-    label: '',
-    value: '',
-    desc: t('Remove Account'),
-    action: 'remove-account',
-    route: 'remove-account',
-    right: false,
-    keyringType: KEYRING_CLASS.PRIVATE_KEY
   }
 ]
 
