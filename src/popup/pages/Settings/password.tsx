@@ -1,5 +1,5 @@
 import CHeader from '@/popup/components/CHeader'
-import { useWallet, useWalletRequest } from '@/ui/utils'
+import { useWallet } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
@@ -61,22 +61,11 @@ export default () => {
     }
   }
 
-  const [run, loading] = useWalletRequest(wallet.changePassword, {
-    onSuccess() {
-      message.success(t('Success'), undefined, () => {
-        navigate('/dashboard')
-      })
-    },
-    onError(err) {
-      message.error(err.message)
-    }
-  })
-
   const verify = async () => {
-    // run(passwordC, password)
     try {
-      console.log(passwordC, password, '??')
       await wallet.changePassword(passwordC, password)
+      message.success(t('Success'))
+      navigate('/dashboard')
     } catch (err) {
       message.error((err as any).message)
     }
