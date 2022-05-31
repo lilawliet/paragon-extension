@@ -1,15 +1,18 @@
-import { formatAddr } from '@/common/utils'
+import { copyToClipboard, formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
 import AccountSelect from '@/popup/components/Account'
-import { Statistic } from 'antd'
+import { message, Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
 
-interface Currency {
-  name: string
-  amount: string
-  value: string
+function copy(str: string) {
+  copyToClipboard(str).then(() => {
+    message.success({
+      duration: 3,
+      content: `${str} copied`
+    })
+  })
 }
 
 const Home = ({ current, accountAssets, accountBalance, accountsList }: AccountsProps) => {
@@ -27,7 +30,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           title={''}
         />
       </div>
-      <div className='flex items-center mt-2_5'>
+      <div className='flex items-center mt-2_5' onClick={e=>{copy(current?.address??'')}}>
         <span className='text-2xl text-soft-white'>{formatAddr(current?.address??'', 5)}</span>
         {current?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className='text-xs rounded bg-primary-active p-2_5 ml-2_5'>IMPORTED</span> : <></>}
       </div>

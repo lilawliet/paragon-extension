@@ -1,9 +1,10 @@
 import { useAppDispatch } from '@/common/storages/hooks'
 import { changeAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
+import { copyToClipboard } from '@/common/utils'
 import { CURRENCIES, KEYRING_CLASS } from '@/constant'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
-import { Button, Input, List } from 'antd'
+import { Button, Input, List, message } from 'antd'
 import { t } from 'i18next'
 import VirtualList from 'rc-virtual-list'
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
@@ -74,7 +75,6 @@ const SettingList: Setting[] = [
     right: false
   }
 ]
-
 
 interface MyItemProps {
   key: number
@@ -199,6 +199,15 @@ export default ({ current }: AccountsProps) => {
     }
   })
 
+  function copy(str: string) {
+    copyToClipboard(str).then(() => {
+      message.success({
+        duration: 3,
+        content: `${str} copied`
+      })
+    })
+  }
+  
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
@@ -228,7 +237,7 @@ export default ({ current }: AccountsProps) => {
           </div>
         </div>
 
-        <div className="w-full text-center text-soft-white mt-2_5">( {current?.address} )</div>
+        <div className="w-full text-center text-soft-white mt-2_5" onClick={e=>{copy(current?.address??'')}}>( {current?.address} )</div>
       </div>
       <div className="h-121_25 mt-3_75">
         <VirtualList
