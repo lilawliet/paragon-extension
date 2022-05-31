@@ -48,7 +48,8 @@ function task_merge_manifest() {
   return gulp
     .src([`dist/${options.browser}/manifest/_base.json`, `dist/${options.browser}/manifest/${options.browser}.json`])
     .pipe(jsoncombine('manifest.json', (data,meta) => {
-      let result = Object.assign({},data["_base"],data[options.browser])
+      const result = Object.assign({}, data["_base"], data[options.browser])
+      result.version = packageConfig.version;
       return Buffer.from(JSON.stringify(result));
     }))
     .pipe(gulp.dest(`dist/${options.browser}`))
@@ -63,7 +64,7 @@ function task_clean_tmps() {
 function task_webpack(cb) {
   webpack(
     webpackConfigFunc({
-      version:1,
+      version:packageConfig.version,
       config: options.env,
       browser: options.browser
     }),

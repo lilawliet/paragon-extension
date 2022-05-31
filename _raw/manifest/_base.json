@@ -3,7 +3,7 @@
   "name": "Paragon Wallet",
   "version": "1.0",
   "default_locale": "en",
-  "description": "Paragon Wallet",
+  "description": "Paragon is a browser extension wallet that makes it safe & easy for you to store, send and receive NOVO. ",
   "manifest_version": 2,
   "background": {
     "page": "background.html",
