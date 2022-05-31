@@ -431,8 +431,8 @@ interface GetTxResponse {
 const maxRPS = 100
 
 enum API_STATUS {
-  FAILED = 0,
-  SUCCESS = 1
+  FAILED = '0',
+  SUCCESS = '1'
 }
 
 export class OpenApiService {
@@ -520,7 +520,7 @@ export class OpenApiService {
       params: {}
     })
     if (data.status == API_STATUS.FAILED) {
-      throw new Error(data.messaage)
+      throw new Error(data.message)
     }
     return data.result
   }
@@ -532,7 +532,7 @@ export class OpenApiService {
       }
     })
     if (data.status == API_STATUS.FAILED) {
-      throw new Error(data.messaage)
+      throw new Error(data.message)
     }
     return data.result
   }
@@ -544,7 +544,7 @@ export class OpenApiService {
       }
     })
     if (data.status == API_STATUS.FAILED) {
-      throw new Error(data.messaage)
+      throw new Error(data.message)
     }
     return data.result
   }
@@ -556,7 +556,7 @@ export class OpenApiService {
       }
     })
     if (data.status == API_STATUS.FAILED) {
-      throw new Error(data.messaage)
+      throw new Error(data.message)
     }
     return data.result
   }
@@ -566,7 +566,7 @@ export class OpenApiService {
       rawtx
     })
     if (data.status == API_STATUS.FAILED) {
-      throw new Error(data.messaage)
+      throw new Error(data.message)
     }
     return data.result
   }

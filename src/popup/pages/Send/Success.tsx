@@ -63,7 +63,7 @@ export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
       </div>
       <div className="flex items-center text-soft-white">
         <EyeOutlined />
-        &nbsp;{t('View on Block Explorer')}
+        <a href={`https://novoexplorer.com/tx/${transaction.txid}`}>&nbsp;{t('View on Block Explorer')}</a>
       </div>
     </div>
   )

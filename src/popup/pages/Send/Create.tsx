@@ -1,3 +1,4 @@
+import { COIN_DUST } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress } from '@/ui/utils'
 import { Button, Input } from 'antd'
@@ -35,7 +36,8 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
       setError(t('Invalid_address'))
       return
     }
-    if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
+    toAmount = parseFloat(toAmount.toString())
+    if (!toAmount || toAmount < COIN_DUST || toAmount > parseFloat(accountBalance.amount)) {
       setStatueAmt('error')
       setError(t('Invalid_amount'))
       return
@@ -54,6 +56,7 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
         className="mt-5 font-semibold text-white h-15_5 box default hover"
         placeholder={t('Recipients NOVO address')}
         status={statueAdd}
+        defaultValue={toAddress}
         onChange={async (e) => {
           setToAddress(e.target.value)
         }}
@@ -66,8 +69,9 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
       </div>
       <Input
         className="font-semibold text-white h-15_5 box default hover"
-        placeholder={t('Amount')}
+        placeholder={t('Amount') + ` ( >${COIN_DUST} )`}
         status={statueAmt}
+        defaultValue={toAmount > 0 ? toAmount : undefined}
         onChange={async (e) => {
           const val = parseFloat(e.target.value)
           setToAmount(val)

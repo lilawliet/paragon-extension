@@ -171,9 +171,9 @@ class PreferenceService {
     }
   }
 
-  getAddressHistory = (address: string): TxHistoryItem[] | null => {
+  getAddressHistory = (address: string): TxHistoryItem[] => {
     const historyMap = this.store.historyMap || {}
-    return historyMap[address] || null
+    return historyMap[address] || []
   }
 
   getExternalLinkAck = (): boolean => {

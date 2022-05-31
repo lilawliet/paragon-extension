@@ -74,7 +74,7 @@ const SettingList: Setting[] = [
   }
 ]
 
-interface MyItemProps {
+type MyItemProps = {
   key: number
   item: Setting
   navigate: NavigateFunction

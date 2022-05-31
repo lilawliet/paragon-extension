@@ -165,3 +165,5 @@ export const CURRENCIES = [
   { name: 'Swiss Franc', code: 'CHF', symbol: 'CHF' },
   { name: 'Canadian Dollar', code: 'CAD', symbol: 'C$' }
 ]
+
+export const COIN_DUST = 0.4368

@@ -35,7 +35,7 @@ module.exports = {
     // 代码风格及规范限制.相关 //
     ///
     "quotes": [2, "single"], // 单引号
-    "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // 不禁用console
+    // "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // 不禁用console
     "no-debugger": process.env.NODE_ENV === 'production' ? 2 : 0, // 禁用debugger
     "semi": 0, // 不强制使用分号
     "no-control-regex": 2, // 禁止在正则表达式中使用控制字符 ：new RegExp("\x1f")
@@ -128,5 +128,13 @@ module.exports = {
       "import/resolver": {
           "typescript": {}
       }
-  }
+  },
+  overrides: [
+    {
+      files: ["**/*.tsx"],
+      rules: {
+        "react/prop-types":"off"
+      }
+    }
+  ]
 };

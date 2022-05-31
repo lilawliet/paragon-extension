@@ -1,17 +1,18 @@
+import { COIN_DUST } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress, sleep, useWallet } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { Button, Layout } from 'antd'
+import { Button, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import SendConfirm from './Confirm'
 import SendCreate from './Create'
+import Error from './Error'
 import Sending from './Sending'
 import Success from './Success'
-import Error from './Error'
 
 export interface Transaction {
   rawtx: string
@@ -48,7 +49,7 @@ const SendIndex = () => {
       await sleep(3)
       setStatus('success')
     } catch (e) {
-      console.error(e)
+      message.error((e as any).message)
       setStatus('error')
     }
   }, [ref.current.rawtx])
@@ -58,7 +59,7 @@ const SendIndex = () => {
     if (!isValidAddress(toAddress)) {
       return
     }
-    if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
+    if (toAmount <= COIN_DUST || toAmount > parseFloat(accountBalance.amount)) {
       return
     }
     const run = async () => {
@@ -66,7 +67,7 @@ const SendIndex = () => {
         setError('Invalid address')
         return
       }
-      if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
+      if (toAmount < COIN_DUST || toAmount > parseFloat(accountBalance.amount)) {
         setError('Invalid amount')
         return
       }
@@ -124,6 +125,8 @@ const SendIndex = () => {
                 setStatus('create')
               } else if (status == 'success') {
                 window.history.go(-1)
+              } else {
+                setStatus('create')
               }
             }}>
             <div className="flex items-center justify-center text-lg">

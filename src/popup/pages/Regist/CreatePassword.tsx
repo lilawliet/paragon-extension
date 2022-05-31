@@ -87,7 +87,7 @@ const CreatePassword = () => {
         <Input.Password
           status={status2}
           className="font-semibold text-white mt-2_5 box focus:active"
-          placeholder={t('Confirm__Password')}
+          placeholder={t('Confirm Password')}
           onChange={(e) => {
             setPassword2(e.target.value)
           }}

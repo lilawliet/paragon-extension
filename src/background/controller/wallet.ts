@@ -18,7 +18,7 @@ import { openIndexPage } from 'background/webapi/tab'
 import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL } from 'consts'
 import { cloneDeep, groupBy } from 'lodash'
 import { ContactBookItem } from '../service/contactBook'
-import { OpenApiService } from '../service/openapi'
+import { NovoBalance, OpenApiService } from '../service/openapi'
 import { ConnectedSite } from '../service/permission'
 import { Account } from '../service/preference'
 import { TxComposer } from '../utils/tx-utils'
@@ -131,9 +131,15 @@ export class WalletController extends BaseController {
     preferenceService.updateAddressBalance(address, data)
     return data
   }
-  getAddressCacheBalance = (address: string | undefined) => {
-    if (!address) return null
-    return preferenceService.getAddressBalance(address)
+  getAddressCacheBalance = (address: string | undefined): NovoBalance => {
+    const defaultBalance: NovoBalance = {
+      confirm_amount: '0',
+      pending_amount: '0',
+      amount: '0',
+      usd_value: '0'
+    }
+    if (!address) return defaultBalance
+    return preferenceService.getAddressBalance(address) || defaultBalance
   }
 
   getAddressHistory = async (address: string) => {
@@ -142,7 +148,7 @@ export class WalletController extends BaseController {
     return data
   }
   getAddressCacheHistory = (address: string | undefined) => {
-    if (!address) return null
+    if (!address) return []
     return preferenceService.getAddressHistory(address)
   }
 
