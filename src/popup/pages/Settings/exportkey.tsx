@@ -51,7 +51,7 @@ export default () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: 'copied'
+        content: t('copied')
       })
     })
   }
@@ -62,22 +62,22 @@ export default () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-5 justify-evenly w-95">
-          <div className="flex items-center px-2 text-2xl h-13">Export Private Key</div>
+          <div className="flex items-center px-2 text-2xl h-13">{t('Export Private Key')}</div>
           {privateKey == '' ? (
             <div className="flex flex-col items-center mx-auto text-center gap-3_75 justify-evenly w-95">
-              <div className="text-warn box w380">Type your Paragon password</div>
+              <div className="text-warn box w380">{t('Type your Paragon password')}</div>
               <div className="mt-1_25">
                 <Input.Password
                   className="box w380"
                   status={status}
-                  placeholder="Password"
+                  placeholder={t('Password')}
                   onChange={(e) => {
                     setPassword(e.target.value)
                   }}
                   onKeyUp={(e) => handleOnKeyUp(e)}
                 />
               </div>
-              { error ? <div className="text-base text-error">{error}</div> : <></>}
+              {error ? <div className="text-base text-error">{error}</div> : <></>}
               <div>
                 <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
                   {t('Show Private Key')}
@@ -87,7 +87,7 @@ export default () => {
           ) : (
             <div className="flex flex-col items-center gap-5 mx-auto text-center justify-evenly w-95">
               <div className="text-base text-soft-white">
-                If you ever change browsers or move computers, you will need this Private Key to access this account. Save it somewhere safe and secret.
+                {t('If you ever change browsers or move computers')}, {t('you will need this Private Key to access this account')}.{t('Save it somewhere safe and secret')}.
               </div>
               <div
                 className="grid w-full grid-cols-6 p-5 select-text box default hover text-4_5 leading-6_5"
@@ -98,7 +98,7 @@ export default () => {
                 <div className="flex items-center">
                   <img src="./images/copy-solid.svg" alt="" />
                 </div>
-                <div className='flex items-center col-span-5 overflow-hidden font-semibold text-soft-white overflow-ellipsis'>{privateKey}</div>
+                <div className="flex items-center col-span-5 overflow-hidden font-semibold text-soft-white overflow-ellipsis">{privateKey}</div>
               </div>
             </div>
           )}
@@ -115,7 +115,7 @@ export default () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+            <span className="font-semibold leading-4">&nbsp;Back</span>
           </div>
         </Button>
       </Footer>

@@ -30,7 +30,7 @@ const RepeatRecovery = () => {
         }
       })
     } catch (e) {
-      message.error('mnemonic phrase is invalid')
+      message.error(t('mnemonic phrase is invalid'))
     }
   }
 
@@ -73,15 +73,16 @@ const RepeatRecovery = () => {
   return (
     <div className="flex justify-center pt-15 box w380">
       <div className="flex flex-col justify-center gap-5 text-center">
-        <div className="text-2xl text-white">Secret Recovery Phrase</div>
-        <div className="text-base text-soft-white">Import an existing wallet with your 12-word secret recovery phrase</div>
+        <div className="text-2xl text-white">{t('Secret Recovery Phrase')}</div>
+        <div className="text-base text-soft-white">{t('Import an existing wallet with your 12 word secret recovery phrase')}</div>
         <div className="grid grid-cols-2 gap-5 text-soft-white">
           {keys.map((_, index) => {
             return (
               <div
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 box hover
-                                    ${active == index ? ' active' : ''}`}>
+                                    ${active == index ? ' active' : ''}`}
+              >
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}

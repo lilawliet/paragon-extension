@@ -16,9 +16,9 @@ export default () => {
   const wallet = useWallet()
   const [currentAccount, setCurrentAccont] = useState<Account | null>(null)
   const { confirm } = Modal
-  
-  useEffect(()=> {
-    (async () =>{
+
+  useEffect(() => {
+    ;(async () => {
       setCurrentAccont(await wallet.getCurrentAccount())
     })()
   }, [])
@@ -27,13 +27,17 @@ export default () => {
     confirm({
       className: 'modal',
       icon: <ExclamationCircleOutlined />,
-      content: <span>This is an imported account. You will not be able to recover this account with your Secret Recovery Phrase. This action is not reversible.</span>,
-      onOk() {
-      },
+      content: (
+        <span>
+          {t('This is an imported account')}. {t('You will not be able to recover this account with your Secret Recovery Phrase')}.{t('This action is not reversible')}.
+        </span>
+      ),
+      onOk() {},
       onCancel() {
         // pass
       }
-  })}
+    })
+  }
 
   return (
     <Layout className="h-full">
@@ -43,21 +47,15 @@ export default () => {
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-36 gap-2_5 w-110">
           <img src="./images/Delete.svg" alt="" />
-          <span className="mt-6 text-2xl">Remove Account</span>
-          <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address??'', 8)} { currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span>Imported</span>  : <></>}</span>
-          <span className="text-base text-center text-error">
-            This is an imported account. You will not be able to recover this account with your Secret Recovery Phrase. This action is not reversible.
+          <span className="mt-6 text-2xl">{t('Remove Account')}</span>
+          <span className="text-2xl text-soft-white">
+            {formatAddr(currentAccount?.address ?? '', 8)} {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span>Imported</span> : <></>}
           </span>
-          <Button
-            danger
-            type='text'
-            size="large"
-            className="box w440 mt-3_75"
-            onClick={showConfirm}
-          >
-            <div className="font-semibold text-center text-4_5">
-              {t('Remove Account')}
-            </div>
+          <span className="text-base text-center text-error">
+            {t('This is an imported account')}. {t('You will not be able to recover this account with your Secret Recovery Phrase')}.{t('This action is not reversible')}.
+          </span>
+          <Button danger type="text" size="large" className="box w440 mt-3_75" onClick={showConfirm}>
+            <div className="font-semibold text-center text-4_5">{t('Remove Account')}</div>
           </Button>
         </div>
       </Content>
@@ -68,10 +66,11 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+            <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
           </div>
         </Button>
       </Footer>

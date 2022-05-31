@@ -23,7 +23,7 @@ interface MyItemProps {
   index: number
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index}, ref) => {
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index }, ref) => {
   return (
     <div key={index}>
       <div className="pl-2 font-semibold text-soft-white">{group.date}</div>
@@ -37,7 +37,6 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index
         </div>
       ))}
     </div>
-    
   )
 }
 
@@ -61,7 +60,6 @@ type ListRef = {
   scrollTo: ScrollTo
 }
 
-
 interface Transaction {
   time: number
   address: string
@@ -76,7 +74,7 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
   const html = document.getElementsByTagName('html')[0]
   let virtualListHeight = 485
   if (html && getComputedStyle(html).fontSize) {
-    virtualListHeight = virtualListHeight * parseFloat(getComputedStyle(html).fontSize) / 16
+    virtualListHeight = (virtualListHeight * parseFloat(getComputedStyle(html).fontSize)) / 16
   }
 
   const historyGroups: GroupItem[] = []
@@ -85,7 +83,7 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
   accountHistory?.forEach((v, i) => {
     if (lastDate != v.date) {
       lastDate = v.date
-      lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index:i}
+      lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index: i }
       historyGroups.push(lastGroup)
     }
     const amount = parseFloat(v.amount)
@@ -110,23 +108,22 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
         />
       </div>
       <div className="grid mt-6 gap-2_5">
-        
-      <VirtualList
-        data={historyGroups}
-        data-id="list"
-        height={virtualListHeight}
-        itemHeight={20}
-        itemKey={(group) => group.index}
-        // disabled={animating}
-        ref={listRef}
-        style={{
-          boxSizing: 'border-box'
-        }}
-        // onSkipRender={onAppear}
-        // onItemRemove={onAppear}
-      >
-      {(item, index) => <ForwardMyItem group={item} index={index}/>}
-      </VirtualList>
+        <VirtualList
+          data={historyGroups}
+          data-id="list"
+          height={virtualListHeight}
+          itemHeight={20}
+          itemKey={(group) => group.index}
+          // disabled={animating}
+          ref={listRef}
+          style={{
+            boxSizing: 'border-box'
+          }}
+          // onSkipRender={onAppear}
+          // onItemRemove={onAppear}
+        >
+          {(item, index) => <ForwardMyItem group={item} index={index} />}
+        </VirtualList>
       </div>
     </div>
   )

@@ -51,7 +51,7 @@ export default () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: 'copied'
+        content: t('copied')
       })
     })
   }
@@ -63,22 +63,22 @@ export default () => {
 
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-5 text-center justify-evenly w-95">
-          <div className="flex items-center px-2 text-2xl h-13">Secret Recovery Phrase</div>
+          <div className="flex items-center px-2 text-2xl h-13">{t('Secret Recovery Phrase')}</div>
           {mnemonic == '' ? (
             <div className="flex flex-col items-center mx-auto text-center gap-3_75 justify-evenly w-95">
-              <div className=" text-warn box w380">Type your Paragon password</div>
+              <div className=" text-warn box w380">{t('Type your Paragon password')}</div>
               <div className="mt-1_25">
                 <Input.Password
                   className="box w380"
                   status={status}
-                  placeholder="Password"
+                  placeholder={t('Password')}
                   onChange={(e) => {
                     setPassword(e.target.value)
                   }}
                   onKeyUp={(e) => handleOnKeyUp(e)}
                 />
               </div>
-              { error ? <div className="text-base text-error">{error}</div> : <></>}
+              {error ? <div className="text-base text-error">{error}</div> : <></>}
               <div>
                 <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
                   {t('Show Secret Recovery Phrase')}
@@ -88,9 +88,9 @@ export default () => {
           ) : (
             <div className="flex flex-col items-center mx-auto text-center gap-3_75 justify-evenly w-95">
               <div className="text-base text-warn box w380">
-                This phrase is the ONLY way to <br />
-                recover your wallet. Do NOT share it with anyone!
-                <br /> (click to copy)
+                {t('This phrase is the ONLY way to')} <br />
+                {t('recover your wallet')}. {t('Do NOT share it with anyone')}!
+                <br /> ({t('click to copy')})
               </div>
               <div>{/* margin */} </div>
               <div
@@ -116,7 +116,7 @@ export default () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+            <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
           </div>
         </Button>
       </Footer>

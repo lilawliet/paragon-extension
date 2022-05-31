@@ -13,11 +13,9 @@ const CreatePassword = () => {
   const wallet = useWallet()
 
   const [password, setPassword] = useState('')
-  const [placeholder1, setPlaceholder1] = useState('Password')
   const [status1, setStatus1] = useState<Status>('')
 
   const [password2, setPassword2] = useState('')
-  const [placeholder2, setPlaceholder2] = useState('Confirm Password')
   const [status2, setStatus2] = useState<Status>('')
 
   const [disabled, setDisabled] = useState(true)
@@ -45,7 +43,7 @@ const CreatePassword = () => {
   const verify = (pwd2: string) => {
     if (pwd2 && pwd2 !== password) {
       setStatus2('error')
-      message.warning('Entered passwords differ')
+      message.warning(t('Entered passwords differ'))
     }
   }
 
@@ -53,8 +51,8 @@ const CreatePassword = () => {
     setDisabled(true)
 
     if (password) {
-      if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
-        message.warning('at least six characters and must contain uppercase and lowercase letters and digits')
+      if (!/^(?![0-9]+$)(?![A-Z]+$)(?![a-z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
+        message.warning(t('at least six characters and must contain uppercase and lowercase letters and digits'))
         setStatus1('error')
         return
       }
@@ -76,12 +74,12 @@ const CreatePassword = () => {
   return (
     <div className="flex justify-center pt-45">
       <div className="flex flex-col justify-center text-center gap-2_5">
-        <div className="text-2xl text-white box w380">Create a password</div>
-        <div className="text-base text-soft-white box w380">You will use this to unlock your wallet</div>
+        <div className="text-2xl text-white box w380">{t('Create a password')}</div>
+        <div className="text-base text-soft-white box w380">{t('You will use this to unlock your wallet')}</div>
         <Input.Password
           status={status1}
           className="font-semibold text-white mt-12_5 box focus:active"
-          placeholder={placeholder1}
+          placeholder={t('Password')}
           onBlur={(e) => {
             setPassword(e.target.value)
           }}
@@ -89,7 +87,7 @@ const CreatePassword = () => {
         <Input.Password
           status={status2}
           className="font-semibold text-white mt-2_5 box focus:active"
-          placeholder={placeholder2}
+          placeholder={t('Confirm__Password')}
           onChange={(e) => {
             setPassword2(e.target.value)
           }}

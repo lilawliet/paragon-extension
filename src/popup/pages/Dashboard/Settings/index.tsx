@@ -83,7 +83,7 @@ interface MyItemProps {
   currency: string
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({item, key, navigate, currency}, ref) => {
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ item, key, navigate, currency }, ref) => {
   return (
     <Button
       key={key}
@@ -137,7 +137,7 @@ export default ({ current }: AccountsProps) => {
   const html = document.getElementsByTagName('html')[0]
   let virtualListHeight = 485
   if (html && getComputedStyle(html).fontSize) {
-    virtualListHeight = virtualListHeight * parseFloat(getComputedStyle(html).fontSize) / 16
+    virtualListHeight = (virtualListHeight * parseFloat(getComputedStyle(html).fontSize)) / 16
   }
 
   const dispatch = useAppDispatch()
@@ -171,22 +171,21 @@ export default ({ current }: AccountsProps) => {
   const handleOnBlur = async (e) => {
     if (current) {
       if (e.target.value) {
-          dispatch(
-            updateAlianName({
-              wallet,
-              address: current.address,
-              alianName: e.target.value
-            })
-          ).then(() => {
-            dispatch(changeAccount({ account: { ...current, alianName: e.target.value }, wallet }))
+        dispatch(
+          updateAlianName({
+            wallet,
+            address: current.address,
+            alianName: e.target.value
           })
-          setName(e.target.value)
-          setEditable(false)
-        }
+        ).then(() => {
+          dispatch(changeAccount({ account: { ...current, alianName: e.target.value }, wallet }))
+        })
+        setName(e.target.value)
+        setEditable(false)
       }
-      else {
-        setName(alianName || '')
-      }
+    } else {
+      setName(alianName || '')
+    }
   }
 
   const toRenderSettings = SettingList.filter((v) => {
@@ -207,7 +206,7 @@ export default ({ current }: AccountsProps) => {
       })
     })
   }
-  
+
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
@@ -217,7 +216,8 @@ export default ({ current }: AccountsProps) => {
           }`}
           onClick={(e) => {
             handleChangeAlianName()
-          }}>
+          }}
+        >
           {editable ? (
             <Input
               ref={addressInput}
@@ -233,11 +233,23 @@ export default ({ current }: AccountsProps) => {
             <span className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60">{name}</span>
           )}
           <div className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
-            <EditOutlined onClick={e=>{setName('')}} title={t('Clear the inputted')} />
+            <EditOutlined
+              onClick={(e) => {
+                setName('')
+              }}
+              title={t('Clear the inputted')}
+            />
           </div>
         </div>
 
-        <div className="w-full text-center text-soft-white mt-2_5" onClick={e=>{copy(current?.address??'')}}>( {current?.address} )</div>
+        <div
+          className="w-full text-center text-soft-white mt-2_5"
+          onClick={(e) => {
+            copy(current?.address ?? '')
+          }}
+        >
+          ( {current?.address} )
+        </div>
       </div>
       <div className="h-121_25 mt-3_75">
         <VirtualList

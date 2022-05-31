@@ -1,5 +1,6 @@
 /* constants pool */
 import { Chain } from '@/background/service/openapi'
+import { t } from 'i18next'
 // import IconNovoLogo from "./images/novo.svg";
 
 export enum CHAINS_ENUM {

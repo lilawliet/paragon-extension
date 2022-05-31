@@ -34,7 +34,7 @@ const Receive = () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: `${str} copied`
+        content: `${str} ${t('copied')}`
       })
     })
   }
@@ -46,7 +46,7 @@ const Receive = () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center gap-10 mx-auto mt-5 justify-evenly w-110">
-          <div className="flex items-center px-2 text-2xl h-13 w340">Deposit Novo</div>
+          <div className="flex items-center px-2 text-2xl h-13 w340">{t('Deposit')} Novo</div>
           <div className="flex items-center justify-center bg-white rounded-2xl h-60 w-60">
             <QRCode value={currentAccount?.address || ''} renderAs="svg" size={size}></QRCode>
           </div>
@@ -65,7 +65,7 @@ const Receive = () => {
                 <span className="text-soft-white">{shortAddress(currentAccount?.address || '')}</span>
               </div>
             </div>
-            <div className="text-base text-center text-soft-white">This address can only receive Novo</div>
+            <div className="text-base text-center text-soft-white">{t('This address can only receive Novo')}</div>
           </div>
         </div>
       </Content>
@@ -80,7 +80,7 @@ const Receive = () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+            <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
           </div>
         </Button>
       </Footer>

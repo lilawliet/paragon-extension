@@ -57,17 +57,24 @@ const CreateRecovery = () => {
   return (
     <div className="flex justify-center pt-33_75">
       <div className="flex flex-col justify-center gap-5 text-center">
-        <div className="text-2xl text-white box w380">Secret Recovery Phrase</div>
+        <div className="text-2xl text-white box w380">{t('Secret Recovery Phrase')}</div>
         <div className="text-base text-warn box w380">
-          This phrase is the ONLY way to <br />
-          recover your wallet. Do NOT share it with anyone!
+          {t('This phrase is the ONLY way to')} <br />
+          {t('recover your wallet')}. {t('Do NOT share it with anyone')}!
         </div>
         <div className="h-10">{/* margin */} </div>
-        <div className="p-5 font-semibold select-text box default text-4_5 w380 leading-6_5" onClick={e=>{copy(mnemonics)}}>{mnemonics}</div>
+        <div
+          className="p-5 font-semibold select-text box default text-4_5 w380 leading-6_5"
+          onClick={(e) => {
+            copy(mnemonics)
+          }}
+        >
+          {mnemonics}
+        </div>
         <div>
           <div className="flex items-center justify-center align-middle">
             <Checkbox onChange={onChange} checked={checked} className="font-semibold">
-              <span className="font-semibold text-white">I saved My Secret Recovery Phrase</span>
+              <span className="font-semibold text-white">{t('I saved My Secret Recovery Phrase')}</span>
             </Checkbox>
           </div>
         </div>

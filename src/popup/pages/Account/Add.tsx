@@ -1,5 +1,6 @@
 import { RightOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Status } from '.'
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default ({ setStatus }: Props) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const verify = () => {
@@ -18,7 +20,7 @@ export default ({ setStatus }: Props) => {
 
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
-      <div className="flex items-center px-2 text-2xl h-13">Add a new account</div>
+      <div className="flex items-center px-2 text-2xl h-13">{t('Add a new account')}</div>
       <Button
         size="large"
         type="default"
@@ -29,8 +31,8 @@ export default ({ setStatus }: Props) => {
       >
         <div className="flex items-center justify-between font-semibold text-4_5">
           <div className="flex flex-col text-left gap-2_5">
-            <span>Create a new account</span>
-            <span className="font-normal opacity-60">Generate a new address</span>
+            <span>{t('Create a new account')}</span>
+            <span className="font-normal opacity-60">{t('Generate a new address')}</span>
           </div>
           <div className="flex-grow"> </div>
           {/* <RightOutlined style={{transform: 'scale(1.2)', opacity: '80%'}}/> */}
@@ -47,8 +49,8 @@ export default ({ setStatus }: Props) => {
       >
         <div className="flex items-center justify-between font-semibold text-4_5">
           <div className="flex flex-col text-left gap-2_5">
-            <span>Import Private Key</span>
-            <span className="font-normal opacity-60">Import an existing account</span>
+            <span>{t('Import Private Key')}</span>
+            <span className="font-normal opacity-60">{t('Import an existing account')}</span>
           </div>
           <div className="flex-grow"> </div>
           {/* <RightOutlined style={{transform: 'scale(1.2)', opacity: '80%'}}/> */}

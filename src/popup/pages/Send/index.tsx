@@ -11,6 +11,7 @@ import SendConfirm from './Confirm'
 import SendCreate from './Create'
 import Sending from './Sending'
 import Success from './Success'
+import Error from './Error'
 
 export interface Transaction {
   rawtx: string
@@ -89,7 +90,6 @@ const SendIndex = () => {
       const { fee, rawtx } = await wallet.sendNovo({ to: toAddress, amount: toAmount })
       setFee(fee)
       ref.current.rawtx = rawtx
-      console.log(toAddress, toAmount, fee)
     }
     run()
   }, [toAddress + toAmount])
@@ -120,7 +120,7 @@ const SendIndex = () => {
         ) : status == 'success' ? (
           <Success transaction={ref.current} fromAddress={fromAddress} toAmount={toAmount} setStatus={setStatus} />
         ) : (
-          <div>error</div>
+          <Error transaction={ref.current} fromAddress={fromAddress} toAmount={toAmount} setStatus={setStatus} />
         )}
       </Content>
       {status !== 'sending' ? (
@@ -148,7 +148,7 @@ const SendIndex = () => {
           >
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+              <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
             </div>
           </Button>
         </Footer>

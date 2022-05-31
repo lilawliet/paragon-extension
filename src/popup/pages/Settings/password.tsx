@@ -25,8 +25,8 @@ export default () => {
   useEffect(() => {
     setDisabled(true)
     if (password) {
-      if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
-        message.warning('at least six characters and must contain uppercase and lowercase letters and digits')
+      if (!/^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
+        message.warning(t('at least six characters and must contain uppercase and lowercase letters and digits'))
         setStatus1('error')
         return
       }
@@ -35,7 +35,7 @@ export default () => {
 
       if (password2) {
         if (password !== password2) {
-          message.warning('Entered passwords differ')
+          message.warning(t('Entered passwords differ'))
           setStatus2('error')
           return
         }
@@ -84,11 +84,11 @@ export default () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
-          <div className="flex items-center px-2 text-2xl h-13">Change Password</div>
+          <div className="flex items-center px-2 text-2xl h-13">{t('Change Password')}</div>
           <Input.Password
             status={statusC}
             className="font-semibold text-white mt-1_25 box focus:active"
-            placeholder="Current Password"
+            placeholder={t('Current Password')}
             onBlur={(e) => {
               handleOnBlur(e, 'passwordC')
             }}
@@ -99,7 +99,7 @@ export default () => {
           <Input.Password
             status={status1}
             className="font-semibold text-white mt-1_25 box focus:active"
-            placeholder="New Password"
+            placeholder={t('New Password')}
             onBlur={(e) => {
               handleOnBlur(e, 'password')
             }}
@@ -110,7 +110,7 @@ export default () => {
           <Input.Password
             status={status2}
             className="font-semibold text-white mt-1_25 box focus:active"
-            placeholder="Confirm Password"
+            placeholder={t('Confirm Password')}
             onBlur={(e) => {
               handleOnBlur(e, 'password2')
             }}
@@ -127,7 +127,7 @@ export default () => {
               verify()
             }}
           >
-            <div className="flex items-center justify-center text-lg">Change Password</div>
+            <div className="flex items-center justify-center text-lg">{t('Change Password')}</div>
           </Button>
         </div>
       </Content>
@@ -142,7 +142,7 @@ export default () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+            <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
           </div>
         </Button>
       </Footer>

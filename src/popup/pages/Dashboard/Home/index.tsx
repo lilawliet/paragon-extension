@@ -30,9 +30,14 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           title={''}
         />
       </div>
-      <div className='flex items-center mt-2_5' onClick={e=>{copy(current?.address??'')}}>
-        <span className='text-2xl text-soft-white'>{formatAddr(current?.address??'', 5)}</span>
-        {current?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className='text-xs rounded bg-primary-active p-2_5 ml-2_5'>IMPORTED</span> : <></>}
+      <div
+        className="flex items-center mt-2_5"
+        onClick={(e) => {
+          copy(current?.address ?? '')
+        }}
+      >
+        <span className="text-2xl text-soft-white">{formatAddr(current?.address ?? '', 5)}</span>
+        {current?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
       </div>
       <div className="flex items-center p-10 font-semibold text-11">
         <span>$</span>

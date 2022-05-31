@@ -5,9 +5,11 @@ import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons'
 import { Button, Layout } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 export default () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
 
@@ -31,7 +33,7 @@ export default () => {
       </Header>
       <Content style={{ backgroundColor: '#1C1919' }}>
         <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
-          <div className="flex items-center px-2 text-2xl h-13">Currency</div>
+          <div className="flex items-center px-2 text-2xl h-13">{t('Currency')}</div>
 
           {CURRENCIES.map((v) => (
             <Button
@@ -62,7 +64,7 @@ export default () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            <span className='font-semibold leading-4'>&nbsp;Back</span>
+            <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
           </div>
         </Button>
       </Footer>

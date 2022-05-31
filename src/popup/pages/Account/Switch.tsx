@@ -7,6 +7,7 @@ import { CheckOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import VirtualList from 'rc-virtual-list'
 import { forwardRef, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Status } from '.'
 
@@ -26,14 +27,15 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         setCurrency(index)
-      }}>
+      }}
+    >
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName} </span>
           <span className="font-normal opacity-60">({formatAddr(account.address, 8)})</span>
         </div>
-        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className='text-xs rounded bg-primary-active p-2_5'>IMPORTED</span>: <></>}
-        {currency == index ? <CheckOutlined className='w-4 ml-2_5' style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <span className='w-4 ml-2_5'></span>}
+        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5">IMPORTED</span> : <></>}
+        {currency == index ? <CheckOutlined className="w-4 ml-2_5" style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <span className="w-4 ml-2_5"></span>}
       </div>
     </Button>
   )
@@ -64,6 +66,7 @@ type ListRef = {
 }
 
 export default ({ setStatus }: Props) => {
+  const { t } = useTranslation()
   const wallet = useWallet()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -114,7 +117,7 @@ export default ({ setStatus }: Props) => {
 
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
-      <div className="flex items-center px-2 text-2xl h-13">Switch Account</div>
+      <div className="flex items-center px-2 text-2xl h-13">{t('Switch Account')}</div>
 
       <VirtualList
         data={accountsList}
@@ -138,8 +141,9 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}>
-        <div className="flex items-center justify-center text-lg">Add New Account</div>
+        }}
+      >
+        <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
       </Button>
     </div>
   )

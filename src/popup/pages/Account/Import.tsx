@@ -39,7 +39,7 @@ export default ({ setStatus }: Props) => {
       setInputError((e as any).message)
     }
   }
-  
+
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if ('Enter' == e.key) {
       verify()
@@ -59,13 +59,13 @@ export default ({ setStatus }: Props) => {
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex flex-col items-center px-2 text-2xl">
-        Import Private Key
-        <div className="text-base text-soft-white mt-2_5">Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase.</div>
+        {t('Import Private Key')}
+        <div className="text-base text-soft-white mt-2_5">{t('Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase')}.</div>
       </div>
       <Input
         className="font-semibold text-white mt-1_25 h-15_5"
         status={inputStatus}
-        placeholder="Private Key"
+        placeholder={t('Private Key')}
         onKeyUp={(e) => handleOnKeyUp(e)}
         onChange={(e) => {
           setPrivateKey(e.target.value)
@@ -79,8 +79,9 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}>
-        <div className="flex items-center justify-center text-lg">Import Private Key</div>
+        }}
+      >
+        <div className="flex items-center justify-center text-lg">{t('Import Private Key')}</div>
       </Button>
     </div>
   )

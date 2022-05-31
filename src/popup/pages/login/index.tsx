@@ -16,7 +16,7 @@ const Login = () => {
       resolveApproval()
     },
     onError(err) {
-      message.error('PASSWORD ERROR')
+      message.error(t('PASSWORD ERROR'))
     }
   })
 
