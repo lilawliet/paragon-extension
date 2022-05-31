@@ -25,15 +25,17 @@ interface MyItemProps {
 
 const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index }, ref) => {
   return (
-    <div key={index}>
+    <div key={index} className="mt-2_5">
       <div className="pl-2 font-semibold text-soft-white">{group.date}</div>
       {group.historyItems.map((item, index) => (
-        <div className="justify-between mb-4 box nobor w440 text-soft-white" key={index}>
-          <span>{shortAddress(item.address)}</span>
-          <span>
-            <span className={`font-semibold ${item.amount > 0 ? 'text-custom-green' : 'text-warn'}`}>{item.amount > 0 ? '+' : '-'}</span>
-            <span className="font-semibold text-white">{Math.abs(item.amount)}</span> {item.symbol}
-          </span>
+        <div className="mt-2_5" key={`item_${index}`}>
+          <div className="justify-between box nobor w440 text-soft-white" key={index}>
+            <span>{shortAddress(item.address)}</span>
+            <span>
+              <span className={`font-semibold ${item.amount > 0 ? 'text-custom-green' : 'text-warn'}`}>{item.amount > 0 ? '+' : '-'}</span>
+              <span className="font-semibold text-white">{Math.abs(item.amount)}</span> {item.symbol}
+            </span>
+          </div>
         </div>
       ))}
     </div>
