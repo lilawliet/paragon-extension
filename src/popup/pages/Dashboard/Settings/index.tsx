@@ -6,15 +6,16 @@ import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
 import { t } from 'i18next'
 import VirtualList from 'rc-virtual-list'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { AccountsProps } from '..'
 
 interface Setting {
   label?: string
   value?: string
   desc?: string
+  danger?: boolean
   action: string
   route: string
   right: boolean
@@ -48,6 +49,15 @@ const SettingList: Setting[] = [
   {
     label: '',
     value: '',
+    danger: true,
+    desc: t('Remove Account'),
+    action: 'remove-account',
+    route: 'remove-account',
+    right: false
+  },
+  {
+    label: '',
+    value: '',
     desc: t('Show Secret Recovery Phrase'),
     action: 'recovery',
     route: 'recovery',
@@ -63,11 +73,70 @@ const SettingList: Setting[] = [
   }
 ]
 
+
+interface MyItemProps {
+  key: number
+  item: Setting
+  navigate: NavigateFunction
+  currency: string
+}
+
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({item, key, navigate, currency}, ref) => {
+  return (
+    <Button
+      key={key}
+      danger={item.danger}
+      type={item.danger ? 'text' : 'default'}
+      size="large"
+      className={`mb-3_75 box w-115 ${item.danger ? item.danger : 'default'} ${item.right ? 'btn-settings' : ''}`}
+      onClick={(e) => {
+        navigate(`/settings/${item.route}`)
+      }}
+    >
+      <div className="flex items-center justify-between font-semibold text-4_5">
+        <div className="flex flex-col text-left gap-2_5">
+          <span>{item.label}</span>
+          <span className="font-normal opacity-60">{item.action == 'currency' ? CURRENCIES.find((v) => v.symbol == currency)?.name : item.value}</span>
+        </div>
+        <div className="flex-grow">{item.desc}</div>
+        {item.right ? <RightOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
+      </div>
+    </Button>
+  )
+}
+
+export type ScrollAlign = 'top' | 'bottom' | 'auto'
+
+export type ScrollConfig =
+  | {
+      index: number
+      align?: ScrollAlign
+      offset?: number
+    }
+  | {
+      key: React.Key
+      align?: ScrollAlign
+      offset?: number
+    }
+
+export type ScrollTo = (arg: number | ScrollConfig) => void
+
+type ListRef = {
+  scrollTo: ScrollTo
+}
+
 export default ({ current }: AccountsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
+  const listRef = useRef<ListRef>(null)
+  const ForwardMyItem = forwardRef(MyItem)
   const [editable, setEditable] = useState(false)
+  const html = document.getElementsByTagName('html')[0]
+  let virtualListHeight = 485
+  if (html && getComputedStyle(html).fontSize) {
+    virtualListHeight = virtualListHeight * parseFloat(getComputedStyle(html).fontSize) / 16
+  }
 
   const dispatch = useAppDispatch()
   const addressInput = useRef<any>(null)
@@ -96,15 +165,6 @@ export default ({ current }: AccountsProps) => {
       setCurrency(currency)
     })()
   }, [])
-
-  const ContainerHeight = 500
-  const ItemHeight = 90
-
-  const onScroll = (e: any) => {
-    if (e.target.scrollHeight - e.target.scrollTop === ContainerHeight) {
-      // do something
-    }
-  }
 
   const handleOnBlur = async (e) => {
     if (current) {
@@ -154,30 +214,19 @@ export default ({ current }: AccountsProps) => {
 
         <div className="w-full text-center text-soft-white mt-2_5">( {current?.address} )</div>
       </div>
-      <div className="h-125 ">
-        <List>
-          <VirtualList data={SettingList} itemKey="action" onScroll={onScroll}>
-            {(item) => (
-              <Button
-                size="large"
-                type="default"
-                className={`mt-3_75 box w-115 default ${item.right ? 'btn-settings' : ''}`}
-                onClick={(e) => {
-                  navigate(`/settings/${item.route}`)
-                }}
-              >
-                <div className="flex items-center justify-between font-semibold text-4_5">
-                  <div className="flex flex-col text-left gap-2_5">
-                    <span>{item.label}</span>
-                    <span className="font-normal opacity-60">{item.action == 'currency' ? CURRENCIES.find((v) => v.symbol == currency)?.name : item.value}</span>
-                  </div>
-                  <div className="flex-grow">{item.desc}</div>
-                  {item.right ? <RightOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
-                </div>
-              </Button>
-            )}
-          </VirtualList>
-        </List>
+      <div className="h-121_25 mt-3_75">
+        <VirtualList
+          data={SettingList}
+          data-id="list"
+          height={virtualListHeight}
+          itemHeight={20}
+          itemKey={(item) => item.action}
+          style={{
+            boxSizing: 'border-box'
+          }}
+        >
+          {(item, index) => <MyItem key={index} navigate={navigate} item={item} currency={currency} />}
+        </VirtualList>
       </div>
     </div>
   )

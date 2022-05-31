@@ -7,12 +7,13 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Receive from './pages/Dashboard/Home/Receive'
 import SendPage from './pages/Send'
-import SetLang from './pages/Settings/language'
-import SetCurr from './pages/Settings/currency'
-import SetPwd from './pages/Settings/password'
-import ShowRecv from './pages/Settings/recovery'
-import ShowKey from './pages/Settings/showkey'
-import ExportKey from './pages/Settings/exportkey'
+import SetLang from './pages/Settings/Language'
+import SetCurr from './pages/Settings/Currency'
+import SetPwd from './pages/Settings/Password'
+import ShowRecv from './pages/Settings/Recovery'
+import ShowKey from './pages/Settings/Showkey'
+import ExportKey from './pages/Settings/Exportkey'
+import RemoveAccount from './pages/Settings/Remove'
 import SetAccount from './pages/Account'
 import Sorthat from './pages/Sorthat'
 
@@ -37,6 +38,7 @@ const Main = () => {
           <Route path="/settings/export-key" element={<ExportKey />} />
           <Route path="/settings/show-key" element={<ShowKey />} />
           <Route path="/settings/account" element={<SetAccount />} />
+          <Route path="/settings/remove-account" element={<RemoveAccount />} />
         </Routes>
       </HashRouter>
     </>

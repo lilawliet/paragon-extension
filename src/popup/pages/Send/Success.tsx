@@ -39,7 +39,7 @@ export default ({ transaction, fromAddress, toAmount, setStatus }: Props) => {
 
   return (
     <div className="flex flex-col items-center mx-auto mt-36 gap-2_5 w-110">
-      <img src="./images/Success.png" alt="" />
+      <img src="./images/Success.svg" alt="" />
       <span className="mt-6 text-2xl">Payment Sent</span>
       <span className="text-soft-white">Your transaction has been succesfully sent</span>
       <div className="justify-between w-full box nobor text-soft-white mt-2_5">
