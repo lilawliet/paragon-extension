@@ -8,7 +8,6 @@ import CHeader from '@/popup/components/CHeader'
 import { useWallet } from '@/ui/utils'
 import { Layout } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -98,28 +97,30 @@ const Dashboard = () => {
   }, [currentAccount])
 
   const getAllKeyrings = async () => {
-    const _accounts = await wallet.getAllVisibleAccounts()
-    const allAlianNames = await wallet.getAllAlianName()
-    const allContactNames = await wallet.getContactsByMap()
-    const templist = await _accounts
-      .map((item) =>
-        item.accounts.map((account) => {
-          return {
-            ...account,
-            type: item.type,
-            alianName: allContactNames[account?.address?.toLowerCase()]?.name || allAlianNames[account?.address?.toLowerCase()],
-            keyring: item.keyring
-          }
-        })
-      )
-      .flat(1)
-    const result = await balanceList(templist)
-    if (result) {
-      const withBalanceList = result.sort((a, b) => {
-        return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
-      })
-      setAccountsList(withBalanceList)
-    }
+    // const _accounts = await wallet.getAllVisibleAccounts()
+    // const allAlianNames = await wallet.getAllAlianName()
+    // const allContactNames = await wallet.getContactsByMap()
+    // const templist = await _accounts
+    //   .map((item) =>
+    //     item.accounts.map((account) => {
+    //       return {
+    //         ...account,
+    //         type: item.type,
+    //         alianName: allContactNames[account?.address?.toLowerCase()]?.name || allAlianNames[account?.address?.toLowerCase()],
+    //         keyring: item.keyring
+    //       }
+    //     })
+    //   )
+    //   .flat(1)
+    // const result = await balanceList(templist)
+    // if (result) {
+    //   const withBalanceList = result.sort((a, b) => {
+    //     return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
+    //   })
+    //   setAccountsList(withBalanceList)
+    // }
+    const _accounts = await wallet.getAccounts()
+    setAccountsList(_accounts)
   }
 
   useEffect(() => {
@@ -137,7 +138,6 @@ const Dashboard = () => {
       if (!currentAccount) {
         const _currentAccount = await wallet.getCurrentAccount()
         setCurrentAccount(_currentAccount)
-
         const fetchCurrentAccountAction = await dispatch(fetchCurrentAccount({ wallet }))
         if (fetchCurrentAccount.fulfilled.match(fetchCurrentAccountAction)) {
           // pass

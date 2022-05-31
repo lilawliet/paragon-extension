@@ -41,9 +41,7 @@ export const KEYRING_TYPE = {
 
 export const KEYRING_CLASS = {
   PRIVATE_KEY: 'Simple Key Pair',
-  MNEMONIC: 'HD Key Tree',
-  WATCH: 'Watch Address',
-  WALLETCONNECT: 'WalletConnect'
+  MNEMONIC: 'HD Key Tree'
 }
 
 export const KEYRING_TYPE_TEXT = {

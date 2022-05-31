@@ -1,6 +1,5 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch } from '@/common/storages/hooks'
-import { changeAccount } from '@/common/storages/stores/popup/slice'
 import { useWallet } from '@/ui/utils'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
@@ -32,7 +31,6 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
   const handleOnChange = (index: number) => {
     if (accountsList && accountsList[index]) {
       setSelected(index)
-      dispatch(changeAccount({ account: accountsList[index], wallet }))
       wallet.changeAccount(accountsList[index])
     }
   }
@@ -54,8 +52,7 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
       className="flex items-center w-full"
       onClick={(e) => {
         handleOnClick(e)
-      }}
-    >
+      }}>
       <span>
         <img src="./images/user-solid.svg" alt="" />
       </span>
@@ -69,11 +66,10 @@ const AccountSelect = ({ current, accountsList, handleOnCancel, title, isLoading
             <span className="text-white">
               <img src="./images/chevron-down-solid.png" alt="" />
             </span>
-          }
-        >
+          }>
           {accountsList?.map((account, index) => (
             <Option value={index} key={index}>
-              {account.alianName ? account.alianName : account.brandName}{' '}
+              {account.alianName}{' '}
             </Option>
           ))}
         </Select>

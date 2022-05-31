@@ -30,7 +30,6 @@ const RepeatRecovery = () => {
         }
       })
     } catch (e) {
-      console.log(mnemonics, e)
       message.error('mnemonic phrase is invalid')
     }
   }
@@ -82,8 +81,7 @@ const RepeatRecovery = () => {
               <div
                 key={index}
                 className={`flex items-center w-full p-5 font-bold text-left border border-white rounded-lg bg-soft-black border-opacity-20 box hover
-                                    ${active == index ? ' active' : ''}`}
-              >
+                                    ${active == index ? ' active' : ''}`}>
                 {index + 1}.&nbsp;
                 <Input
                   className={`font-bold p0 ${active == index || hover == index ? styles.antInputActive : styles.antInput}`}

@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/common/storages/hooks'
 import { changeAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
-import { CURRENCIES } from '@/constant'
+import { CURRENCIES, KEYRING_CLASS } from '@/constant'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
@@ -19,6 +19,7 @@ interface Setting {
   action: string
   route: string
   right: boolean
+  keyringType?: string
 }
 
 const SettingList: Setting[] = [
@@ -70,6 +71,15 @@ const SettingList: Setting[] = [
     action: 'export-key',
     route: 'export-key',
     right: false
+  },
+  {
+    label: '',
+    value: '',
+    desc: t('Remove Account'),
+    action: 'remove-account',
+    route: 'remove-account',
+    right: false,
+    keyringType: KEYRING_CLASS.PRIVATE_KEY
   }
 ]
 
@@ -145,11 +155,11 @@ export default ({ current }: AccountsProps) => {
     setEditable(true)
   }
 
-  const alianName = useMemo(() => (current?.alianName ? current.alianName : current?.brandName ? current.brandName : ''), [current])
+  const alianName = useMemo(() => current?.alianName, [current])
   const [name, setName] = useState('')
 
   useEffect(() => {
-    setName(alianName)
+    setName(alianName || '')
   }, [current])
 
   useEffect(() => {
@@ -182,6 +192,16 @@ export default ({ current }: AccountsProps) => {
     }
   }
 
+  const toRenderSettings = SettingList.filter((v) => {
+    if (v.keyringType) {
+      if (current?.type == v.keyringType) {
+        return true
+      }
+    } else {
+      return true
+    }
+  })
+
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
@@ -191,8 +211,7 @@ export default ({ current }: AccountsProps) => {
           }`}
           onClick={(e) => {
             handleChangeAlianName()
-          }}
-        >
+          }}>
           {editable ? (
             <Input
               ref={addressInput}

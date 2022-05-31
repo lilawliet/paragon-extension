@@ -16,7 +16,7 @@ import { DisplayedKeryring, Keyring, KEYRING_CLASS } from 'background/service/ke
 import { CacheState } from 'background/service/pageStateCache'
 import { openIndexPage } from 'background/webapi/tab'
 import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL } from 'consts'
-import { groupBy } from 'lodash'
+import { cloneDeep, groupBy } from 'lodash'
 import { ContactBookItem } from '../service/contactBook'
 import { OpenApiService } from '../service/openapi'
 import { ConnectedSite } from '../service/permission'
@@ -69,13 +69,11 @@ export class WalletController extends BaseController {
           )
         )
         .map((item) => item.flat(1))
-      console.log(result, 'heiheihei1')
       result.forEach((group) =>
         group.forEach((acc, index) => {
           this.updateAlianName(acc?.address, `${BRAND_ALIAN_TYPE_TEXT[acc?.type]} ${index + 1}`)
         })
       )
-      console.log(result, 'heiheihei2')
     }
     if (contacts.length !== 0 && keyrings.length !== 0) {
       const allAccounts = keyrings.map((item) => item.accounts).flat()
@@ -385,7 +383,17 @@ export class WalletController extends BaseController {
   }
 
   getAllVisibleAccountsArray = async (): Promise<Account[]> => {
-    return await keyringService.getAllVisibleAccountsArray()
+    const _accounts = await keyringService.getAllVisibleAccountsArray()
+    const accounts: Account[] = []
+    _accounts.forEach((v) => {
+      accounts.push({
+        type: v.type,
+        address: v.address,
+        brandName: v.brandName,
+        alianName: this.getAlianName(v.address)
+      })
+    })
+    return accounts
   }
 
   getAllClassAccounts = async () => {
@@ -467,6 +475,26 @@ export class WalletController extends BaseController {
     return contactBookService.getContactByAddress(address)
   }
 
+  getNewAccountAlianName = async (type: string) => {
+    const sameTypeAccounts = await this.getTypedAccounts(type)
+    let accountLength = 0
+    if (sameTypeAccounts.length > 0) {
+      accountLength = sameTypeAccounts[0]?.accounts?.length
+    }
+    const alianName = `${BRAND_ALIAN_TYPE_TEXT[type]} ${accountLength}`
+    return alianName
+  }
+
+  getNextAccountAlianName = async (type: string) => {
+    const sameTypeAccounts = await this.getTypedAccounts(type)
+    let accountLength = 0
+    if (sameTypeAccounts.length > 0) {
+      accountLength = sameTypeAccounts[0]?.accounts?.length
+    }
+    const alianName = `${BRAND_ALIAN_TYPE_TEXT[type]} ${accountLength + 1}`
+    return alianName
+  }
+
   private _setCurrentAccountFromKeyring = async (keyring: Keyring, index = 0) => {
     const accounts = await keyring.getAccounts()
     const account = accounts[index < 0 ? index + accounts.length : index]
@@ -475,7 +503,8 @@ export class WalletController extends BaseController {
       throw new Error('the current account is empty')
     }
 
-    const alianName = this.getAlianName(account)
+    const alianName = this.getAlianName(account) || (await this.getNewAccountAlianName(keyring.type))
+
     const _account: Account = {
       address: account,
       type: keyring.type,
@@ -578,11 +607,29 @@ export class WalletController extends BaseController {
 
   getAccounts = async () => {
     const accounts: Account[] = await keyringService.getAllVisibleAccountsArray()
-    accounts.forEach((v) => {
-      v.alianName = this.getAlianName(v.address)
-    })
+    for (let i = 0; i < accounts.length; i++) {
+      const account = accounts[i]
+      account.alianName = this.getAlianName(account.address) || (await this.getNewAccountAlianName(account.type))
+    }
 
     return accounts
+  }
+
+  getCurrentAccount = async () => {
+    let account = preferenceService.getCurrentAccount()
+    if (account) {
+      const accounts = await this.getAccounts()
+      const matchAcct = accounts.find((acct) => account!.address === acct.address)
+      if (!matchAcct) account = undefined
+    }
+
+    if (!account) {
+      ;[account] = await this.getAccounts()
+      if (!account) return null
+      preferenceService.setCurrentAccount(account)
+    }
+
+    return cloneDeep(account) as Account
   }
 }
 
