@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/common/storages/hooks'
 import { changeAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
-import { CURRENCIES } from '@/constant'
+import { CURRENCIES, KEYRING_CLASS } from '@/constant'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Input, List } from 'antd'
@@ -18,6 +18,7 @@ interface Setting {
   action: string
   route: string
   right: boolean
+  keyringType?: string
 }
 
 const SettingList: Setting[] = [
@@ -60,6 +61,15 @@ const SettingList: Setting[] = [
     action: 'export-key',
     route: 'export-key',
     right: false
+  },
+  {
+    label: '',
+    value: '',
+    desc: t('Remove Account'),
+    action: 'export-key',
+    route: 'export-key',
+    right: false,
+    keyringType: KEYRING_CLASS.PRIVATE_KEY
   }
 ]
 
@@ -122,6 +132,16 @@ export default ({ current }: AccountsProps) => {
     }
   }
 
+  const toRenderSettings = SettingList.filter((v) => {
+    if (v.keyringType) {
+      if (current?.type == v.keyringType) {
+        return true
+      }
+    } else {
+      return true
+    }
+  })
+
   return (
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
@@ -131,8 +151,7 @@ export default ({ current }: AccountsProps) => {
           }`}
           onClick={(e) => {
             handleChangeAlianName()
-          }}
-        >
+          }}>
           {editable ? (
             <Input
               ref={addressInput}
@@ -156,7 +175,7 @@ export default ({ current }: AccountsProps) => {
       </div>
       <div className="h-125 ">
         <List>
-          <VirtualList data={SettingList} itemKey="action" onScroll={onScroll}>
+          <VirtualList data={toRenderSettings} itemKey="action" onScroll={onScroll}>
             {(item) => (
               <Button
                 size="large"
@@ -164,8 +183,7 @@ export default ({ current }: AccountsProps) => {
                 className={`mt-3_75 box w-115 default ${item.right ? 'btn-settings' : ''}`}
                 onClick={(e) => {
                   navigate(`/settings/${item.route}`)
-                }}
-              >
+                }}>
                 <div className="flex items-center justify-between font-semibold text-4_5">
                   <div className="flex flex-col text-left gap-2_5">
                     <span>{item.label}</span>
