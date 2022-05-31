@@ -44,7 +44,7 @@ export default () => {
         <div className="flex flex-col items-center mx-auto mt-36 gap-2_5 w-110">
           <img src="./images/Delete.svg" alt="" />
           <span className="mt-6 text-2xl">Remove Account</span>
-          <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address??'')} { currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span>Imported</span>  : <></>}</span>
+          <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address??'', 8)} { currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span>Imported</span>  : <></>}</span>
           <span className="text-base text-center text-error">
             This is an imported account. You will not be able to recover this account with your Secret Recovery Phrase. This action is not reversible.
           </span>

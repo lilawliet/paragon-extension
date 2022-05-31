@@ -1,3 +1,5 @@
+import { formatAddr } from '@/common/utils'
+import { KEYRING_CLASS } from '@/constant'
 import AccountSelect from '@/popup/components/Account'
 import { Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -24,6 +26,10 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           }}
           title={''}
         />
+      </div>
+      <div className='flex items-center mt-2_5'>
+        <span className='text-2xl text-soft-white'>{formatAddr(current?.address??'', 5)}</span>
+        {current?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className='text-xs rounded bg-primary-active p-2_5 ml-2_5'>IMPORTED</span> : <></>}
       </div>
       <div className="flex items-center p-10 font-semibold text-11">
         <span>$</span>

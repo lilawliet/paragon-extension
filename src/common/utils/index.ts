@@ -25,9 +25,9 @@ export const copyToClipboard = (textToCopy: string) => {
   }
 }
 
-export const formatAddr = (address: string) => {
+export const formatAddr = (address: string, fixed: number) => {
   if (address.length > 16) {
-    return `${address.slice(0, 8)}...${address.slice(-8)}`
+    return `${address.slice(0, fixed)}...${address.slice(-fixed)}`
   }
   return address
 }

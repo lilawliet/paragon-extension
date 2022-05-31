@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Status } from '.'
 
+type InputStatus = '' | 'error' | 'warning' | undefined
+
 interface Props {
   setStatus(status: Status): void
 }
@@ -15,6 +17,7 @@ export default ({ setStatus }: Props) => {
   const wallet = useWallet()
   const [privateKey, setPrivateKey] = useState('')
   const [inputError, setInputError] = useState('')
+  const [inputStatus, setInputStatus] = useState<InputStatus>('')
   const [disabled, setDisabled] = useState(true)
   const { t } = useTranslation()
   const verify = async () => {
@@ -32,7 +35,14 @@ export default ({ setStatus }: Props) => {
 
       navigate('/dashboard')
     } catch (e) {
+      setInputStatus('error')
       setInputError((e as any).message)
+    }
+  }
+  
+  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ('Enter' == e.key) {
+      verify()
     }
   }
 
@@ -41,6 +51,8 @@ export default ({ setStatus }: Props) => {
       setDisabled(false)
       return
     }
+    setInputStatus('')
+    setInputError('')
     setDisabled(true)
   }, [privateKey])
 
@@ -51,8 +63,10 @@ export default ({ setStatus }: Props) => {
         <div className="text-base text-soft-white mt-2_5">Imported accounts will not be associated with your originally created Paragon account Secret Recovery Phrase.</div>
       </div>
       <Input
-        className="p-5 font-semibold text-white mt-1_25 h-15_5 box default"
+        className="font-semibold text-white mt-1_25 h-15_5"
+        status={inputStatus}
         placeholder="Private Key"
+        onKeyUp={(e) => handleOnKeyUp(e)}
         onChange={(e) => {
           setPrivateKey(e.target.value)
         }}

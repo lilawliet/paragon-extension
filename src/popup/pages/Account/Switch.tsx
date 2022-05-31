@@ -1,6 +1,7 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch } from '@/common/storages/hooks'
 import { formatAddr } from '@/common/utils'
+import { KEYRING_CLASS } from '@/constant'
 import { useWallet } from '@/ui/utils'
 import { CheckOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
@@ -29,9 +30,10 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName} </span>
-          <span className="font-normal opacity-60">({formatAddr(account.address)})</span>
+          <span className="font-normal opacity-60">({formatAddr(account.address, 8)})</span>
         </div>
-        {currency == index ? <CheckOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
+        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className='text-xs rounded bg-primary-active p-2_5'>IMPORTED</span>: <></>}
+        {currency == index ? <CheckOutlined className='w-4 ml-2_5' style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <span className='w-4 ml-2_5'></span>}
       </div>
     </Button>
   )

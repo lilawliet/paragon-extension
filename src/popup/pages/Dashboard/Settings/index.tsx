@@ -170,18 +170,23 @@ export default ({ current }: AccountsProps) => {
 
   const handleOnBlur = async (e) => {
     if (current) {
-      dispatch(
-        updateAlianName({
-          wallet,
-          address: current.address,
-          alianName: e.target.value
-        })
-      ).then(() => {
-        dispatch(changeAccount({ account: { ...current, alianName: e.target.value }, wallet }))
-      })
-      setName(e.target.value)
-      setEditable(false)
-    }
+      if (e.target.value) {
+          dispatch(
+            updateAlianName({
+              wallet,
+              address: current.address,
+              alianName: e.target.value
+            })
+          ).then(() => {
+            dispatch(changeAccount({ account: { ...current, alianName: e.target.value }, wallet }))
+          })
+          setName(e.target.value)
+          setEditable(false)
+        }
+      }
+      else {
+        setName(alianName || '')
+      }
   }
 
   const toRenderSettings = SettingList.filter((v) => {
