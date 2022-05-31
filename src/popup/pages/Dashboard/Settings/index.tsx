@@ -66,8 +66,8 @@ const SettingList: Setting[] = [
     label: '',
     value: '',
     desc: t('Remove Account'),
-    action: 'export-key',
-    route: 'export-key',
+    action: 'remove-account',
+    route: 'remove-account',
     right: false,
     keyringType: KEYRING_CLASS.PRIVATE_KEY
   }
@@ -86,11 +86,11 @@ export default ({ current }: AccountsProps) => {
     setEditable(true)
   }
 
-  const alianName = useMemo(() => (current?.alianName ? current.alianName : current?.brandName ? current.brandName : ''), [current])
+  const alianName = useMemo(() => current?.alianName, [current])
   const [name, setName] = useState('')
 
   useEffect(() => {
-    setName(alianName)
+    setName(alianName || '')
   }, [current])
 
   useEffect(() => {

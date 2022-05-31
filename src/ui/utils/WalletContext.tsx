@@ -67,11 +67,13 @@ export type WalletController = {
   getContactsByMap: () => ContactBookStore
   getAllVisibleAccountsArray(): Promise<Account>
   getAllClassAccounts(): Promise<DisplayedKeryring & { keyring: DisplayKeyring }[]>
-  updateAlianName: (address: string, name: string) => void
+  updateAlianName: (address: string, name: string) => Promise<void>
 
-  changeAccount(account: Account): void
+  changeAccount(account: Account): Promise<void>
   getCurrentAccount(): Promise<Account>
-  getAccounts(): Promise<{ address: string; type: string }[]>
+  getAccounts(): Promise<Account[]>
+  getNewAccountAlianName: (type: string) => Promise<string>
+  getNextAccountAlianName: (type: string) => Promise<string>
 
   signTransaction(type: string, from: string, novoTx: novo.Transaction): Promise<novo.Transaction>
   sendNovo(data: { to: string; amount: number }): Promise<{ fee: number; rawtx: string }>

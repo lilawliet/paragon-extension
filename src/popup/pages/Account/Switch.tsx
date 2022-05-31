@@ -1,11 +1,9 @@
 import { Account } from '@/background/service/preference'
 import { useAppDispatch } from '@/common/storages/hooks'
-import { changeAccount } from '@/common/storages/stores/popup/slice'
 import { formatAddr } from '@/common/utils'
 import { useWallet } from '@/ui/utils'
 import { CheckOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
-import BigNumber from 'bignumber.js'
 import VirtualList from 'rc-virtual-list'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -27,11 +25,10 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         setCurrency(index)
-      }}
-    >
+      }}>
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
-          <span>{account.alianName ? account.alianName : account.brandName} </span>
+          <span>{account.alianName} </span>
           <span className="font-normal opacity-60">({formatAddr(account.address)})</span>
         </div>
         {currency == index ? <CheckOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
@@ -76,44 +73,9 @@ export default ({ setStatus }: Props) => {
 
   const ForwardMyItem = forwardRef(MyItem)
 
-  const balanceList = async (accounts) => {
-    return await Promise.all<Account>(
-      accounts.map(async (item) => {
-        let balance = await wallet.getAddressCacheBalance(item?.address)
-        if (!balance) {
-          balance = await wallet.getAddressBalance(item?.address)
-        }
-        return {
-          ...item,
-          balance: balance?.amount || 0
-        }
-      })
-    )
-  }
-
   const getAllKeyrings = async () => {
-    const _accounts = await wallet.getAllVisibleAccounts()
-    const allAlianNames = await wallet.getAllAlianName()
-    const allContactNames = await wallet.getContactsByMap()
-    const templist = await _accounts
-      .map((item) =>
-        item.accounts.map((account) => {
-          return {
-            ...account,
-            type: item.type,
-            alianName: allContactNames[account?.address?.toLowerCase()]?.name || allAlianNames[account?.address?.toLowerCase()],
-            keyring: item.keyring
-          }
-        })
-      )
-      .flat(1)
-    const result = await balanceList(templist)
-    if (result) {
-      const withBalanceList = result.sort((a, b) => {
-        return new BigNumber(b?.balance || 0).minus(new BigNumber(a?.balance || 0)).toNumber()
-      })
-      setAccountsList(withBalanceList)
-    }
+    const _accounts = await wallet.getAccounts()
+    setAccountsList(_accounts)
   }
 
   useEffect(() => {
@@ -137,8 +99,9 @@ export default ({ setStatus }: Props) => {
 
   useEffect(() => {
     if (accountsList && accountsList[currency]?.address != currentAccount?.address) {
-      dispatch(changeAccount({ account: accountsList[currency], wallet }))
+      wallet.changeAccount(accountsList[currency])
       setCurrentAccount(accountsList[currency])
+      navigate('/dashboard')
     }
   }, [currency])
 
@@ -173,8 +136,7 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">Add New Account</div>
       </Button>
     </div>
