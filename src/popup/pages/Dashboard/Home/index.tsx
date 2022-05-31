@@ -1,10 +1,10 @@
 import { copyToClipboard, formatAddr } from '@/common/utils'
-import { KEYRING_CLASS } from '@/constant'
+import { CURRENCIES, KEYRING_CLASS } from '@/constant'
 import AccountSelect from '@/popup/components/Account'
+import { useGlobalState } from '@/ui/state/state'
 import { message, Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { AccountsProps } from '..'
 
 function copy(str: string) {
   copyToClipboard(str).then(() => {
@@ -15,41 +15,50 @@ function copy(str: string) {
   })
 }
 
-const Home = ({ current, accountAssets, accountBalance, accountsList }: AccountsProps) => {
+const Home = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const [currentAccount] = useGlobalState('currentAccount')
+  const [accountAssets] = useGlobalState('accountAssets')
+  const [currency] = useGlobalState('currency')
+  const [exchangeRate] = useGlobalState('exchangeRate')
+  const [accountBalance] = useGlobalState('accountBalance')
+
+  const getCurrencyValueString = (usd_value) => {
+    let value = 0
+    if (accountBalance) {
+      if (currency == 'USD') {
+        value = parseFloat(usd_value)
+      } else {
+        value = parseFloat(usd_value) * exchangeRate[currency]
+      }
+    }
+    const symbol = CURRENCIES.find((v) => v.code == currency)?.symbol
+    return symbol + ' ' + value.toFixed(2)
+  }
   return (
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box soft-black bg-opacity-20 w340 hover">
-        <AccountSelect
-          current={current}
-          accountsList={accountsList}
-          handleOnCancel={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          title={''}
-        />
+        <AccountSelect />
       </div>
       <div
         className="flex items-center mt-2_5"
         onClick={(e) => {
-          copy(current?.address ?? '')
-        }}
-      >
-        <span className="text-2xl text-soft-white">{formatAddr(current?.address ?? '', 5)}</span>
-        {current?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
+          copy(currentAccount?.address ?? '')
+        }}>
+        <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address ?? '', 5)}</span>
+        {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
       </div>
       <div className="flex items-center p-10 font-semibold text-11">
-        <span>$</span>
-        <Statistic className="text-white" value={accountBalance?.usd_value} valueStyle={{ fontSize: '2.75rem' }} />
+        <Statistic className="text-white" value={getCurrencyValueString(accountBalance?.usd_value)} valueStyle={{ fontSize: '2.75rem' }} />
       </div>
       <div className="grid grid-cols-2 gap-4 leading-6_5 w-5/8">
         <div
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
-          }}
-        >
+          }}>
           <span>
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
@@ -59,8 +68,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate('/send/index')
-          }}
-        >
+          }}>
           <span>
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>
@@ -79,7 +87,7 @@ const Home = ({ current, accountAssets, accountBalance, accountsList }: Accounts
                 {asset.amount} {asset.symbol}
               </div>
             </div>
-            <div className="font-semibold">{asset.value}</div>
+            <div className="font-semibold">{getCurrencyValueString(asset.value)}</div>
           </div>
         ))}
       </div>

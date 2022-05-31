@@ -1,10 +1,10 @@
 import AccountSelect from '@/popup/components/Account'
-import { shortAddress, useWallet } from '@/ui/utils'
+import { useGlobalState } from '@/ui/state/state'
+import { shortAddress } from '@/ui/utils'
 import moment from 'moment'
-import { forwardRef, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { AccountsProps } from '..'
 import VirtualList from 'rc-virtual-list'
+import { forwardRef, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface HistoryItem {
   address: string
@@ -67,7 +67,7 @@ interface Transaction {
   opt: string
 }
 
-const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) => {
+const Transaction = () => {
   const { t } = useTranslation()
   const listRef = useRef<ListRef>(null)
   const ForwardMyItem = forwardRef(MyItem)
@@ -77,35 +77,35 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
     virtualListHeight = (virtualListHeight * parseFloat(getComputedStyle(html).fontSize)) / 16
   }
 
-  const historyGroups: GroupItem[] = []
-  let lastDate = ''
-  let lastGroup: GroupItem
-  accountHistory?.forEach((v, i) => {
-    if (lastDate != v.date) {
-      lastDate = v.date
-      lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index: i }
-      historyGroups.push(lastGroup)
-    }
-    const amount = parseFloat(v.amount)
-    const symbol = v.symbol
-    const address = current?.address || ''
-    lastGroup.historyItems.push({
-      address,
-      amount,
-      symbol
+  const [currentAccount] = useGlobalState('currentAccount')
+  const [accountHistory] = useGlobalState('accountHistory')
+  const [historyGroups, setHistoryGroups] = useState<GroupItem[]>([])
+  useEffect(() => {
+    const _historyGroups: GroupItem[] = []
+    let lastDate = ''
+    let lastGroup: GroupItem
+    let index = 0
+    accountHistory?.forEach((v) => {
+      if (lastDate != v.date) {
+        lastDate = v.date
+        lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index: index++ }
+        _historyGroups.push(lastGroup)
+      }
+      const amount = parseFloat(v.amount)
+      const symbol = v.symbol
+      const address = currentAccount?.address || ''
+      lastGroup.historyItems.push({
+        address,
+        amount,
+        symbol
+      })
     })
-  })
+    setHistoryGroups(_historyGroups)
+  }, [accountHistory])
   return (
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
-        <AccountSelect
-          current={current}
-          accountsList={accountsList}
-          handleOnCancel={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          title={''}
-        />
+        <AccountSelect />
       </div>
       <div className="grid mt-6 gap-2_5">
         <VirtualList
@@ -113,7 +113,7 @@ const Transaction = ({ current, accountsList, accountHistory }: AccountsProps) =
           data-id="list"
           height={virtualListHeight}
           itemHeight={20}
-          itemKey={(group) => group.index}
+          itemKey={(group) => group.date}
           // disabled={animating}
           ref={listRef}
           style={{

@@ -1,5 +1,5 @@
-import { NovoBalance } from '@/background/service/openapi'
 import CHeader from '@/popup/components/CHeader'
+import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress, sleep, useWallet } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Layout } from 'antd'
@@ -24,13 +24,10 @@ const SendIndex = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const [balance, setBalance] = useState<NovoBalance>({
-    confirm_amount: '0',
-    pending_amount: '0',
-    amount: '0',
-    usd_value: 0
-  })
-  const [fromAddress, setFromAddress] = useState('')
+  const [currentAccount] = useGlobalState('currentAccount')
+
+  const [fromAddress, setFromAddress] = useState(currentAccount?.address || '')
+  const [accountBalance] = useGlobalState('accountBalance')
   const [toAddress, setToAddress] = useState('')
   const [toAmount, setToAmount] = useState(0)
   const [fee, setFee] = useState(0)
@@ -42,26 +39,12 @@ const SendIndex = () => {
 
   const [status, setStatus] = useState<Status>('create')
   const [error, setError] = useState('')
-  useEffect(() => {
-    //todo
-  }, [status])
-
-  useEffect(() => {
-    const init = async () => {
-      const currentAccount = await wallet.getCurrentAccount()
-      setFromAddress(currentAccount.address)
-      const balance = await wallet.getAddressBalance(currentAccount.address)
-      setBalance(balance)
-    }
-    init()
-  }, [])
 
   const sendTx = useCallback(async () => {
     try {
       setStatus('sending')
       const txid = await wallet.pushTx(ref.current.rawtx)
       ref.current.txid = txid
-      console.log('start')
       await sleep(3)
       setStatus('success')
     } catch (e) {
@@ -75,7 +58,7 @@ const SendIndex = () => {
     if (!isValidAddress(toAddress)) {
       return
     }
-    if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
+    if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
       return
     }
     const run = async () => {
@@ -83,7 +66,7 @@ const SendIndex = () => {
         setError('Invalid address')
         return
       }
-      if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
+      if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
         setError('Invalid amount')
         return
       }
@@ -103,7 +86,6 @@ const SendIndex = () => {
         {status == 'create' ? (
           <SendCreate
             transaction={ref.current}
-            balance={balance}
             fee={fee}
             setToAddress={setToAddress}
             setToAmount={setToAmount}
@@ -130,8 +112,7 @@ const SendIndex = () => {
             backgroundColor: '#1C1919',
             textAlign: 'center',
             width: '100%'
-          }}
-        >
+          }}>
           <Button
             size="large"
             type="default"
@@ -144,8 +125,7 @@ const SendIndex = () => {
               } else if (status == 'success') {
                 window.history.go(-1)
               }
-            }}
-          >
+            }}>
             <div className="flex items-center justify-center text-lg">
               <ArrowLeftOutlined />
               <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>

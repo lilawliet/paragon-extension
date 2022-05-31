@@ -9,7 +9,7 @@
     "build:firefox": "gulp build --env=pro --browser=firefox",
     "build:brave": "gulp build --env=pro --browser=brave",
     "build:opera": "gulp build --env=pro --browser=opera",
-    "translate":"node build/pull_translation",
+    "translate": "node build/pull_translation",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",

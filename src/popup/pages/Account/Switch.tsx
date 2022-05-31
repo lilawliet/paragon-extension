@@ -2,6 +2,7 @@ import { Account } from '@/background/service/preference'
 import { useAppDispatch } from '@/common/storages/hooks'
 import { formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
+import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { CheckOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
@@ -14,11 +15,11 @@ import { Status } from '.'
 interface MyItemProps {
   index: number
   account: Account
-  currency: number
-  setCurrency(num: number): void
+  accountIndex: number
+  onClick(num: number): void
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, account, currency, setCurrency }: MyItemProps, ref) => {
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, account, accountIndex: currency, onClick }: MyItemProps, ref) => {
   return (
     <Button
       key={index}
@@ -26,9 +27,8 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       type="default"
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
-        setCurrency(index)
-      }}
-    >
+        onClick(index)
+      }}>
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName} </span>
@@ -72,43 +72,15 @@ export default ({ setStatus }: Props) => {
   const navigate = useNavigate()
   const listRef = useRef<ListRef>(null)
 
-  const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
-  const [currency, setCurrency] = useState(0)
-  const [accountsList, setAccountsList] = useState<Account[]>([])
+  const [currentAccount, setCurrentAccount] = useGlobalState('currentAccount')
+  const [accountsList] = useGlobalState('accountsList')
+  const [accountIndex, setAccountIndex] = useState(accountsList.findIndex((v) => v.address == currentAccount?.address))
 
   const ForwardMyItem = forwardRef(MyItem)
 
-  const getAllKeyrings = async () => {
-    const _accounts = await wallet.getAccounts()
-    setAccountsList(_accounts)
-  }
-
   useEffect(() => {
-    currentAccount &&
-      accountsList &&
-      accountsList.map((_account, index) => {
-        if (currentAccount && currentAccount.address == _account.address) {
-          setCurrency(index)
-        }
-      })
+    setAccountIndex(accountsList.findIndex((v) => v.address == currentAccount?.address))
   }, [currentAccount, accountsList])
-
-  useEffect(() => {
-    ;(async () => {
-      if (!currentAccount) {
-        setCurrentAccount(await wallet.getCurrentAccount())
-      }
-      getAllKeyrings()
-    })()
-  }, [])
-
-  useEffect(() => {
-    if (accountsList && accountsList[currency]?.address != currentAccount?.address) {
-      wallet.changeAccount(accountsList[currency])
-      setCurrentAccount(accountsList[currency])
-      navigate('/dashboard')
-    }
-  }, [currency])
 
   const verify = () => {
     // to verify
@@ -133,7 +105,21 @@ export default ({ setStatus }: Props) => {
         // onSkipRender={onAppear}
         // onItemRemove={onAppear}
       >
-        {(item, index) => <ForwardMyItem key={index} account={item} index={index} currency={currency} setCurrency={setCurrency} />}
+        {(item, index) => (
+          <ForwardMyItem
+            key={index}
+            account={item}
+            index={index}
+            accountIndex={accountIndex}
+            onClick={async (index) => {
+              if (index != accountIndex) {
+                await wallet.changeAccount(accountsList[index])
+                setCurrentAccount(accountsList[index])
+                navigate('/dashboard')
+              }
+            }}
+          />
+        )}
       </VirtualList>
       <Button
         size="large"
@@ -141,8 +127,7 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
       </Button>
     </div>

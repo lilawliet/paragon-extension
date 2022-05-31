@@ -1,6 +1,5 @@
 /* constants pool */
 import { Chain } from '@/background/service/openapi'
-import { t } from 'i18next'
 // import IconNovoLogo from "./images/novo.svg";
 
 export enum CHAINS_ENUM {
@@ -151,10 +150,10 @@ export const COIN_NAME = 'Novo'
 export const COIN_SYMBOL = 'NOVO'
 
 export const CURRENCIES = [
-  { name: 'US Dollar', symbol: 'USD' },
-  { name: 'Euro', symbol: 'EUR' },
-  { name: 'Japanese Yen', symbol: 'JPY' },
-  { name: 'British Pound', symbol: 'GBP' },
-  { name: 'Swiss Franc', symbol: 'CHF' },
-  { name: 'Canadian Dollar', symbol: 'CAD' }
+  { name: 'US Dollar', code: 'USD', symbol: '$' },
+  { name: 'Euro', code: 'EUR', symbol: '€' },
+  { name: 'Japanese Yen', code: 'JPY', symbol: '¥' },
+  { name: 'British Pound', code: 'GBP', symbol: '£' },
+  { name: 'Swiss Franc', code: 'CHF', symbol: 'CHF' },
+  { name: 'Canadian Dollar', code: 'CAD', symbol: 'C$' }
 ]

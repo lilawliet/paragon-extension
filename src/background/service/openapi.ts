@@ -106,7 +106,7 @@ export interface NovoBalance {
   confirm_amount: string
   pending_amount: string
   amount: string
-  usd_value: number
+  usd_value: string
 }
 
 export interface TokenItem {

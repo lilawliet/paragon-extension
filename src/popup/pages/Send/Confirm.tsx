@@ -48,8 +48,7 @@ export default ({ transaction, fromAddress, toAddress, toAmount, fee, sendTx, se
         className="box w380"
         onClick={(e) => {
           sendTx()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">{t('Next')}</div>
       </Button>
     </div>

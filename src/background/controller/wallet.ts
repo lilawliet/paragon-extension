@@ -33,6 +33,13 @@ function satoshisToNovo(amount: number) {
   return amount / 10000
 }
 
+export type AccountAsset = {
+  name: string
+  symbol: string
+  amount: string
+  value: string
+}
+
 export class WalletController extends BaseController {
   openapi: OpenApiService = openapiService
 
@@ -559,7 +566,7 @@ export class WalletController extends BaseController {
 
   listChainAssets = async (address: string) => {
     const balance = await openapiService.getAddressBalance(address)
-    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: '$' + balance.usd_value }]
+    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: balance.usd_value }]
     return assets
   }
 

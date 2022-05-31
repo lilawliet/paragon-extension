@@ -1,33 +1,25 @@
-import { Account } from '@/background/service/preference'
 import { copyToClipboard } from '@/common/utils'
 import CHeader from '@/popup/components/CHeader'
-import { shortAddress, useWallet } from '@/ui/utils'
+import { useGlobalState } from '@/ui/state/state'
+import { shortAddress } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import QRCode from 'qrcode.react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams } from 'react-router-dom'
 
 const Receive = () => {
   const { t } = useTranslation()
-  const [searchParams] = useSearchParams()
-
-  const wallet = useWallet()
   const [size, setSize] = useState(210)
 
-  const [currentAccount, setCurrentAccount] = useState<Account | null>(null)
+  const [currentAccount] = useGlobalState('currentAccount')
 
   useEffect(() => {
     const html = document.getElementsByTagName('html')[0]
     if (html && getComputedStyle(html).fontSize) {
       setSize((210 * parseFloat(getComputedStyle(html).fontSize)) / 16)
     }
-    ;(async () => {
-      const account = await wallet.getCurrentAccount()
-      setCurrentAccount(account)
-    })()
   }, [])
 
   function copy(str: string) {
@@ -55,8 +47,7 @@ const Receive = () => {
               className="grid w-full grid-cols-6 px-10 box default py-2_5 hover"
               onClick={(e) => {
                 copy(currentAccount?.address || '')
-              }}
-            >
+              }}>
               <div className="flex items-center">
                 <img src="./images/copy-solid.svg" alt="" />
               </div>
@@ -76,8 +67,7 @@ const Receive = () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}
-        >
+          }}>
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>

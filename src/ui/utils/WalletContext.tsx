@@ -1,3 +1,4 @@
+import { AccountAsset } from '@/background/controller/wallet'
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook'
 import { DisplayedKeryring } from '@/background/service/keyring'
 import DisplayKeyring from '@/background/service/keyring/display'
@@ -29,14 +30,7 @@ export type WalletController = {
 
   getAddressBalance(address: string): Promise<NovoBalance>
   getAddressCacheBalance(address: string): NovoBalance
-  listChainAssets: (address: string) => Promise<
-    {
-      name: string
-      symbol: string
-      amount: number
-      value: string
-    }[]
-  >
+  listChainAssets: (address: string) => Promise<AccountAsset[]>
   getTransactionHistory: (address: string) => Promise<TxHistoryItem[]>
 
   getLocale(): string

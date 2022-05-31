@@ -1,16 +1,14 @@
-import { useAppDispatch } from '@/common/storages/hooks'
-import { changeAccount, updateAlianName } from '@/common/storages/stores/popup/slice'
 import { copyToClipboard } from '@/common/utils'
-import { CURRENCIES, KEYRING_CLASS } from '@/constant'
+import { CURRENCIES, KEYRING_TYPE } from '@/constant'
+import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
-import { Button, Input, List, message } from 'antd'
+import { Button, Input, message } from 'antd'
 import { t } from 'i18next'
 import VirtualList from 'rc-virtual-list'
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { AccountsProps } from '..'
 
 interface Setting {
   label?: string
@@ -56,7 +54,7 @@ const SettingList: Setting[] = [
     action: 'remove-account',
     route: 'remove-account',
     right: false,
-    keyringType: KEYRING_CLASS.PRIVATE_KEY
+    keyringType: KEYRING_TYPE.SimpleKeyring
   },
   {
     label: '',
@@ -83,7 +81,7 @@ interface MyItemProps {
   currency: string
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ item, key, navigate, currency }, ref) => {
+const MyItem: React.FC<MyItemProps> = forwardRef(({ item, key, navigate, currency }) => {
   return (
     <Button
       key={key}
@@ -93,19 +91,18 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ item, key, n
       className={`mb-3_75 box w-115 ${item.danger ? item.danger : 'default'} ${item.right ? 'btn-settings' : ''}`}
       onClick={(e) => {
         navigate(`/settings/${item.route}`)
-      }}
-    >
+      }}>
       <div className="flex items-center justify-between font-semibold text-4_5">
         <div className="flex flex-col text-left gap-2_5">
           <span>{item.label}</span>
-          <span className="font-normal opacity-60">{item.action == 'currency' ? CURRENCIES.find((v) => v.symbol == currency)?.name : item.value}</span>
+          <span className="font-normal opacity-60">{item.action == 'currency' ? CURRENCIES.find((v) => v.code == currency)?.name : item.value}</span>
         </div>
         <div className="flex-grow">{item.desc}</div>
         {item.right ? <RightOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
       </div>
     </Button>
   )
-}
+})
 
 export type ScrollAlign = 'top' | 'bottom' | 'auto'
 
@@ -127,12 +124,10 @@ type ListRef = {
   scrollTo: ScrollTo
 }
 
-export default ({ current }: AccountsProps) => {
+export default () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const wallet = useWallet()
-  const listRef = useRef<ListRef>(null)
-  const ForwardMyItem = forwardRef(MyItem)
   const [editable, setEditable] = useState(false)
   const html = document.getElementsByTagName('html')[0]
   let virtualListHeight = 485
@@ -140,19 +135,20 @@ export default ({ current }: AccountsProps) => {
     virtualListHeight = (virtualListHeight * parseFloat(getComputedStyle(html).fontSize)) / 16
   }
 
-  const dispatch = useAppDispatch()
+  const [currentAccount] = useGlobalState('currentAccount')
+  const [currency] = useGlobalState('currency')
+
   const addressInput = useRef<any>(null)
 
   const handleChangeAlianName = () => {
     setEditable(true)
   }
 
-  const alianName = useMemo(() => current?.alianName, [current])
   const [name, setName] = useState('')
 
   useEffect(() => {
-    setName(alianName || '')
-  }, [current])
+    setName(currentAccount?.alianName || '')
+  }, [currentAccount])
 
   useEffect(() => {
     if (editable) {
@@ -160,37 +156,20 @@ export default ({ current }: AccountsProps) => {
     }
   }, [editable])
 
-  const [currency, setCurrency] = useState('USD')
-  useEffect(() => {
-    ;(async () => {
-      const currency = await wallet.getCurrency()
-      setCurrency(currency)
-    })()
-  }, [])
-
   const handleOnBlur = async (e) => {
-    if (current) {
-      if (e.target.value) {
-        dispatch(
-          updateAlianName({
-            wallet,
-            address: current.address,
-            alianName: e.target.value
-          })
-        ).then(() => {
-          dispatch(changeAccount({ account: { ...current, alianName: e.target.value }, wallet }))
-        })
-        setName(e.target.value)
-        setEditable(false)
-      }
-    } else {
-      setName(alianName || '')
+    if (currentAccount) {
+      const alianName = e.target.value
+      await wallet.updateAlianName(currentAccount.address, alianName)
+      currentAccount.alianName = alianName
+      await wallet.changeAccount(currentAccount)
+      setName(alianName)
+      setEditable(false)
     }
   }
 
   const toRenderSettings = SettingList.filter((v) => {
     if (v.keyringType) {
-      if (current?.type == v.keyringType) {
+      if (currentAccount?.type == v.keyringType) {
         return true
       }
     } else {
@@ -216,8 +195,7 @@ export default ({ current }: AccountsProps) => {
           }`}
           onClick={(e) => {
             handleChangeAlianName()
-          }}
-        >
+          }}>
           {editable ? (
             <Input
               ref={addressInput}
@@ -245,10 +223,9 @@ export default ({ current }: AccountsProps) => {
         <div
           className="w-full text-center text-soft-white mt-2_5"
           onClick={(e) => {
-            copy(current?.address ?? '')
-          }}
-        >
-          ( {current?.address} )
+            copy(currentAccount?.address ?? '')
+          }}>
+          ( {currentAccount?.address} )
         </div>
       </div>
       <div className="h-121_25 mt-3_75">
@@ -260,8 +237,7 @@ export default ({ current }: AccountsProps) => {
           itemKey={(item) => item.action}
           style={{
             boxSizing: 'border-box'
-          }}
-        >
+          }}>
           {(item, index) => <MyItem key={index} navigate={navigate} item={item} currency={currency} />}
         </VirtualList>
       </div>

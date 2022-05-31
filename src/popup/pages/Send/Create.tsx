@@ -1,7 +1,6 @@
-import { NovoBalance } from '@/background/service/openapi'
+import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress } from '@/ui/utils'
 import { Button, Input } from 'antd'
-import { t } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Status, Transaction } from './index'
@@ -11,7 +10,6 @@ type InputState = '' | 'error' | 'warning' | undefined
 interface Props {
   transaction: Transaction
 
-  balance: NovoBalance
   fee: number
 
   toAddress: string
@@ -23,8 +21,9 @@ interface Props {
   setStatus(status: Status): void
 }
 
-export default ({ transaction, balance, fee, toAddress, toAmount, error, setError, setToAddress, setToAmount, setStatus }: Props) => {
+export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setToAmount, setStatus }: Props) => {
   const { t } = useTranslation()
+  const [accountBalance] = useGlobalState('accountBalance')
   const [statueAdd, setStatueAdd] = useState<InputState>('')
   const [statueAmt, setStatueAmt] = useState<InputState>('')
 
@@ -36,7 +35,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
       setError('Invalid address')
       return
     }
-    if (toAmount <= 0 || toAmount > parseFloat(balance.amount)) {
+    if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
       setStatueAmt('error')
       setError('Invalid amount')
       return
@@ -62,7 +61,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
       <div className="flex justify-between w-full mt-5 box text-soft-white">
         <span>{t('Available')}</span>
         <span>
-          <span className="font-semibold text-white">{balance.amount}</span> Novo
+          <span className="font-semibold text-white">{accountBalance.amount}</span> Novo
         </span>
       </div>
       <Input
@@ -87,8 +86,7 @@ export default ({ transaction, balance, fee, toAddress, toAmount, error, setErro
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">{t('Next')}</div>
       </Button>
     </div>
