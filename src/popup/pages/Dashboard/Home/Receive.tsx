@@ -58,7 +58,7 @@ const Receive = () => {
               }}
             >
               <div className="flex items-center">
-                <img src="./images/copy-solid.png" alt="" />
+                <img src="./images/copy-solid.svg" alt="" />
               </div>
               <div className="flex flex-col flex-grow col-span-5 items-begin">
                 <span className="font-semibold">{currentAccount?.alianName}</span>
@@ -80,7 +80,7 @@ const Receive = () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            &nbsp;Back
+            <span className='font-semibold leading-4'>&nbsp;Back</span>
           </div>
         </Button>
       </Footer>

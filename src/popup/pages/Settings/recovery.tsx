@@ -7,6 +7,9 @@ import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+
+type Status = '' | 'error' | 'warning' | undefined
+
 export default () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -16,6 +19,7 @@ export default () => {
   const [disabled, setDisabled] = useState(true)
 
   const [mnemonic, setMnemonic] = useState('')
+  const [status, setStatus] = useState<Status>('')
   const [error, setError] = useState('')
   const wallet = useWallet()
   const btnClick = async () => {
@@ -23,16 +27,23 @@ export default () => {
       const _res = await wallet.getMnemonics(password)
       setMnemonic(_res)
     } catch (e) {
+      setStatus('error')
       setError((e as any).message)
     }
   }
 
+  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ('Enter' == e.key) {
+      btnClick()
+    }
+  }
+
   useEffect(() => {
+    setDisabled(true)
     if (password) {
-      // if (true) {
       setDisabled(false)
+      setStatus('')
       setError('')
-      // }
     }
   }, [password])
 
@@ -51,21 +62,23 @@ export default () => {
       </Header>
 
       <Content style={{ backgroundColor: '#1C1919' }}>
-        <div className="flex flex-col items-center mx-auto mt-5 text-center gap-3_75 justify-evenly w-95">
+        <div className="flex flex-col items-center mx-auto mt-5 text-center justify-evenly w-95">
           <div className="flex items-center px-2 text-2xl h-13">Secret Recovery Phrase</div>
-
           {mnemonic == '' ? (
-            <div className="flex flex-col items-center mx-auto mt-5 text-center gap-3_75 justify-evenly w-95">
-              <div className="text-warn box w380 text-left">Type your Paragon password</div>
-              <div className="box w380">
+            <div className="flex flex-col items-center mx-auto text-center gap-3_75 justify-evenly w-95">
+              <div className=" text-warn box w380">Type your Paragon password</div>
+              <div className="mt-1_25">
                 <Input.Password
+                  className="box w380"
+                  status={status}
                   placeholder="Password"
                   onChange={(e) => {
                     setPassword(e.target.value)
                   }}
+                  onKeyUp={(e) => handleOnKeyUp(e)}
                 />
               </div>
-              <div className="text-base text-warn box w380">{error}</div>
+              { error ? <div className="text-base text-error">{error}</div> : <></>}
               <div>
                 <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
                   {t('Show Secret Recovery Phrase')}
@@ -73,7 +86,7 @@ export default () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center mx-auto mt-5 text-center gap-3_75 justify-evenly w-95">
+            <div className="flex flex-col items-center mx-auto text-center gap-3_75 justify-evenly w-95">
               <div className="text-base text-warn box w380">
                 This phrase is the ONLY way to <br />
                 recover your wallet. Do NOT share it with anyone!
@@ -103,7 +116,7 @@ export default () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            &nbsp;Back
+            <span className='font-semibold leading-4'>&nbsp;Back</span>
           </div>
         </Button>
       </Footer>

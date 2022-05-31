@@ -62,7 +62,7 @@ export default () => {
         >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
-            &nbsp;Back
+            <span className='font-semibold leading-4'>&nbsp;Back</span>
           </div>
         </Button>
       </Footer>

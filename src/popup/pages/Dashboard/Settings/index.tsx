@@ -219,7 +219,7 @@ export default ({ current }: AccountsProps) => {
             <span className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60">{name}</span>
           )}
           <div className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
-            <EditOutlined />
+            <EditOutlined onClick={e=>{setName('')}} title={t('Clear the inputted')} />
           </div>
         </div>
 
