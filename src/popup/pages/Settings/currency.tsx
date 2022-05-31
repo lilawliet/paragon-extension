@@ -18,6 +18,7 @@ export default () => {
   const onBtnSetCurrency = async (code: string) => {
     await wallet.setCurrency(code)
     setCurrency(code)
+    window.history.go(-1)
   }
 
   return (
@@ -39,7 +40,7 @@ export default () => {
                 onBtnSetCurrency(v.code)
               }}>
               <div className="flex items-center justify-between text-base font-semibold">
-                <div className="flex-grow text-left">{`${v.name} (${v.code})`}</div>
+                <div className="flex-grow text-left">{`${t(v.name)} (${v.code})`}</div>
                 {currency == v.code ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
               </div>
             </Button>

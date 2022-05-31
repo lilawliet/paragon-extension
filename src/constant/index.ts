@@ -88,7 +88,15 @@ export const LANGS = [
   },
   {
     value: 'zh_CN',
-    label: '中文'
+    label: 'Chinese'
+  },
+  {
+    value: 'ja',
+    label: 'Japanese'
+  },
+  {
+    value: 'es',
+    label: 'Spanish'
   }
 ]
 

@@ -1,5 +1,5 @@
 import { copyToClipboard } from '@/common/utils'
-import { CURRENCIES, KEYRING_TYPE } from '@/constant'
+import { CURRENCIES, KEYRING_TYPE, LANGS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { EditOutlined, RightOutlined } from '@ant-design/icons'
@@ -95,7 +95,7 @@ const MyItem: React.FC<MyItemProps> = forwardRef(({ item, key, navigate, currenc
       <div className="flex items-center justify-between font-semibold text-4_5">
         <div className="flex flex-col text-left gap-2_5">
           <span>{item.label}</span>
-          <span className="font-normal opacity-60">{item.action == 'currency' ? CURRENCIES.find((v) => v.code == currency)?.name : item.value}</span>
+          <span className="font-normal opacity-60">{item.action == 'currency' ? (t(CURRENCIES.find((v) => v.code == currency)?.name || '') as string) : item.value}</span>
         </div>
         <div className="flex-grow">{item.desc}</div>
         {item.right ? <RightOutlined style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <></>}
@@ -137,6 +137,7 @@ export default () => {
 
   const [currentAccount] = useGlobalState('currentAccount')
   const [currency] = useGlobalState('currency')
+  const [locale] = useGlobalState('locale')
 
   const addressInput = useRef<any>(null)
 
@@ -168,6 +169,9 @@ export default () => {
   }
 
   const toRenderSettings = SettingList.filter((v) => {
+    if (v.action == 'language') {
+      v.value = t(LANGS.find((v) => v.value == locale)?.label || '')
+    }
     if (v.keyringType) {
       if (currentAccount?.type == v.keyringType) {
         return true

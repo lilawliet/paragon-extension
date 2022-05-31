@@ -263,6 +263,20 @@ class KeyringService extends EventEmitter {
   changePassword = async (password: string, newPassword: string) => {
     await this.verifyPassword(password)
     this.password = newPassword
+
+    const encryptedVault = this.store.getState().vault
+    if (!encryptedVault) {
+      throw new Error(i18n.t('Cannot unlock without a previous vault'))
+    }
+
+    await this.clearKeyrings()
+    const vault = await this.encryptor.decrypt(password, encryptedVault)
+    const preMnemonics = await this.encryptor.encrypt(newPassword, vault)
+    // TODO: FIXME
+    await Promise.all(Array.from(vault).map(this._restoreKeyring.bind(this)))
+    await this._updateMemStoreKeyrings()
+
+    this.memStore.updateState({ preMnemonics })
     await this.persistAllKeyrings()
   }
 

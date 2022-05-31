@@ -1,28 +1,22 @@
-import { Account } from '@/background/service/preference'
 import { formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
+import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { ArrowLeftOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import Button from 'antd/lib/button'
 import Layout from 'antd/lib/layout'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 export default () => {
   const { t } = useTranslation()
   const wallet = useWallet()
-  const [currentAccount, setCurrentAccont] = useState<Account | null>(null)
+  const [currentAccount] = useGlobalState('currentAccount')
   const { confirm } = Modal
   const navigate = useNavigate()
-  useEffect(() => {
-    ;(async () => {
-      setCurrentAccont(await wallet.getCurrentAccount())
-    })()
-  }, [])
 
   const showConfirm = () => {
     confirm({
@@ -33,12 +27,10 @@ export default () => {
           {t('This is an imported account')}. {t('You will not be able to recover this account with your Secret Recovery Phrase')}.{t('This action is not reversible')}.
         </span>
       ),
-      onOk() {
-        ;async () => {
-          if (currentAccount) {
-            await wallet.removeAddress(currentAccount?.address, currentAccount?.type)
-            navigate('/dashboard')
-          }
+      onOk: async () => {
+        if (currentAccount) {
+          await wallet.removeAddress(currentAccount?.address, currentAccount?.type)
+          navigate('/dashboard')
         }
       },
       onCancel() {

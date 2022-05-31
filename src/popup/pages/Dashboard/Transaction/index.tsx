@@ -1,9 +1,10 @@
 import AccountSelect from '@/popup/components/Account'
 import { useGlobalState } from '@/ui/state/state'
 import { shortAddress } from '@/ui/utils'
+import { Empty } from 'antd'
 import moment from 'moment'
 import VirtualList from 'rc-virtual-list'
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { forwardRef, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface HistoryItem {
@@ -81,35 +82,37 @@ const Transaction = () => {
 
   const [currentAccount] = useGlobalState('currentAccount')
   const [accountHistory] = useGlobalState('accountHistory')
-  const [historyGroups, setHistoryGroups] = useState<GroupItem[]>([])
-  useEffect(() => {
-    const _historyGroups: GroupItem[] = []
-    let lastDate = ''
-    let lastGroup: GroupItem
-    let index = 0
-    accountHistory?.forEach((v) => {
-      if (lastDate != v.date) {
-        lastDate = v.date
-        lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index: index++ }
-        _historyGroups.push(lastGroup)
-      }
-      const amount = parseFloat(v.amount)
-      const symbol = v.symbol
-      const address = currentAccount?.address || ''
-      lastGroup.historyItems.push({
-        address,
-        amount,
-        symbol
-      })
+
+  const _historyGroups: GroupItem[] = []
+  let lastDate = ''
+  let lastGroup: GroupItem
+  let index = 0
+  accountHistory?.forEach((v) => {
+    if (lastDate != v.date) {
+      lastDate = v.date
+      lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index: index++ }
+      _historyGroups.push(lastGroup)
+    }
+    const amount = parseFloat(v.amount)
+    const symbol = v.symbol
+    const address = currentAccount?.address || ''
+    lastGroup.historyItems.push({
+      address,
+      amount,
+      symbol
     })
-    setHistoryGroups(_historyGroups)
-  }, [accountHistory])
+  })
+  const historyGroups = _historyGroups
+  if (historyGroups.length == 0) {
+    virtualListHeight = 0
+  }
   return (
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
       <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
         <AccountSelect />
       </div>
       <div className="grid mt-6 gap-2_5">
+        {historyGroups.length == 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
         <VirtualList
           data={historyGroups}
           data-id="list"

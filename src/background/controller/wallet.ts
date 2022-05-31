@@ -136,6 +136,16 @@ export class WalletController extends BaseController {
     return preferenceService.getAddressBalance(address)
   }
 
+  getAddressHistory = async (address: string) => {
+    const data = await openapiService.getAddressRecentHistory(address)
+    preferenceService.updateAddressHistory(address, data)
+    return data
+  }
+  getAddressCacheHistory = (address: string | undefined) => {
+    if (!address) return null
+    return preferenceService.getAddressHistory(address)
+  }
+
   getExternalLinkAck = () => {
     preferenceService.getExternalLinkAck()
   }
@@ -566,7 +576,7 @@ export class WalletController extends BaseController {
 
   listChainAssets = async (address: string) => {
     const balance = await openapiService.getAddressBalance(address)
-    const assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: balance.usd_value }]
+    const assets: AccountAsset[] = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: balance.usd_value }]
     return assets
   }
 

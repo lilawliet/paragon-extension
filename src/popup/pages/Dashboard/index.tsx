@@ -1,12 +1,13 @@
 import { Account } from '@/background/service/preference'
 import { useAppSelector } from '@/common/storages/hooks'
 import { getPanel } from '@/common/storages/stores/popup/slice'
+import { COIN_NAME, COIN_SYMBOL } from '@/constant'
 import eventBus from '@/eventBus'
 import CFooter from '@/popup/components/CFooter'
 import CHeader from '@/popup/components/CHeader'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
-import { Layout } from 'antd'
+import { Layout, Space, Spin } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -28,29 +29,41 @@ const Dashboard = () => {
   const [accountHistory, setAccountHistory] = useGlobalState('accountHistory')
   const [currency, setCurrency] = useGlobalState('currency')
   const [exchangeRate, setExchangeRate] = useGlobalState('exchangeRate')
+  const [locale, setLocale] = useGlobalState('locale')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    console.log('reaload', currentAccount)
     const onCurrentChange = async () => {
       if (currentAccount) {
         setAccountHistory([])
 
         setLoading(true)
-        const _accountAssets = await wallet.listChainAssets(currentAccount.address)
-        setAccountAssets(_accountAssets)
-
-        const _accountBalance = await wallet.getAddressBalance(currentAccount.address)
-        setAccountBalance(_accountBalance)
-
-        const _accountHistory = await wallet.getTransactionHistory(currentAccount.address)
-        setAccountHistory(_accountHistory)
 
         const _currency = await wallet.getCurrency()
         setCurrency(_currency)
 
         const _exchangeRate = await wallet.getExchangeRate()
         setExchangeRate(_exchangeRate)
+
+        const _locale = await wallet.getLocale()
+        setLocale(_locale)
+
+        const _accountBalance = await wallet.getAddressCacheBalance(currentAccount.address)
+        setAccountBalance(_accountBalance)
+        const _assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
+        setAccountAssets(_assets)
+        wallet.getAddressBalance(currentAccount.address).then((_accountBalance) => {
+          setAccountBalance(_accountBalance)
+          const _assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
+          setAccountAssets(_assets)
+        })
+
+        const _accountHistory = await wallet.getAddressCacheHistory(currentAccount.address)
+        setAccountHistory(_accountHistory)
+        wallet.getAddressHistory(currentAccount.address).then((_accountHistory) => {
+          setAccountHistory(_accountHistory)
+        })
+
         setLoading(false)
       }
     }
@@ -91,7 +104,23 @@ const Dashboard = () => {
         <CHeader />
       </Header>
       <Content style={{ backgroundColor: '#1C1919', overflowY: 'auto' }}>
-        {panel == 'home' ? <Home /> : panel == 'transaction' ? <Transaction /> : panel == 'settings' ? <Settings /> : <Home />}
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+              <Space size="middle">
+                <Spin size="large" />
+              </Space>
+            </div>
+          </div>
+        ) : panel == 'home' ? (
+          <Home />
+        ) : panel == 'transaction' ? (
+          <Transaction />
+        ) : panel == 'settings' ? (
+          <Settings />
+        ) : (
+          <Home />
+        )}
       </Content>
       <Footer style={{ height: '5.625rem' }}>
         <CFooter />

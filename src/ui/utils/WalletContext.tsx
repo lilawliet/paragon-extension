@@ -18,7 +18,7 @@ export type WalletController = {
   verifyPassword(password: string): Promise<void>
   changePassword: (password: string, newPassword: string) => Promise<void>
   unlock(password: string): Promise<void>
-  isUnlocked(): boolean
+  isUnlocked(): Promise<boolean>
   lockWallet(): Promise<void>
   setPopupOpen(isOpen: boolean): void
 
@@ -29,12 +29,16 @@ export type WalletController = {
   setPageStateCache(cache: CacheState): void
 
   getAddressBalance(address: string): Promise<NovoBalance>
-  getAddressCacheBalance(address: string): NovoBalance
+  getAddressCacheBalance(address: string): Promise<NovoBalance>
+
+  getAddressHistory: (address: string) => Promise<TxHistoryItem[]>
+  getAddressCacheHistory: (address: string) => Promise<TxHistoryItem[]>
+
   listChainAssets: (address: string) => Promise<AccountAsset[]>
   getTransactionHistory: (address: string) => Promise<TxHistoryItem[]>
 
-  getLocale(): string
-  setLocale(locale: string): void
+  getLocale(): Promise<string>
+  setLocale(locale: string): Promise<void>
 
   getExchangeRate(): Promise<ExchangeRate>
 

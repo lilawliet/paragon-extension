@@ -12,6 +12,7 @@ export type GlobalModelState = {
   accountHistory: TxHistoryItem[]
   currency: string
   exchangeRate: ExchangeRate
+  locale: string
 }
 
 // app state
@@ -34,7 +35,8 @@ const initialState: GlobalModelState = {
     GBP: 1,
     CHF: 1,
     CAD: 1
-  }
+  },
+  locale: 'English'
 }
 
 const { useGlobalState, getGlobalState, setGlobalState } = createGlobalState(initialState)

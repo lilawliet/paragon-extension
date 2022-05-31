@@ -5,7 +5,7 @@ import { EVENTS } from 'consts'
 import cloneDeep from 'lodash/cloneDeep'
 import { browser } from 'webextension-polyfill-ts'
 import { i18n, keyringService, sessionService } from './index'
-import { NovoBalance } from './openapi'
+import { NovoBalance, TxHistoryItem } from './openapi'
 
 const version = process.env.release || '0'
 
@@ -24,6 +24,9 @@ export interface PreferenceStore {
   externalLinkAck: boolean
   balanceMap: {
     [address: string]: NovoBalance
+  }
+  historyMap: {
+    [address: string]: TxHistoryItem[]
   }
   locale: string
   watchAddressPreference: Record<string, number>
@@ -50,6 +53,7 @@ class PreferenceService {
         currentAccount: undefined,
         externalLinkAck: false,
         balanceMap: {},
+        historyMap: {},
         locale: defaultLang,
         watchAddressPreference: {},
         walletSavedList: [],
@@ -78,6 +82,10 @@ class PreferenceService {
 
     if (!this.store.balanceMap) {
       this.store.balanceMap = {}
+    }
+
+    if (!this.store.historyMap) {
+      this.store.historyMap = {}
     }
 
     if (!this.store.walletSavedList) {
@@ -144,6 +152,28 @@ class PreferenceService {
   getAddressBalance = (address: string): NovoBalance | null => {
     const balanceMap = this.store.balanceMap || {}
     return balanceMap[address] || null
+  }
+
+  updateAddressHistory = (address: string, data: TxHistoryItem[]) => {
+    const historyMap = this.store.historyMap || {}
+    this.store.historyMap = {
+      ...historyMap,
+      [address]: data
+    }
+  }
+
+  removeAddressHistory = (address: string) => {
+    const key = address
+    if (key in this.store.historyMap) {
+      const map = this.store.historyMap
+      delete map[key]
+      this.store.historyMap = map
+    }
+  }
+
+  getAddressHistory = (address: string): TxHistoryItem[] | null => {
+    const historyMap = this.store.historyMap || {}
+    return historyMap[address] || null
   }
 
   getExternalLinkAck = (): boolean => {

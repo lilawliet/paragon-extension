@@ -1,10 +1,9 @@
-import { handleInputBlur, handleInputFocus } from '@/common/utils'
 import CHeader from '@/popup/components/CHeader'
 import { useWallet, useWalletRequest } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
-import { FocusEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -73,10 +72,15 @@ export default () => {
     }
   })
 
-  const verify = () => {
-    run(passwordC, password)
+  const verify = async () => {
+    // run(passwordC, password)
+    try {
+      console.log(passwordC, password, '??')
+      await wallet.changePassword(passwordC, password)
+    } catch (err) {
+      message.error((err as any).message)
+    }
   }
-
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -125,8 +129,7 @@ export default () => {
             className="box w380"
             onClick={() => {
               verify()
-            }}
-          >
+            }}>
             <div className="flex items-center justify-center text-lg">{t('Change Password')}</div>
           </Button>
         </div>
@@ -138,8 +141,7 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}
-        >
+          }}>
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>

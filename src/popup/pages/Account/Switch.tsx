@@ -115,8 +115,8 @@ export default ({ setStatus }: Props) => {
               if (index != accountIndex) {
                 await wallet.changeAccount(accountsList[index])
                 setCurrentAccount(accountsList[index])
-                navigate('/dashboard')
               }
+              navigate('/dashboard')
             }}
           />
         )}

@@ -32,12 +32,12 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
     setStatueAmt('')
     if (!isValidAddress(toAddress)) {
       setStatueAdd('error')
-      setError('Invalid address')
+      setError(t('Invalid_address'))
       return
     }
     if (toAmount <= 0 || toAmount > parseFloat(accountBalance.amount)) {
       setStatueAmt('error')
-      setError('Invalid amount')
+      setError(t('Invalid_amount'))
       return
     }
     // to verify
