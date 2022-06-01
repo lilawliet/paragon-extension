@@ -2,7 +2,6 @@ import AccountSelect from '@/popup/components/Account'
 import { useGlobalState } from '@/ui/state/state'
 import { shortAddress } from '@/ui/utils'
 import { ClockCircleFilled } from '@ant-design/icons'
-import { Empty } from 'antd'
 import moment from 'moment'
 import VirtualList from 'rc-virtual-list'
 import { forwardRef, useRef } from 'react'
@@ -89,14 +88,15 @@ const Transaction = () => {
   let lastGroup: GroupItem
   let index = 0
   accountHistory?.forEach((v) => {
-    if (lastDate != v.date) {
-      lastDate = v.date
-      lastGroup = { date: moment(v.time * 1000).format('MMMM DD, YYYY'), historyItems: [], index: index++ }
+    const date = moment(v.time * 1000 || Date.now()).format('MMMM DD, YYYY')
+    if (lastDate != date) {
+      lastDate = date
+      lastGroup = { date, historyItems: [], index: index++ }
       _historyGroups.push(lastGroup)
     }
     const amount = parseFloat(v.amount)
     const symbol = v.symbol
-    const address = currentAccount?.address || ''
+    const address = v.address
     lastGroup.historyItems.push({
       address,
       amount,
