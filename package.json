@@ -8,7 +8,7 @@
     "build:chrome": "gulp build --env=pro --browser=chrome",
     "build:firefox": "gulp build --env=pro --browser=firefox",
     "build:brave": "gulp build --env=pro --browser=brave",
-    "build:opera": "gulp build --env=pro --browser=opera",
+    "build:edge": "gulp build --env=pro --browser=edge",
     "translate": "node build/pull_translation",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
