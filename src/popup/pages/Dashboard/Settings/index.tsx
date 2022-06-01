@@ -91,7 +91,8 @@ const MyItem: React.FC<MyItemProps> = forwardRef(({ item, key, navigate, currenc
       className={`mb-3_75 box w-115 ${item.danger ? item.danger : 'default'} ${item.right ? 'btn-settings' : ''}`}
       onClick={(e) => {
         navigate(`/settings/${item.route}`)
-      }}>
+      }}
+    >
       <div className="flex items-center justify-between font-semibold text-4_5">
         <div className="flex flex-col text-left gap-2_5">
           <span>{item.label}</span>
@@ -148,7 +149,7 @@ export default () => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    setName(currentAccount?.alianName??'')
+    setName(currentAccount?.alianName ?? '')
   }, [currentAccount])
 
   useEffect(() => {
@@ -158,7 +159,7 @@ export default () => {
   }, [editable])
 
   const handleOnBlur = async (e) => {
-    let alianName = currentAccount?.alianName??''
+    let alianName = currentAccount?.alianName ?? ''
     if (currentAccount && e.target.value) {
       alianName = e.target.value
       await wallet.updateAlianName(currentAccount.address, alianName)
@@ -186,7 +187,7 @@ export default () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: `${str} copied`
+        content: t('copied')
       })
     })
   }
@@ -197,7 +198,8 @@ export default () => {
         <div
           className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${
             editable ? 'bg-primary-active border-opacity-60' : 'bg-soft-black border-opacity-20'
-          }`}>
+          }`}
+        >
           {editable ? (
             <Input
               ref={addressInput}
@@ -210,18 +212,24 @@ export default () => {
               onPressEnter={(e) => handleOnBlur(e)}
             />
           ) : (
-            <span className="col-span-5 font-semibold p0 hover hover:cursor-text opacity-60" 
-            onClick={(e) => {
-              handleChangeAlianName()
-            }}>{name}</span>
+            <span
+              className="col-span-5 font-semibold p0 hover hover:cursor-text opacity-60"
+              onClick={(e) => {
+                handleChangeAlianName()
+              }}
+            >
+              {name}
+            </span>
           )}
           <div className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
-            <img src="./images/Name.svg" 
+            <img
+              src="./images/Name.svg"
               onClick={(e) => {
                 setName('')
                 handleChangeAlianName()
               }}
-              title={t('Clear the inputted')}/>
+              title={t('Clear the inputted')}
+            />
           </div>
         </div>
 
@@ -230,8 +238,8 @@ export default () => {
           // onClick={(e) => {
           //   copy(currentAccount?.address ?? '')
           // }}
-          >
-           {formatAddr(currentAccount?.address??'', 5)} 
+        >
+          {formatAddr(currentAccount?.address ?? '', 5)}
         </div>
       </div>
       <div className="h-121_25 mt-3_75">
@@ -243,7 +251,8 @@ export default () => {
           itemKey={(item) => item.action}
           style={{
             boxSizing: 'border-box'
-          }}>
+          }}
+        >
           {(item, index) => <MyItem key={index} navigate={navigate} item={item} currency={currency} />}
         </VirtualList>
       </div>

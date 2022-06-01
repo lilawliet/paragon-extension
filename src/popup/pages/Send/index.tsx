@@ -38,7 +38,7 @@ const SendIndex = () => {
     txid: ''
   })
 
-  const [status, setStatus] = useState<Status>('success')
+  const [status, setStatus] = useState<Status>('create')
   const [error, setError] = useState('')
 
   const sendTx = useCallback(async () => {
@@ -78,7 +78,6 @@ const SendIndex = () => {
     run()
   }, [toAddress + toAmount])
 
-
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -102,7 +101,7 @@ const SendIndex = () => {
         ) : status == 'sending' ? (
           <Sending />
         ) : status == 'success' ? (
-          <Success transaction={ref.current} fromAddress={fromAddress} toAmount={toAmount} setStatus={setStatus} />
+          <Success transaction={ref.current} fromAddress={fromAddress} toAddress={toAddress} toAmount={toAmount} setStatus={setStatus} />
         ) : (
           <Error transaction={ref.current} fromAddress={fromAddress} toAmount={toAmount} setStatus={setStatus} />
         )}
@@ -114,7 +113,8 @@ const SendIndex = () => {
             backgroundColor: '#1C1919',
             textAlign: 'center',
             width: '100%'
-          }}>
+          }}
+        >
           <Button
             size="large"
             type="default"
@@ -129,7 +129,8 @@ const SendIndex = () => {
               } else {
                 setStatus('create')
               }
-            }}>
+            }}
+          >
             <div className="flex items-center justify-center text-lg">
               <img src="./images/arrow-left.svg" />
               <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>

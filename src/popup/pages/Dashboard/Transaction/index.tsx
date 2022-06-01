@@ -35,7 +35,7 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index
             <span>{shortAddress(item.address)}</span>
             <span>
               <span className={`font-semibold ${item.amount > 0 ? 'text-custom-green' : 'text-warn'}`}>{item.amount > 0 ? '+' : '-'}</span>
-              <span className="font-semibold text-white">{Number(Math.abs(item.amount)).toLocaleString('en', {minimumFractionDigits:4})}</span> {item.symbol}
+              <span className="font-semibold text-white">{Number(Math.abs(item.amount)).toLocaleString('en', { minimumFractionDigits: 4 })}</span> {item.symbol}
             </span>
           </div>
         </div>
@@ -115,11 +115,12 @@ const Transaction = () => {
         </div>
       </div>
       <div className="grid flex-grow mt-6 gap-2_5">
-        {historyGroups.length == 0 ? 
-        <div className='flex flex-col items-center justify-center h-full gap-5'>
-          <ClockCircleFilled className='text-2xl' />
-          {t('No Activity')}
-        </div> : null}
+        {historyGroups.length == 0 ? (
+          <div className="flex flex-col items-center justify-center h-full gap-5">
+            <ClockCircleFilled className="text-2xl" />
+            {t('No Activity')}
+          </div>
+        ) : null}
         <VirtualList
           data={historyGroups}
           data-id="list"

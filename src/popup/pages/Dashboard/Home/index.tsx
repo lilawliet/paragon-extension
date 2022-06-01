@@ -6,15 +6,6 @@ import { message, Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-function copy(str: string) {
-  copyToClipboard(str).then(() => {
-    message.success({
-      duration: 3,
-      content: `${str} copied`
-    })
-  })
-}
-
 const Home = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -24,6 +15,15 @@ const Home = () => {
   const [currency] = useGlobalState('currency')
   const [exchangeRate] = useGlobalState('exchangeRate')
   const [accountBalance] = useGlobalState('accountBalance')
+
+  function copy(str: string) {
+    copyToClipboard(str).then(() => {
+      message.success({
+        duration: 3,
+        content: t('copied')
+      })
+    })
+  }
 
   const getCurrencyValueString = (usd_value) => {
     let value = 0
@@ -46,7 +46,8 @@ const Home = () => {
         className="flex items-center cursor-pointer mt-2_5"
         onClick={(e) => {
           copy(currentAccount?.address ?? '')
-        }}>
+        }}
+      >
         <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address ?? '', 5)}</span>
         {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
       </div>
@@ -58,8 +59,9 @@ const Home = () => {
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
-          }}>
-          <span className='h-4_8 mr-0_5' >
+          }}
+        >
+          <span className="h-4_8 mr-0_5">
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
           &nbsp;{t('Receive')}
@@ -68,8 +70,9 @@ const Home = () => {
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate('/send/index')
-          }}>
-          <span className='h-4_8 mr-0_5' >
+          }}
+        >
+          <span className="h-4_8 mr-0_5">
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>
           &nbsp;{t('Send')}
@@ -84,7 +87,7 @@ const Home = () => {
             <div className="flex flex-col flex-grow px-2">
               <div className="font-semibold">{asset.name}</div>
               <div className="text-base text-soft-white">
-                {Number(asset.amount)?.toLocaleString('en', {minimumFractionDigits:4})} {asset.symbol}
+                {Number(asset.amount)?.toLocaleString('en', { minimumFractionDigits: 4 })} {asset.symbol}
               </div>
             </div>
             <div className="font-semibold">{getCurrencyValueString(asset.value)}</div>

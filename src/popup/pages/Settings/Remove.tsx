@@ -66,7 +66,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <img src="./images/arrow-left.svg" />
             <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>

@@ -22,7 +22,8 @@ const AccountSelect = () => {
       className="flex items-center w-full cursor-pointer px-1_25"
       onClick={(e) => {
         navigate('/settings/account')
-      }}>
+      }}
+    >
       <span>
         <img src="./images/user-solid.svg" alt="" />
       </span>

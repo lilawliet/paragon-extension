@@ -26,7 +26,7 @@ const Receive = () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: `${str} ${t('copied')}`
+        content: t('copied')
       })
     })
   }
@@ -47,7 +47,8 @@ const Receive = () => {
               className="grid w-full grid-cols-6 px-10 box default py-2_5 hover"
               onClick={(e) => {
                 copy(currentAccount?.address || '')
-              }}>
+              }}
+            >
               <div className="flex items-center">
                 <img src="./images/copy-solid.svg" alt="" />
               </div>
@@ -67,7 +68,8 @@ const Receive = () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <img src="./images/arrow-left.svg" />
             <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>

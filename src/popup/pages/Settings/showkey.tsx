@@ -3,16 +3,18 @@ import CHeader from '@/popup/components/CHeader'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 export default () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   function copy(str: string) {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: `${str} copied`
+        content: t('copied')
       })
     })
   }
@@ -32,7 +34,8 @@ export default () => {
             className="grid w-full grid-cols-6 p-5 box default mt-1_25"
             onClick={(e) => {
               copy('address')
-            }}>
+            }}
+          >
             <div className="h-5_5">
               <img src="./images/copy-solid.png" alt="" />
             </div>
@@ -48,7 +51,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             <span className="font-semibold leading-4">&nbsp;Back</span>

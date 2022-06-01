@@ -49,7 +49,7 @@ const CreateRecovery = () => {
     copyToClipboard(str).then(() => {
       message.success({
         duration: 3,
-        content: 'copied'
+        content: t('copied')
       })
     })
   }

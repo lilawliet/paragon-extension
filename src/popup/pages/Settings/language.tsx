@@ -3,7 +3,6 @@ import i18n, { addResourceBundle } from '@/i18n'
 import CHeader from '@/popup/components/CHeader'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
-import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons'
 import { Button, Layout } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useTranslation } from 'react-i18next'
@@ -40,10 +39,17 @@ export default () => {
                 className="box w-115 default"
                 onClick={(e) => {
                   handleSwitchLang(item.value)
-                }}>
+                }}
+              >
                 <div className="flex items-center justify-between text-base font-semibold">
                   <div className="flex-grow text-left">{t(item.label)}</div>
-                  {item.value == locale ? <CheckOutlined style={{ transform: 'scale(1.5)', opacity: '80%' }} /> : <></>}
+                  {item.value == locale ? (
+                    <span className="w-4 h-4">
+                      <img src="./images/check.svg" alt="" />
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </Button>
             )
@@ -57,7 +63,8 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}>
+          }}
+        >
           <div className="flex items-center justify-center text-lg">
             <img src="./images/arrow-left.svg" />
             <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>

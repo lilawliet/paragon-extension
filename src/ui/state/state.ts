@@ -48,7 +48,7 @@ export const { useGlobalState, getGlobalState, setGlobalState } = createGlobalSt
 //     case 'initAccounts': return async () => {
 //       state.accountsList =  await action.wallet.getAccounts()
 //       if (state.accountsList.length == 0) {
-//         return 
+//         return
 //       }
 //       state.currentAccount = await action.wallet.getCurrentAccount()
 //       return state
@@ -65,7 +65,7 @@ export const { useGlobalState, getGlobalState, setGlobalState } = createGlobalSt
 //           state.ccountBalance = _accountBalance
 //           state.accountAssets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
 //         })
-    
+
 //         state.accountHistory = await action.wallet.getAddressCacheHistory(state.currentAccount.address)
 //         action.wallet.getAddressHistory(state.currentAccount.address).then((_accountHistory) => {
 //           state.accountHistory = _accountHistory
@@ -76,6 +76,5 @@ export const { useGlobalState, getGlobalState, setGlobalState } = createGlobalSt
 //     default: return state
 //   }
 // }
-
 
 // export const { dispatch: globalDispath, useStoreState: useGlobalStoreState } = createStore(reducer, initialState)

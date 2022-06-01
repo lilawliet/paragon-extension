@@ -4,23 +4,47 @@ import { formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
-import { CheckOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import VirtualList from 'rc-virtual-list'
-import { forwardRef, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { TFunction, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Status } from '.'
 
+interface AccountTmp {
+  oper: 'add' | null
+  type: string
+  address: string
+  brandName: string
+  alianName?: string
+  displayBrandName?: string
+  index?: number
+  balance?: number
+}
+
 interface MyItemProps {
+  t: TFunction<'translation', undefined>
   index: number
   account: Account
   accountIndex: number
   onClick(num: number): void
+  oper: 'add' | undefined | null
+  setStatus(val: string): void
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, account, accountIndex: currency, onClick }: MyItemProps, ref) => {
-  return (
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ t, index, account, accountIndex: currency, onClick, oper, setStatus }: MyItemProps, ref) => {
+  return 'add' == oper ? (
+    <Button
+      size="large"
+      type="primary"
+      className="box w-115"
+      onClick={(e) => {
+        setStatus(oper)
+      }}
+    >
+      <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
+    </Button>
+  ) : (
     <Button
       key={index}
       size="large"
@@ -28,14 +52,21 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ index, accou
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         onClick(index)
-      }}>
+      }}
+    >
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName} </span>
           <span className="font-normal opacity-60">({formatAddr(account.address, 8)})</span>
         </div>
         {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5">IMPORTED</span> : <></>}
-        {currency == index ? <CheckOutlined className="w-4 ml-2_5" style={{ transform: 'scale(1.2)', opacity: '80%' }} /> : <span className="w-4 ml-2_5"></span>}
+        {currency == index ? (
+          <span className="w-4 ml-2_5">
+            <img src="./images/check.svg" alt="" />
+          </span>
+        ) : (
+          <span className="w-4 ml-2_5"></span>
+        )}
       </div>
     </Button>
   )
@@ -68,18 +99,44 @@ type ListRef = {
 export default ({ setStatus }: Props) => {
   const { t } = useTranslation()
   const wallet = useWallet()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const listRef = useRef<ListRef>(null)
 
+  const html = document.getElementsByTagName('html')[0]
+  let virtualListHeight = 500
+  if (html && getComputedStyle(html).fontSize) {
+    virtualListHeight = (virtualListHeight * parseFloat(getComputedStyle(html).fontSize)) / 16
+  }
+
   const [currentAccount, setCurrentAccount] = useGlobalState('currentAccount')
   const [accountsList] = useGlobalState('accountsList')
+
+  const [accountsTmpList, setAccountTmpList] = useState<AccountTmp[]>(
+    accountsList
+      ?.map((item, index) => {
+        const tmp = item as AccountTmp
+        tmp.oper = null
+        return tmp
+      })
+      .concat({ oper: 'add', index: 999 } as AccountTmp)
+  )
+
   const [accountIndex, setAccountIndex] = useState(accountsList.findIndex((v) => v.address == currentAccount?.address))
 
   const ForwardMyItem = forwardRef(MyItem)
 
   useEffect(() => {
     setAccountIndex(accountsList.findIndex((v) => v.address == currentAccount?.address))
+
+    setAccountTmpList(
+      accountsList
+        ?.map((item, index) => {
+          const tmp = item as AccountTmp
+          tmp.oper = null
+          return tmp
+        })
+        .concat({ oper: 'add', index: 999 } as AccountTmp)
+    )
   }, [currentAccount, accountsList])
 
   const verify = () => {
@@ -90,11 +147,10 @@ export default ({ setStatus }: Props) => {
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex items-center px-2 text-2xl h-13">{t('Switch Account')}</div>
-
       <VirtualList
-        data={accountsList}
+        data={accountsTmpList}
         data-id="list"
-        height={330}
+        height={virtualListHeight}
         itemHeight={20}
         itemKey={(item) => item.address}
         // disabled={animating}
@@ -107,9 +163,12 @@ export default ({ setStatus }: Props) => {
       >
         {(item, index) => (
           <ForwardMyItem
+            t={t}
+            setStatus={setStatus}
             key={index}
             account={item}
             index={index}
+            oper={item.oper}
             accountIndex={accountIndex}
             onClick={async (index) => {
               if (index != accountIndex) {
@@ -121,15 +180,6 @@ export default ({ setStatus }: Props) => {
           />
         )}
       </VirtualList>
-      <Button
-        size="large"
-        type="primary"
-        className="box w380"
-        onClick={(e) => {
-          verify()
-        }}>
-        <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
-      </Button>
     </div>
   )
 }

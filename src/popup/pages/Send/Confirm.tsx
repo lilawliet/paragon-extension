@@ -25,7 +25,7 @@ export default ({ transaction, fromAddress, toAddress, toAmount, fee, sendTx, se
       <div className="justify-between w-full box nobor text-soft-white">
         <span>{shortAddress(fromAddress)}</span>
         <span className="text-white">
-            <img src="./images/arrow-right.svg" alt="" />
+          <img src="./images/arrow-right.svg" alt="" />
         </span>
         <span>{shortAddress(toAddress)}</span>
       </div>
@@ -48,7 +48,8 @@ export default ({ transaction, fromAddress, toAddress, toAmount, fee, sendTx, se
         className="box w380"
         onClick={(e) => {
           sendTx()
-        }}>
+        }}
+      >
         <div className="flex items-center justify-center text-lg font-semibold">{t('Next')}</div>
       </Button>
     </div>
