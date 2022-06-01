@@ -45,10 +45,11 @@ function task_prepare() {
 }
 
 function task_merge_manifest() {
+  const baseFile = "_base_v2";
   return gulp
-    .src([`dist/${options.browser}/manifest/_base.json`, `dist/${options.browser}/manifest/${options.browser}.json`])
+    .src([`dist/${options.browser}/manifest/${baseFile}.json`, `dist/${options.browser}/manifest/${options.browser}.json`])
     .pipe(jsoncombine('manifest.json', (data,meta) => {
-      const result = Object.assign({}, data["_base"], data[options.browser])
+      const result = Object.assign({}, data[baseFile], data[options.browser])
       result.version = packageConfig.version;
       return Buffer.from(JSON.stringify(result));
     }))

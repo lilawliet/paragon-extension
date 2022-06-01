@@ -53,17 +53,12 @@ class PushEventHandlers {
     this._emit('accountsChanged', accounts)
   }
 
-  chainChanged = ({ chain, networkVersion }) => {
-    this.connect({ chainId: chain })
+  chainChanged = ({ network }) => {
+    this.connect({})
 
-    if (chain !== this.provider._chainId) {
-      this.provider._chainId = chain
-      this._emit('chainChanged', chain)
-    }
-
-    if (networkVersion !== this.provider._networkVersion) {
-      this.provider._networkVersion = networkVersion
-      this._emit('networkChanged', networkVersion)
+    if (network !== this.provider._network) {
+      this.provider._network = network
+      this._emit('networkChanged', network)
     }
   }
 }

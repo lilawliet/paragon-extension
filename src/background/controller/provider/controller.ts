@@ -1,9 +1,31 @@
-import { permissionService, sessionService } from 'background/service'
-import { CHAINS } from 'consts'
+import { Account } from '@/background/service/preference'
+import { keyringService, permissionService, preferenceService, sessionService } from 'background/service'
 import { ethErrors } from 'eth-rpc-errors'
+import { cloneDeep } from 'lodash'
 import BaseController from '../base'
 
 class ProviderController extends BaseController {
+  getCurrentAccount = async () => {
+    let account = preferenceService.getCurrentAccount()
+    if (account) {
+      const accounts = await this.getAccounts()
+      const matchAcct = accounts.find((acct) => account!.address === acct.address)
+      if (!matchAcct) account = undefined
+    }
+
+    if (!account) {
+      ;[account] = await this.getAccounts()
+      if (!account) return null
+      preferenceService.setCurrentAccount(account)
+    }
+
+    return cloneDeep(account) as Account
+  }
+
+  getAccounts = () => {
+    return keyringService.getAllVisibleAccountsArray()
+  }
+
   ethRequestAccounts = async ({ session: { origin } }) => {
     if (!permissionService.hasPermission(origin)) {
       throw ethErrors.provider.unauthorized()
@@ -14,12 +36,10 @@ class ProviderController extends BaseController {
     sessionService.broadcastEvent('accountsChanged', account)
     const connectSite = permissionService.getConnectedSite(origin)
     if (connectSite) {
-      const chain = CHAINS[connectSite.chain]
       sessionService.broadcastEvent(
-        'chainChanged',
+        'networkChanged',
         {
-          chain: chain.name,
-          network: chain.network
+          network: 'mainnet'
         },
         origin
       )

@@ -92,14 +92,6 @@ class NotificationService extends Events {
         reject
       }
 
-      if (['wallet_switchEthereumChain', 'wallet_addEthereumChain'].includes(data?.params?.method)) {
-        const chainId = data.params?.data?.[0]?.chainId
-        const chain = null
-        if (chain) {
-          this.resolveApproval(null)
-          return
-        }
-      }
       this.openNotification(winProps)
     })
   }

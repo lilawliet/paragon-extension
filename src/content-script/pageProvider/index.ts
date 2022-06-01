@@ -10,7 +10,7 @@ declare const channelName
 
 const log = (event, ...args) => {
   if (process.env.NODE_ENV !== 'production') {
-    console.log(`%c [rabby] (${new Date().toTimeString().substr(0, 8)}) ${event}`, 'font-weight: bold; background-color: #7d6ef9; color: white;', ...args)
+    console.log(`%c [paragon] (${new Date().toTimeString().slice(0, 8)}) ${event}`, 'font-weight: bold; background-color: #7d6ef9; color: white;', ...args)
   }
 }
 
@@ -28,9 +28,8 @@ interface StateProvider {
 }
 
 export class ParagonProvider extends EventEmitter {
-  _chainId: string | null = null
   _selectedAddress: string | null = null
-  _networkVersion: string | null = null
+  _network: string | null = null
   _isConnected = false
   _initialized = false
   _isUnlocked = false
@@ -41,14 +40,6 @@ export class ParagonProvider extends EventEmitter {
     isUnlocked: false,
     initialized: false,
     isPermanentlyDisconnected: false
-  }
-
-  _metamask = {
-    isUnlocked: () => {
-      return new Promise((resolve) => {
-        resolve(this._isUnlocked)
-      })
-    }
   }
 
   private _pushEventHandlers: PushEventHandlers
@@ -82,17 +73,16 @@ export class ParagonProvider extends EventEmitter {
     })
 
     try {
-      const { chainId, networkVersion, accounts, isUnlocked }: any = await this.request({
+      const { network, accounts, isUnlocked }: any = await this.request({
         method: 'getProviderState'
       })
       if (isUnlocked) {
         this._isUnlocked = true
         this._state.isUnlocked = true
       }
-      this.emit('connect', { chainId })
+      this.emit('connect', {})
       this._pushEventHandlers.chainChanged({
-        chain: chainId,
-        networkVersion: networkVersion
+        network
       })
 
       this._pushEventHandlers.accountsChanged(accounts)
@@ -137,24 +127,16 @@ export class ParagonProvider extends EventEmitter {
     }
 
     this._requestPromiseCheckVisibility()
-
     return this._requestPromise.call(() => {
-      if (data.method !== 'eth_call') {
-        log('[request]', JSON.stringify(data, null, 2))
-      }
-
+      log('[request]', JSON.stringify(data, null, 2))
       return this._bcm
         .request(data)
         .then((res) => {
-          if (data.method !== 'eth_call') {
-            log('[request: success]', data.method, res)
-          }
+          log('[request: success]', data.method, res)
           return res
         })
         .catch((err) => {
-          if (data.method !== 'eth_call') {
-            log('[request: error]', data.method, serializeError(err))
-          }
+          log('[request: error]', data.method, serializeError(err))
           throw serializeError(err)
         })
     })
@@ -182,4 +164,4 @@ if (!window.paragon) {
   })
 }
 
-window.dispatchEvent(new Event('ethereum#initialized'))
+window.dispatchEvent(new Event('paragon#initialized'))

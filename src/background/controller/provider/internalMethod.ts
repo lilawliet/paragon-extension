@@ -1,5 +1,5 @@
 import { keyringService, permissionService } from 'background/service'
-import { CHAINS, CHAINS_ENUM } from 'consts'
+import { CHAINS } from 'consts'
 import providerController from './controller'
 
 const tabCheckin = ({
@@ -20,7 +20,6 @@ const getProviderState = async (req) => {
   const isUnlocked = keyringService.memStore.getState().isUnlocked
 
   return {
-    chain: CHAINS[chainEnum || CHAINS_ENUM.NOVO].name,
     isUnlocked,
     accounts: isUnlocked ? await providerController.ethAccounts(req) : [],
     network: CHAINS[chainEnum].network

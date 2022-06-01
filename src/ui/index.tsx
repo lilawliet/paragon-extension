@@ -1,18 +1,17 @@
 import '@/common/styles/antd.less'
+import '@/common/styles/rc-virtual-list.less'
 // 全局公用样式
 import '@/common/styles/tailwind.less'
-import '@/common/styles/rc-virtual-list.less'
 import eventBus from '@/eventBus'
 import Popup from '@/popup'
 import { Message } from '@/utils'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import en from 'antd/es/locale/en_US'
-import zh_CN from 'antd/es/locale/zh_CN'
 import { EVENTS } from 'consts'
 import ReactDOM from 'react-dom/client'
 import i18n, { addResourceBundle } from 'src/i18n'
-import { getUITypeName, WalletProvider } from './utils'
+import { WalletProvider } from './utils'
 const antdConfig = {
   locale: en
 }
@@ -60,24 +59,6 @@ if (
     }
   })
 }
-
-// function initAppMeta() {
-//   const head = document.querySelector('head')
-//   const icon = document.createElement('link')
-//   icon.href = 'https://rabby.io/assets/images/logo-128.png'
-//   icon.rel = 'icon'
-//   head?.appendChild(icon)
-//   const name = document.createElement('meta')
-//   name.name = 'name'
-//   name.content = 'Rabby'
-//   head?.appendChild(name)
-//   const description = document.createElement('meta')
-//   description.name = 'description'
-//   description.content = i18n.t('appDescription')
-//   head?.appendChild(description)
-// }
-
-// initAppMeta()
 
 const { PortMessage } = Message
 

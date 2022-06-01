@@ -477,7 +477,7 @@ export class OpenApiService {
       axios.create({
         baseURL: this.store.host,
         headers: {
-          'X-Client': 'Rabby',
+          'X-Client': 'Paragon',
           'X-Version': process.env.release!
         }
       }),

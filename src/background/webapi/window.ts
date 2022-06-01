@@ -1,6 +1,6 @@
-import { browser, Windows } from 'webextension-polyfill-ts'
-import { EventEmitter } from 'events'
 import { IS_WINDOWS } from 'consts'
+import { EventEmitter } from 'events'
+import { browser, Windows } from 'webextension-polyfill-ts'
 
 const event = new EventEmitter()
 
@@ -71,7 +71,7 @@ const remove = async (winId) => {
 }
 
 const openNotification = ({ route = '', ...rest } = {}): Promise<number | undefined> => {
-  const url = `notification.html${route && `#${route}`}`
+  const url = `index.html${route && `#${route}`}`
 
   return create({ url, ...rest })
 }

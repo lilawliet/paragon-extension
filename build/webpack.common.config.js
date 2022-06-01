@@ -491,9 +491,9 @@ const config = (env) => {
         process: 'process',
         dayjs: 'dayjs',
       }),
-      new AssetReplacePlugin({
-        '#PAGEPROVIDER#': 'pageProvider',
-      }),
+      // new AssetReplacePlugin({
+      //   '#PAGEPROVIDER#': 'pageProvider',
+      // }),
       new webpack.DefinePlugin({
         'process.env.version': JSON.stringify(`version: ${version}`),
         'process.env.release': JSON.stringify(version),

@@ -1,5 +1,9 @@
 // this script is injected into webpage's context
+import { INTERNAL_REQUEST_SESSION } from '@/constant'
 import { EventEmitter } from 'events'
+import { underline2Camelcase } from '.'
+import { providerController } from '../controller'
+import { preferenceService } from '../service'
 
 interface StateProvider {
   accounts: string[] | null
@@ -9,19 +13,11 @@ interface StateProvider {
   isPermanentlyDisconnected: boolean
 }
 
-export class EthereumProvider extends EventEmitter {
+export class NovoProvider extends EventEmitter {
   currentAccount = ''
   currentAccountType = ''
   currentAccountBrand = ''
-  chainId: string | null = null
   selectedAddress: string | null = null
-  /**
-   * The network ID of the currently connected Ethereum chain.
-   * @deprecated
-   */
-  networkVersion: string | null = null
-  isRabby = true
-  isMetaMask = true
 
   _isConnected = true
   _initialized = true
@@ -46,7 +42,6 @@ export class EthereumProvider extends EventEmitter {
   constructor() {
     super()
     this.initialize()
-    this.shimLegacy()
   }
 
   initialize = async () => {
@@ -56,71 +51,29 @@ export class EthereumProvider extends EventEmitter {
   }
 
   isConnected = () => {
-    return true
+    return false
   }
 
   // TODO: support multi request!
   request = async (data) => {
-    // const { method } = data;
-    // const request = {
-    //   data,
-    //   session: INTERNAL_REQUEST_SESSION,
-    // };
-    // const mapMethod = underline2Camelcase(method);
-    // const currentAccount = preferenceService.getCurrentAccount()!;
-    // let networkId = CHAINS[CHAINS_ENUM.ETH].id.toString();
-    // if (currentAccount.type === KEYRING_CLASS.GNOSIS) {
-    //   networkId = wallet.getGnosisNetworkId(currentAccount.address);
-    // } else {
-    //   networkId = this.chainId!;
-    // }
-    // const chain = Object.values(CHAINS).find(
-    //   (item) => item.id.toString() === networkId
-    // )!;
-    // if (!providerController[mapMethod]) {
-    //   // TODO: make rpc whitelist
-    //   if (method.startsWith('eth_') || method === 'net_version') {
-    //     return providerController.ethRpc(request, chain.serverId);
-    //   }
-    // }
-    // switch (data.method) {
-    //   case 'eth_accounts':
-    //   case 'eth_requestAccounts':
-    //     return [this.currentAccount];
-    //   case 'personal_sign':
-    //     return new Promise((resolve, reject) => {
-    //       notificationService.on('resolve', (data) => {
-    //         if (data.uiRequestComponent) return;
-    //         resolve(data);
-    //       });
-    //       notificationService.on('reject', (err) => {
-    //         reject(err);
-    //       });
-    //     });
-    //   case 'eth_sendTransaction':
-    //     preferenceService.setCurrentAccount({
-    //       address: this.currentAccount,
-    //       type: this.currentAccountType,
-    //       brandName: this.currentAccountBrand,
-    //     });
-    //     return wallet
-    //       .sendRequest({
-    //         method: 'eth_sendTransaction',
-    //         params: [
-    //           {
-    //             ...data.params[0],
-    //             chainId: Number(networkId),
-    //           },
-    //         ],
-    //       })
-    //       .finally(() => {
-    //         preferenceService.setCurrentAccount(currentAccount);
-    //       });
-    //   case 'eth_chainId':
-    //     return chain.hex;
-    //   default:
-    //     return providerController[mapMethod](request);
-    // }
+    const { method } = data
+    const request = {
+      data,
+      session: INTERNAL_REQUEST_SESSION
+    }
+    const mapMethod = underline2Camelcase(method)
+    const currentAccount = preferenceService.getCurrentAccount()!
+    console.log('request', data)
+    if (!providerController[mapMethod]) {
+      return
+    }
+    switch (data.method) {
+      case 'eth_accounts':
+      case 'eth_requestAccounts':
+        return [this.currentAccount]
+      default:
+        return providerController[mapMethod](request)
+    }
   }
 
   // shim to matamask legacy api
@@ -166,11 +119,6 @@ export class EthereumProvider extends EventEmitter {
       case 'eth_accounts':
         result = this.selectedAddress ? [this.selectedAddress] : []
         break
-
-      case 'eth_coinbase':
-        result = this.selectedAddress || null
-        break
-
       default:
         throw new Error('sync method doesnt support')
     }
@@ -181,22 +129,11 @@ export class EthereumProvider extends EventEmitter {
       result
     }
   }
-
-  shimLegacy = () => {
-    const legacyMethods = [
-      ['enable', 'eth_requestAccounts'],
-      ['net_version', 'net_version']
-    ]
-
-    for (const [_method, method] of legacyMethods) {
-      this[_method] = () => this.request({ method })
-    }
-  }
 }
 
-const provider = new EthereumProvider()
+const provider = new NovoProvider()
 
-window.dispatchEvent(new Event('ethereum#initialized'))
+window.dispatchEvent(new Event('paragon#initialized'))
 
 export default {
   currentProvider: new Proxy(provider, {
