@@ -15,7 +15,7 @@ import i18n from 'background/service/i18n'
 import { DisplayedKeryring, Keyring, KEYRING_CLASS } from 'background/service/keyring'
 import { CacheState } from 'background/service/pageStateCache'
 import { openIndexPage } from 'background/webapi/tab'
-import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL } from 'consts'
+import { BRAND_ALIAN_TYPE_TEXT, CHAINS_ENUM, COIN_NAME, COIN_SYMBOL, KEYRING_TYPE } from 'consts'
 import { cloneDeep, groupBy } from 'lodash'
 import { ContactBookItem } from '../service/contactBook'
 import { NovoBalance, OpenApiService } from '../service/openapi'
@@ -504,8 +504,12 @@ export class WalletController extends BaseController {
   getNewAccountAlianName = async (type: string, index = 0) => {
     const sameTypeAccounts = await this.getTypedAccounts(type)
     let accountLength = 0
-    if (sameTypeAccounts.length > 0) {
-      accountLength = sameTypeAccounts[0]?.accounts?.length
+    if (type == KEYRING_TYPE.HdKeyring) {
+      if (sameTypeAccounts.length > 0) {
+        accountLength = sameTypeAccounts[0]?.accounts?.length
+      }
+    } else if (type == KEYRING_TYPE.SimpleKeyring) {
+      accountLength = sameTypeAccounts.length
     }
     if (index == 0) {
       index = accountLength
@@ -517,9 +521,14 @@ export class WalletController extends BaseController {
   getNextAccountAlianName = async (type: string) => {
     const sameTypeAccounts = await this.getTypedAccounts(type)
     let accountLength = 0
-    if (sameTypeAccounts.length > 0) {
-      accountLength = sameTypeAccounts[0]?.accounts?.length
+    if (type == KEYRING_TYPE.HdKeyring) {
+      if (sameTypeAccounts.length > 0) {
+        accountLength = sameTypeAccounts[0]?.accounts?.length
+      }
+    } else if (type == KEYRING_TYPE.SimpleKeyring) {
+      accountLength = sameTypeAccounts.length
     }
+
     const alianName = `${BRAND_ALIAN_TYPE_TEXT[type]} ${accountLength + 1}`
     return alianName
   }
