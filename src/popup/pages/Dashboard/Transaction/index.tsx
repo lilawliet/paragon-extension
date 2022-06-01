@@ -35,7 +35,7 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index
             <span>{shortAddress(item.address)}</span>
             <span>
               <span className={`font-semibold ${item.amount > 0 ? 'text-custom-green' : 'text-warn'}`}>{item.amount > 0 ? '+' : '-'}</span>
-              <span className="font-semibold text-white">{Math.abs(item.amount)}</span> {item.symbol}
+              <span className="font-semibold text-white">{Number(Math.abs(item.amount)).toLocaleString('en', {minimumFractionDigits:4})}</span> {item.symbol}
             </span>
           </div>
         </div>
@@ -91,7 +91,7 @@ const Transaction = () => {
   accountHistory?.forEach((v) => {
     if (lastDate != v.date) {
       lastDate = v.date
-      lastGroup = { date: moment(v.time * 1000).format('MMMM DD,YYYY'), historyItems: [], index: index++ }
+      lastGroup = { date: moment(v.time * 1000).format('MMMM DD, YYYY'), historyItems: [], index: index++ }
       _historyGroups.push(lastGroup)
     }
     const amount = parseFloat(v.amount)

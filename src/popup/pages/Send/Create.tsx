@@ -2,7 +2,7 @@ import { COIN_DUST } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress } from '@/ui/utils'
 import { Button, Input, InputNumber } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Status, Transaction } from './index'
 
@@ -24,6 +24,7 @@ interface Props {
 
 export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setToAmount, setStatus }: Props) => {
   const { t } = useTranslation()
+  const amountRef = useRef(null)
   const [accountBalance] = useGlobalState('accountBalance')
   const [statueAdd, setStatueAdd] = useState<InputState>('')
   const [statueAmt, setStatueAmt] = useState<InputState>('')
@@ -68,24 +69,25 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
       <div className="flex justify-between w-full mt-5 box text-soft-white">
         <span>{t('Available')}</span>
         <span>
-          <span className="font-semibold text-white">{accountBalance.amount}</span> Novo
+          <span className="font-semibold text-white cursor-pointer" onClick={e=>{handleOnChange(accountBalance.amount)}}>{accountBalance.amount}</span> NOVO
         </span>
       </div>
       <InputNumber
+        ref={amountRef}
         className="font-semibold text-white h-15_5 box default hover"
         placeholder={t('Amount') + ` ( >${COIN_DUST} )`}
         style={{ width: '100%' }}
         step={0.0001}
         status={statueAmt}
-        max={toAmount > 0 ? toAmount : 0}
+        max={Number(accountBalance?.amount??0)}
         min={COIN_DUST}
-        value={toAmount > 0 ? toAmount : 0}
-        onChange={async (e) => handleOnChange(e)}
+        value={toAmount??0}
+        onChange={(e) => handleOnChange(e)}
       />
       <div className="flex justify-between w-full mt-5 text-soft-white">
         <span>{t('Fee')}</span>
         <span>
-          <span className="font-semibold text-white">{fee}</span> Novo
+          <span className="font-semibold text-white">{fee}</span> NOVO
         </span>
       </div>
       <span className="text-base text-error">{error}</span>

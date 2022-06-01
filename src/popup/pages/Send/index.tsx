@@ -38,7 +38,7 @@ const SendIndex = () => {
     txid: ''
   })
 
-  const [status, setStatus] = useState<Status>('create')
+  const [status, setStatus] = useState<Status>('success')
   const [error, setError] = useState('')
 
   const sendTx = useCallback(async () => {
@@ -78,11 +78,6 @@ const SendIndex = () => {
     run()
   }, [toAddress + toAmount])
 
-  useEffect(() => {
-    if (accountBalance.amount) {
-      setToAmount(parseFloat(accountBalance.amount))
-    }
-  },[accountBalance])
 
   return (
     <Layout className="h-full">

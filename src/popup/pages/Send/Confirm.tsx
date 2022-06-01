@@ -25,7 +25,7 @@ export default ({ transaction, fromAddress, toAddress, toAmount, fee, sendTx, se
       <div className="justify-between w-full box nobor text-soft-white">
         <span>{shortAddress(fromAddress)}</span>
         <span className="text-white">
-          <ArrowRightOutlined />
+            <img src="./images/arrow-right.svg" alt="" />
         </span>
         <span>{shortAddress(toAddress)}</span>
       </div>
