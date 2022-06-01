@@ -2,7 +2,7 @@ import { copyToClipboard, formatAddr } from '@/common/utils'
 import { CURRENCIES, KEYRING_TYPE, LANGS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
-import { EditOutlined, RightOutlined } from '@ant-design/icons'
+import { RightOutlined } from '@ant-design/icons'
 import { Button, Input, message } from 'antd'
 import { t } from 'i18next'
 import VirtualList from 'rc-virtual-list'
@@ -81,9 +81,10 @@ type MyItemProps = {
   currency: string
 }
 
-const MyItem: React.FC<MyItemProps> = forwardRef(({ item, key, navigate, currency }) => {
+const MyItem: React.FC<MyItemProps> = forwardRef(({ item, key, navigate, currency }, ref) => {
   return (
     <Button
+      ref={ref as any}
       key={key}
       danger={item.danger}
       type={item.danger ? 'text' : 'default'}
@@ -91,8 +92,7 @@ const MyItem: React.FC<MyItemProps> = forwardRef(({ item, key, navigate, currenc
       className={`mb-3_75 box w-115 ${item.danger ? item.danger : 'default'} ${item.right ? 'btn-settings' : ''}`}
       onClick={(e) => {
         navigate(`/settings/${item.route}`)
-      }}
-    >
+      }}>
       <div className="flex items-center justify-between font-semibold text-4_5">
         <div className="flex flex-col text-left gap-2_5">
           <span>{item.label}</span>
@@ -198,8 +198,7 @@ export default () => {
         <div
           className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${
             editable ? 'bg-primary-active border-opacity-60' : 'bg-soft-black border-opacity-20'
-          }`}
-        >
+          }`}>
           {editable ? (
             <Input
               ref={addressInput}
@@ -216,8 +215,7 @@ export default () => {
               className="col-span-5 font-semibold p0 hover hover:cursor-text opacity-60"
               onClick={(e) => {
                 handleChangeAlianName()
-              }}
-            >
+              }}>
               {name}
             </span>
           )}
@@ -251,8 +249,7 @@ export default () => {
           itemKey={(item) => item.action}
           style={{
             boxSizing: 'border-box'
-          }}
-        >
+          }}>
           {(item, index) => <MyItem key={index} navigate={navigate} item={item} currency={currency} />}
         </VirtualList>
       </div>

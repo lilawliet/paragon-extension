@@ -1,12 +1,11 @@
 import { Account } from '@/background/service/preference'
-import { useAppDispatch } from '@/common/storages/hooks'
 import { formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { Button } from 'antd'
 import VirtualList from 'rc-virtual-list'
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Status } from '.'
@@ -40,20 +39,17 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ t, index, ac
       className="box w-115"
       onClick={(e) => {
         setStatus(oper)
-      }}
-    >
+      }}>
       <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
     </Button>
   ) : (
     <Button
-      key={index}
       size="large"
       type="default"
       className="p-5 box w-115 default mb-3_75 btn-88"
       onClick={(e) => {
         onClick(index)
-      }}
-    >
+      }}>
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName} </span>
@@ -118,7 +114,7 @@ export default ({ setStatus }: Props) => {
         tmp.oper = null
         return tmp
       })
-      .concat({ oper: 'add', index: 999 } as AccountTmp)
+      .concat({ oper: 'add', index: 999, address: 'NOT_ADDRESS_1' } as AccountTmp)
   )
 
   const [accountIndex, setAccountIndex] = useState(accountsList.findIndex((v) => v.address == currentAccount?.address))
@@ -135,14 +131,9 @@ export default ({ setStatus }: Props) => {
           tmp.oper = null
           return tmp
         })
-        .concat({ oper: 'add', index: 999 } as AccountTmp)
+        .concat({ oper: 'add', index: 999, address: 'NOT_ADDRESS_1' } as AccountTmp)
     )
   }, [currentAccount, accountsList])
-
-  const verify = () => {
-    // to verify
-    setStatus('add')
-  }
 
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
@@ -165,7 +156,6 @@ export default ({ setStatus }: Props) => {
           <ForwardMyItem
             t={t}
             setStatus={setStatus}
-            key={index}
             account={item}
             index={index}
             oper={item.oper}
