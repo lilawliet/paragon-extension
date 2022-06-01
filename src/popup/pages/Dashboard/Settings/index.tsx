@@ -1,4 +1,4 @@
-import { copyToClipboard } from '@/common/utils'
+import { copyToClipboard, formatAddr } from '@/common/utils'
 import { CURRENCIES, KEYRING_TYPE, LANGS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
@@ -148,7 +148,7 @@ export default () => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    setName(currentAccount?.alianName || '')
+    setName(currentAccount?.alianName??'')
   }, [currentAccount])
 
   useEffect(() => {
@@ -158,14 +158,15 @@ export default () => {
   }, [editable])
 
   const handleOnBlur = async (e) => {
-    if (currentAccount) {
-      const alianName = e.target.value
+    let alianName = currentAccount?.alianName??''
+    if (currentAccount && e.target.value) {
+      alianName = e.target.value
       await wallet.updateAlianName(currentAccount.address, alianName)
       currentAccount.alianName = alianName
       await wallet.changeAccount(currentAccount)
-      setName(alianName)
-      setEditable(false)
     }
+    setName(alianName)
+    setEditable(false)
   }
 
   const toRenderSettings = SettingList.filter((v) => {
@@ -196,14 +197,11 @@ export default () => {
         <div
           className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${
             editable ? 'bg-primary-active border-opacity-60' : 'bg-soft-black border-opacity-20'
-          }`}
-          onClick={(e) => {
-            handleChangeAlianName()
-          }}>
+          }`}>
           {editable ? (
             <Input
               ref={addressInput}
-              className="col-span-5 font-semibold p0 hover hover:cursor-pointer disabled:color-soft-white"
+              className="col-span-5 font-semibold rounded-none p0 hover hover:cursor-text disabled:color-soft-white"
               bordered={false}
               status="error"
               placeholder="Recipient’s NOVO address"
@@ -212,24 +210,28 @@ export default () => {
               onPressEnter={(e) => handleOnBlur(e)}
             />
           ) : (
-            <span className="col-span-5 font-semibold p0 hover hover:cursor-pointer opacity-60">{name}</span>
+            <span className="col-span-5 font-semibold p0 hover hover:cursor-text opacity-60" 
+            onClick={(e) => {
+              handleChangeAlianName()
+            }}>{name}</span>
           )}
           <div className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
-            <EditOutlined
+            <img src="./images/Name.svg" 
               onClick={(e) => {
                 setName('')
+                handleChangeAlianName()
               }}
-              title={t('Clear the inputted')}
-            />
+              title={t('Clear the inputted')}/>
           </div>
         </div>
 
         <div
           className="w-full text-center text-soft-white mt-2_5"
-          onClick={(e) => {
-            copy(currentAccount?.address ?? '')
-          }}>
-          ( {currentAccount?.address} )
+          // onClick={(e) => {
+          //   copy(currentAccount?.address ?? '')
+          // }}
+          >
+           {formatAddr(currentAccount?.address??'', 5)} 
         </div>
       </div>
       <div className="h-121_25 mt-3_75">

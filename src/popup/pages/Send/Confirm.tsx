@@ -49,7 +49,7 @@ export default ({ transaction, fromAddress, toAddress, toAmount, fee, sendTx, se
         onClick={(e) => {
           sendTx()
         }}>
-        <div className="flex items-center justify-center text-lg">{t('Next')}</div>
+        <div className="flex items-center justify-center text-lg font-semibold">{t('Next')}</div>
       </Button>
     </div>
   )

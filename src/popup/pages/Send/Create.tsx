@@ -1,8 +1,8 @@
 import { COIN_DUST } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress } from '@/ui/utils'
-import { Button, Input } from 'antd'
-import { useState } from 'react'
+import { Button, Input, InputNumber } from 'antd'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Status, Transaction } from './index'
 
@@ -46,6 +46,10 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
     setStatus('confirm')
   }
 
+  const handleOnChange = (e) => {
+      setToAmount(parseFloat(e))
+  }
+  
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
       <div className="flex items-center px-2 text-2xl h-13">{t('Send')} Novo</div>
@@ -67,15 +71,16 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
           <span className="font-semibold text-white">{accountBalance.amount}</span> Novo
         </span>
       </div>
-      <Input
+      <InputNumber
         className="font-semibold text-white h-15_5 box default hover"
         placeholder={t('Amount') + ` ( >${COIN_DUST} )`}
+        style={{ width: '100%' }}
+        step={0.0001}
         status={statueAmt}
-        defaultValue={toAmount > 0 ? toAmount : undefined}
-        onChange={async (e) => {
-          const val = parseFloat(e.target.value)
-          setToAmount(val)
-        }}
+        max={toAmount > 0 ? toAmount : 0}
+        min={COIN_DUST}
+        value={toAmount > 0 ? toAmount : 0}
+        onChange={async (e) => handleOnChange(e)}
       />
       <div className="flex justify-between w-full mt-5 text-soft-white">
         <span>{t('Fee')}</span>
@@ -91,7 +96,7 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
         onClick={(e) => {
           verify()
         }}>
-        <div className="flex items-center justify-center text-lg">{t('Next')}</div>
+        <div className="flex items-center justify-center text-lg font-semibold">{t('Next')}</div>
       </Button>
     </div>
   )

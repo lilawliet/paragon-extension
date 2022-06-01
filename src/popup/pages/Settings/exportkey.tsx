@@ -100,6 +100,7 @@ export default () => {
                 </div>
                 <div className="flex items-center col-span-5 overflow-hidden font-semibold text-soft-white overflow-ellipsis">{privateKey}</div>
               </div>
+              <div className="text-soft-white -mt-2_5">Derivation Path::m/44'/0'/0'/0/0</div>
             </div>
           )}
         </div>

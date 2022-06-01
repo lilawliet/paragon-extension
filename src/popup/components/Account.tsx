@@ -19,7 +19,7 @@ const AccountSelect = () => {
 
   return (
     <div
-      className="flex items-center w-full"
+      className="flex items-center w-full cursor-pointer px-1_25"
       onClick={(e) => {
         navigate('/settings/account')
       }}>
@@ -27,7 +27,7 @@ const AccountSelect = () => {
         <img src="./images/user-solid.svg" alt="" />
       </span>
       <div className="flex-grow">
-        <div style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem' }}>{currentAccount?.alianName}</div>
+        <div style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem', fontWeight: 600 }}>{currentAccount?.alianName}</div>
       </div>
       <span className="text-white">
         <img src="./images/chevron-down-solid.png" alt="" />

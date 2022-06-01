@@ -16,7 +16,7 @@ const CFooter = () => {
           dispatch(setPanel('home'))
         }}
       >
-        <img src={`./images/wallet-solid${panel == 'home' ? '-active' : ''}.svg`} alt="" />
+        <img src={`./images/wallet-solid${panel == 'home' ? '-active' : ''}.svg`} alt="" className='h-6' />
       </div>
       {/* <div className={`cursor-pointer flex items-center justify-center h-full text-center ${panel == 'nft' ? 'text-primary' : ''}`}>
         <img src={`./images/list-solid${panel == 'nft' ? '-active' : ''}.svg`} alt="" />
@@ -27,7 +27,7 @@ const CFooter = () => {
           dispatch(setPanel('transaction'))
         }}
       >
-        <img src={`./images/clock-solid${panel == 'transaction' ? '-active' : ''}.svg`} alt="" />
+        <img src={`./images/clock-solid${panel == 'transaction' ? '-active' : ''}.svg`} alt="" className='h-6' />
       </div>
       <div
         className={`cursor-pointer flex items-center justify-center h-full text-center ${panel == 'settings' ? 'text-primary' : ''}`}
@@ -35,7 +35,7 @@ const CFooter = () => {
           dispatch(setPanel('settings'))
         }}
       >
-        <img src={`./images/gear-solid${panel == 'settings' ? '-active' : ''}.svg`} alt="" />
+        <img src={`./images/gear-solid${panel == 'settings' ? '-active' : ''}.svg`} alt="" className='h-6' />
       </div>
     </div>
   )

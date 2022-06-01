@@ -49,7 +49,7 @@ const Login = () => {
             <Input.Password placeholder="Password" onChange={(e) => setPassword(e.target.value)} onKeyUp={(e) => handleOnKeyUp(e)} />
           </div>
           <div>
-            <Button disabled={disabled} size="large" type="primary" className="box w380 content" onClick={btnClick}>
+            <Button disabled={disabled} size="large" type="primary" className="font-semibold box w380 content" onClick={btnClick}>
               {t('Unlock')}
             </Button>
           </div>

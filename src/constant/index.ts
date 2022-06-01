@@ -167,3 +167,7 @@ export const CURRENCIES = [
 ]
 
 export const COIN_DUST = 0.4368
+
+export const TO_LOCALE_STRING_CONFIG = {
+  minimumFractionDigits:4
+}

@@ -1,5 +1,5 @@
 import { copyToClipboard, formatAddr } from '@/common/utils'
-import { CURRENCIES, KEYRING_CLASS } from '@/constant'
+import { CURRENCIES, KEYRING_CLASS, TO_LOCALE_STRING_CONFIG } from '@/constant'
 import AccountSelect from '@/popup/components/Account'
 import { useGlobalState } from '@/ui/state/state'
 import { message, Statistic } from 'antd'
@@ -43,7 +43,7 @@ const Home = () => {
         <AccountSelect />
       </div>
       <div
-        className="flex items-center mt-2_5"
+        className="flex items-center cursor-pointer mt-2_5"
         onClick={(e) => {
           copy(currentAccount?.address ?? '')
         }}>
@@ -59,7 +59,7 @@ const Home = () => {
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
           }}>
-          <span>
+          <span className='h-4_8 mr-0_5' >
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
           &nbsp;{t('Receive')}
@@ -69,7 +69,7 @@ const Home = () => {
           onClick={(e) => {
             navigate('/send/index')
           }}>
-          <span>
+          <span className='h-4_8 mr-0_5' >
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>
           &nbsp;{t('Send')}
@@ -84,7 +84,7 @@ const Home = () => {
             <div className="flex flex-col flex-grow px-2">
               <div className="font-semibold">{asset.name}</div>
               <div className="text-base text-soft-white">
-                {asset.amount} {asset.symbol}
+                {Number(asset.amount)?.toLocaleString('en', {minimumFractionDigits:4})} {asset.symbol}
               </div>
             </div>
             <div className="font-semibold">{getCurrencyValueString(asset.value)}</div>

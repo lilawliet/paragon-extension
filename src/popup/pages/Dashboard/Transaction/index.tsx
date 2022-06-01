@@ -1,6 +1,7 @@
 import AccountSelect from '@/popup/components/Account'
 import { useGlobalState } from '@/ui/state/state'
 import { shortAddress } from '@/ui/utils'
+import { ClockCircleFilled } from '@ant-design/icons'
 import { Empty } from 'antd'
 import moment from 'moment'
 import VirtualList from 'rc-virtual-list'
@@ -107,12 +108,18 @@ const Transaction = () => {
     virtualListHeight = 0
   }
   return (
-    <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
-      <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
-        <AccountSelect />
+    <div className="flex flex-col items-center h-full gap-5 justify-evenly">
+      <div className="mt-5">
+        <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
+          <AccountSelect />
+        </div>
       </div>
-      <div className="grid mt-6 gap-2_5">
-        {historyGroups.length == 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
+      <div className="grid flex-grow mt-6 gap-2_5">
+        {historyGroups.length == 0 ? 
+        <div className='flex flex-col items-center justify-center h-full gap-5'>
+          <ClockCircleFilled className='text-2xl' />
+          {t('No Activity')}
+        </div> : null}
         <VirtualList
           data={historyGroups}
           data-id="list"
@@ -120,7 +127,6 @@ const Transaction = () => {
           itemHeight={20}
           itemKey={(group) => group.date}
           // disabled={animating}
-          ref={listRef}
           style={{
             boxSizing: 'border-box'
           }}

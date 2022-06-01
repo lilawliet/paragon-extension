@@ -78,6 +78,12 @@ const SendIndex = () => {
     run()
   }, [toAddress + toAmount])
 
+  useEffect(() => {
+    if (accountBalance.amount) {
+      setToAmount(parseFloat(accountBalance.amount))
+    }
+  },[accountBalance])
+
   return (
     <Layout className="h-full">
       <Header className="border-b border-white border-opacity-10">
@@ -130,8 +136,8 @@ const SendIndex = () => {
               }
             }}>
             <div className="flex items-center justify-center text-lg">
-              <ArrowLeftOutlined />
-              <span className="font-semibold leading-4">&nbsp;{t('Back')}</span>
+              <img src="./images/arrow-left.svg" />
+              <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>
             </div>
           </Button>
         </Footer>
