@@ -22,16 +22,11 @@ export default ({ setStatus }: Props) => {
   const { t } = useTranslation()
   const verify = async () => {
     try {
-      const account = await wallet.importPrivateKey(privateKey)
-      await wallet.changeAccount(account[0])
-
-      const alianName = await wallet.getNewAccountAlianName(KEYRING_CLASS.PRIVATE_KEY)
-      if (account && account.length > 0) {
-        await wallet.updateAlianName(account[0].address, alianName)
-        message.success({
-          content: t('Successfully imported')
-        })
-      }
+      const alianName = await wallet.getNextAccountAlianName(KEYRING_CLASS.PRIVATE_KEY)
+      await wallet.importPrivateKey(privateKey, alianName)
+      message.success({
+        content: t('Successfully imported')
+      })
 
       navigate('/dashboard')
     } catch (e) {
@@ -79,8 +74,7 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">{t('Import Private Key')}</div>
       </Button>
     </div>

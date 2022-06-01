@@ -19,14 +19,10 @@ export default ({ setStatus }: Props) => {
   const [defaultName, setDefaultName] = useState('')
   const handleOnClick = async () => {
     if (wallet.checkHasMnemonic()) {
-      const account = await wallet.deriveNewAccountFromMnemonic()
-      const defaultAlianName = await wallet.getNewAccountAlianName(KEYRING_CLASS.PRIVATE_KEY)
-      if (account && account.length > 0) {
-        await wallet.updateAlianName(account[0], alianName || defaultAlianName)
-        message.success({
-          content: t('Successfully created')
-        })
-      }
+      await wallet.deriveNewAccountFromMnemonic(alianName || defaultName)
+      message.success({
+        content: t('Successfully created')
+      })
 
       navigate('/dashboard')
     }
@@ -63,8 +59,7 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           handleOnClick()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg">{t('Create Account')}</div>
       </Button>
     </div>

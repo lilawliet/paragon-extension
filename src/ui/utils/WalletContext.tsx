@@ -48,7 +48,7 @@ export type WalletController = {
   clearKeyrings(): Promise<void>
   getPrivateKey(password: string, account: { address: string; type: string }): Promise<string>
   getMnemonics(password: string): Promise<string>
-  importPrivateKey(data: string): Promise<Account[]>
+  importPrivateKey(data: string, alianName?: string): Promise<Account[]>
   getPreMnemonics(): Promise<any>
   generatePreMnemonic(): Promise<string>
   removePreMnemonics(): void
@@ -57,7 +57,7 @@ export type WalletController = {
   resetCurrentAccount(): Promise<void>
   generateKeyringWithMnemonic(mnemonic: string): number
   checkHasMnemonic(): boolean
-  deriveNewAccountFromMnemonic(): Promise<string[]>
+  deriveNewAccountFromMnemonic(alianName?: string): Promise<string[]>
   getAccountsCount(): Promise<number>
   getTypedAccounts(type: string): Promise<DisplayedKeryring[]>
   getAllVisibleAccounts(): Promise<DisplayedKeryring[]>

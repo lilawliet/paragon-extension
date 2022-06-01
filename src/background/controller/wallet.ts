@@ -272,7 +272,7 @@ export class WalletController extends BaseController {
     return seedWords
   }
 
-  importPrivateKey = async (data: string) => {
+  importPrivateKey = async (data: string, alianName?: string) => {
     const error = new Error(i18n.t('the private key is invalid'))
     try {
       const key = new novo.PrivateKey(data)
@@ -284,7 +284,9 @@ export class WalletController extends BaseController {
     }
 
     const keyring = await keyringService.importPrivateKey(data)
-    return this._setCurrentAccountFromKeyring(keyring)
+    const accounts = await keyring.getAccounts()
+    if (alianName) this.updateAlianName(accounts[0], alianName)
+    return this._setCurrentAccountFromKeyring(keyring, 0, alianName)
   }
 
   // json format is from "https://github.com/SilentCicero/ethereumjs-accounts"
@@ -310,7 +312,7 @@ export class WalletController extends BaseController {
   createKeyringWithMnemonics = async (mnemonic: string) => {
     const keyring = await keyringService.createKeyringWithMnemonics(mnemonic)
     keyringService.removePreMnemonics()
-    return this._setCurrentAccountFromKeyring(keyring)
+    return this._setCurrentAccountFromKeyring(keyring, 0)
   }
 
   removeAddress = async (address: string, type: string, brand?: string) => {
@@ -379,11 +381,12 @@ export class WalletController extends BaseController {
     }
   }
 
-  deriveNewAccountFromMnemonic = async () => {
+  deriveNewAccountFromMnemonic = async (alianName?: string) => {
     const keyring = this._getKeyringByType(KEYRING_CLASS.MNEMONIC)
 
     const result = await keyringService.addNewAccount(keyring)
-    this._setCurrentAccountFromKeyring(keyring, -1)
+    if (alianName) this.updateAlianName(result[0], alianName)
+    this._setCurrentAccountFromKeyring(keyring, -1, alianName)
     return result
   }
 
@@ -498,13 +501,16 @@ export class WalletController extends BaseController {
     return contactBookService.getContactByAddress(address)
   }
 
-  getNewAccountAlianName = async (type: string) => {
+  getNewAccountAlianName = async (type: string, index = 0) => {
     const sameTypeAccounts = await this.getTypedAccounts(type)
     let accountLength = 0
     if (sameTypeAccounts.length > 0) {
       accountLength = sameTypeAccounts[0]?.accounts?.length
     }
-    const alianName = `${BRAND_ALIAN_TYPE_TEXT[type]} ${accountLength}`
+    if (index == 0) {
+      index = accountLength
+    }
+    const alianName = `${BRAND_ALIAN_TYPE_TEXT[type]} ${index}`
     return alianName
   }
 
@@ -518,7 +524,7 @@ export class WalletController extends BaseController {
     return alianName
   }
 
-  private _setCurrentAccountFromKeyring = async (keyring: Keyring, index = 0) => {
+  private _setCurrentAccountFromKeyring = async (keyring: Keyring, index = 0, alianName?: string) => {
     const accounts = await keyring.getAccounts()
     const account = accounts[index < 0 ? index + accounts.length : index]
 
@@ -526,7 +532,7 @@ export class WalletController extends BaseController {
       throw new Error('the current account is empty')
     }
 
-    const alianName = this.getAlianName(account) || (await this.getNewAccountAlianName(keyring.type))
+    alianName = alianName || this.getAlianName(account) || (await this.getNewAccountAlianName(keyring.type))
 
     const _account: Account = {
       address: account,
@@ -632,7 +638,7 @@ export class WalletController extends BaseController {
     const accounts: Account[] = await keyringService.getAllVisibleAccountsArray()
     for (let i = 0; i < accounts.length; i++) {
       const account = accounts[i]
-      account.alianName = this.getAlianName(account.address) || (await this.getNewAccountAlianName(account.type))
+      account.alianName = this.getAlianName(account.address) || (await this.getNewAccountAlianName(account.type, i + 1))
     }
 
     return accounts
