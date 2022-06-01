@@ -137,6 +137,7 @@ export default () => {
   }
 
   const [currentAccount] = useGlobalState('currentAccount')
+  const [accountsList, setAccountsList] = useGlobalState('accountsList')
   const [currency] = useGlobalState('currency')
   const [locale] = useGlobalState('locale')
 
@@ -154,7 +155,7 @@ export default () => {
 
   useEffect(() => {
     if (editable) {
-      addressInput.current!.focus({ cursor: 'start' })
+      addressInput.current!.focus({ cursor: 'end' })
     }
   }, [editable])
 
@@ -164,6 +165,12 @@ export default () => {
       alianName = e.target.value
       await wallet.updateAlianName(currentAccount.address, alianName)
       currentAccount.alianName = alianName
+      const inListAccount = accountsList.find((v) => v.address == currentAccount.address)
+      if (inListAccount) {
+        inListAccount.alianName = alianName
+      }
+      setAccountsList(accountsList)
+
       await wallet.changeAccount(currentAccount)
     }
     setName(alianName)
