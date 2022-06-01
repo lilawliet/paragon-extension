@@ -2,7 +2,7 @@ import { COIN_DUST } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress } from '@/ui/utils'
 import { Button, Input, InputNumber } from 'antd'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Status, Transaction } from './index'
 
@@ -73,8 +73,7 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
             className="font-semibold text-white cursor-pointer"
             onClick={(e) => {
               handleOnChange(accountBalance.amount)
-            }}
-          >
+            }}>
             {accountBalance.amount}
           </span>{' '}
           NOVO
@@ -89,7 +88,7 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
         status={statueAmt}
         max={Number(accountBalance?.amount ?? 0)}
         min={COIN_DUST}
-        value={toAmount ?? 0}
+        value={toAmount ? toAmount : ''}
         onChange={(e) => handleOnChange(e)}
       />
       <div className="flex justify-between w-full mt-5 text-soft-white">
@@ -105,8 +104,7 @@ export default ({ fee, toAddress, toAmount, error, setError, setToAddress, setTo
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
+        }}>
         <div className="flex items-center justify-center text-lg font-semibold">{t('Next')}</div>
       </Button>
     </div>

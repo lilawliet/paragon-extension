@@ -624,17 +624,25 @@ export class WalletController extends BaseController {
         outputIndex: utxo.outputIndex
       })
     })
-    txComposer.appendP2PKHOutput({
+    const outputIndex = txComposer.appendP2PKHOutput({
       address: receiverAddress,
       satoshis: novoToSatoshis(amount)
     })
     txComposer.appendChangeOutput(accountAddress)
 
+    const unlockSize = txComposer.getTx().inputs.length * 108
+    const fee = Math.ceil((txComposer.getTx().toBuffer().length + unlockSize) * 8)
+    const leftAmount = txComposer.getUnspentValue()
+    if (leftAmount < fee) {
+      txComposer.getOutput(outputIndex).satoshis -= fee - leftAmount
+    }
+
     await this.signTransaction(account.type, account.address, txComposer.getTx())
 
     return {
       fee: satoshisToNovo(txComposer.getUnspentValue()),
-      rawtx: txComposer.getRawHex()
+      rawtx: txComposer.getRawHex(),
+      toAmount: satoshisToNovo(txComposer.getOutput(outputIndex).satoshis)
     }
   }
 

@@ -74,7 +74,7 @@ export type WalletController = {
   getNextAccountAlianName: (type: string) => Promise<string>
 
   signTransaction(type: string, from: string, novoTx: novo.Transaction): Promise<novo.Transaction>
-  sendNovo(data: { to: string; amount: number }): Promise<{ fee: number; rawtx: string }>
+  sendNovo(data: { to: string; amount: number }): Promise<{ fee: number; rawtx: string; toAmount: number }>
   pushTx(rawtx: string): Promise<string>
 }
 

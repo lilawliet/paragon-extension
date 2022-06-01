@@ -2,7 +2,6 @@ import { COIN_DUST } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress, sleep, useWallet } from '@/ui/utils'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -71,9 +70,10 @@ const SendIndex = () => {
         setError('Invalid amount')
         return
       }
-      const { fee, rawtx } = await wallet.sendNovo({ to: toAddress, amount: toAmount })
-      setFee(fee)
-      ref.current.rawtx = rawtx
+      const result = await wallet.sendNovo({ to: toAddress, amount: toAmount })
+      setFee(result.fee)
+      setToAmount(result.toAmount)
+      ref.current.rawtx = result.rawtx
     }
     run()
   }, [toAddress + toAmount])
@@ -113,8 +113,7 @@ const SendIndex = () => {
             backgroundColor: '#1C1919',
             textAlign: 'center',
             width: '100%'
-          }}
-        >
+          }}>
           <Button
             size="large"
             type="default"
@@ -129,8 +128,7 @@ const SendIndex = () => {
               } else {
                 setStatus('create')
               }
-            }}
-          >
+            }}>
             <div className="flex items-center justify-center text-lg">
               <img src="./images/arrow-left.svg" />
               <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>
