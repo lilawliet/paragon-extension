@@ -22,7 +22,7 @@ interface GroupItem {
 interface MyItemProps {
   group: GroupItem
   index: number
-  t: TFunction<"translation", undefined>
+  t: TFunction<'translation', undefined>
 }
 
 const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index, t}, ref) => {
