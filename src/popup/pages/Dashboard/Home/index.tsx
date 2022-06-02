@@ -1,5 +1,5 @@
 import { copyToClipboard, formatAddr } from '@/common/utils'
-import { CURRENCIES, KEYRING_CLASS, TO_LOCALE_STRING_CONFIG } from '@/constant'
+import { CURRENCIES, KEYRING_CLASS } from '@/constant'
 import AccountSelect from '@/popup/components/Account'
 import { useGlobalState } from '@/ui/state/state'
 import { message, Statistic } from 'antd'
@@ -46,8 +46,7 @@ const Home = () => {
         className="flex items-center cursor-pointer mt-2_5"
         onClick={(e) => {
           copy(currentAccount?.address ?? '')
-        }}
-      >
+        }}>
         <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address ?? '', 5)}</span>
         {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
       </div>
@@ -59,8 +58,7 @@ const Home = () => {
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
-          }}
-        >
+          }}>
           <span className="h-4_8 w-4_8 mr-0_5">
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
@@ -70,8 +68,7 @@ const Home = () => {
           className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
           onClick={(e) => {
             navigate('/send/index')
-          }}
-        >
+          }}>
           <span className="h-4_8 w-4_8 mr-0_5">
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>

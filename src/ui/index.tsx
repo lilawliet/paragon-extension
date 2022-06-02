@@ -5,8 +5,6 @@ import '@/common/styles/tailwind.less'
 import eventBus from '@/eventBus'
 import Popup from '@/popup'
 import { Message } from '@/utils'
-import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
 import en from 'antd/es/locale/en_US'
 import { EVENTS } from 'consts'
 import ReactDOM from 'react-dom/client'
@@ -16,18 +14,18 @@ const antdConfig = {
   locale: en
 }
 
-if (process.env.NODE_ENV === 'production') {
-  Sentry.init({
-    dsn: 'https://610efdad84c14c2c8e76192ac365eb7b@o1271596.ingest.sentry.io/6464056',
-    integrations: [new Integrations.BrowserTracing()],
-    release: process.env.release,
+// if (process.env.NODE_ENV === 'production') {
+//   Sentry.init({
+//     dsn: 'https://610efdad84c14c2c8e76192ac365eb7b@o1271596.ingest.sentry.io/6464056',
+//     integrations: [new Integrations.BrowserTracing()],
+//     release: process.env.release,
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0
-  })
-}
+//     // Set tracesSampleRate to 1.0 to capture 100%
+//     // of transactions for performance monitoring.
+//     // We recommend adjusting this value in production
+//     tracesSampleRate: 1.0
+//   })
+// }
 
 // For fix chrome extension render problem in external screen
 if (
