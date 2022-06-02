@@ -3,8 +3,7 @@ import { Chain } from '@/background/service/openapi'
 // import IconNovoLogo from "./images/novo.svg";
 
 export enum CHAINS_ENUM {
-  NOVO = 'NOVO',
-  BSV = 'BSV'
+  NOVO = 'NOVO'
 }
 
 export const CHAINS: Record<string, Chain> = {
@@ -12,23 +11,7 @@ export const CHAINS: Record<string, Chain> = {
     name: 'NOVO',
     enum: CHAINS_ENUM.NOVO,
     logo: '',
-    network: 'mainnet',
-    nativeTokenSymbol: 'NOVO',
-    nativeTokenLogo: 'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png',
-    nativeTokenDecimals: 4,
-    nativeTokenAddress: 'eth',
-    scanLink: 'https://etherscan.io/tx/_s_'
-  },
-  [CHAINS_ENUM.BSV]: {
-    name: 'BSV',
-    enum: CHAINS_ENUM.BSV,
-    logo: '',
-    network: 'mainnet',
-    nativeTokenSymbol: 'BSV',
-    nativeTokenLogo: 'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png',
-    nativeTokenAddress: 'bsc',
-    scanLink: 'https://bscscan.com/tx/_s_',
-    nativeTokenDecimals: 4
+    network: 'mainnet'
   }
 }
 
@@ -50,7 +33,7 @@ export const KEYRING_TYPE_TEXT = {
   [KEYRING_TYPE.WatchAddressKeyring]: 'Watch Mode'
 }
 export const BRAND_ALIAN_TYPE_TEXT = {
-  [KEYRING_TYPE.HdKeyring]: 'Mnemonic',
+  [KEYRING_TYPE.HdKeyring]: 'Account',
   [KEYRING_TYPE.SimpleKeyring]: 'Private Key',
   [KEYRING_TYPE.WatchAddressKeyring]: 'Watch'
 }
@@ -99,13 +82,6 @@ export const LANGS = [
     label: 'Spanish'
   }
 ]
-
-export const CHECK_METAMASK_INSTALLED_URL = {
-  Chrome: 'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/phishing.html',
-  Firefox: '',
-  Brave: '',
-  Edge: ''
-}
 
 export const MINIMUM_GAS_LIMIT = 21000
 

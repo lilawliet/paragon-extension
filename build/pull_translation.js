@@ -1,7 +1,7 @@
 const { Client } = require("@notionhq/client");
 const fs = require("fs")
-const token = "secret_2q9ytoPfXb072W1FaqmdtQ4zgH24W8lcItr0w9sDj9s";
-const database_id = "3e57f186d5254e3c9a21073b19c6fb20";
+const token = "secret_YeRe1CA0qeoZH0Kpv3aX5wpSm4xe2EQgetdFUE7T9Du";
+const database_id = "d4e4d6a2b41349a394dfd766566ebf8b";
 let notion = new Client({ auth: token });
 const Languages = [
     { name: "English", symbol: "en",messages:{} },
@@ -27,8 +27,12 @@ let run = async () => {
     data.results.forEach((v) => {
         Languages.forEach(lang => {
             let key = getPropertyPlainText(v.properties['Name'])
-            lang.messages[key] = {
-                message:getPropertyPlainText(v.properties[lang.name])
+            if (key) {
+                lang.messages[key] = {
+                    message:getPropertyPlainText(v.properties[lang.name])
+                }
+            } else {
+                console.error("Invalid Key!",key)
             }
         })
     })

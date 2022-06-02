@@ -18,7 +18,7 @@ const { PortMessage } = Message
 let appStoreLoaded = false
 
 Sentry.init({
-  dsn: 'https://e871ee64a51b4e8c91ea5fa50b67be6b@o460488.ingest.sentry.io/5831390',
+  dsn: 'https://610efdad84c14c2c8e76192ac365eb7b@o1271596.ingest.sentry.io/6464056',
   integrations: [new Integrations.BrowserTracing()],
   release: process.env.release,
   // Set tracesSampleRate to 1.0 to capture 100%

@@ -1,6 +1,6 @@
 {
   "name": "paragon-wallet-ts",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "clean": "mkdir -p dist && rm -rf dist/* && cp -r _raw/* dist",

@@ -1,8 +1,5 @@
-import { RightOutlined } from '@ant-design/icons'
-import { Button, Input } from 'antd'
+import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-
 import { Status } from '.'
 
 interface Props {
@@ -11,12 +8,6 @@ interface Props {
 
 export default ({ setStatus }: Props) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-
-  const verify = () => {
-    // to verify
-    navigate('/create-recovery')
-  }
 
   return (
     <div className="flex flex-col items-center mx-auto mt-5 gap-3_75 justify-evenly w-95">
@@ -27,8 +18,7 @@ export default ({ setStatus }: Props) => {
         className="mt-1_25 box w-115 default btn-settings"
         onClick={(e) => {
           setStatus('create')
-        }}
-      >
+        }}>
         <div className="flex items-center justify-between font-semibold text-4_5">
           <div className="flex flex-col text-left gap-2_5">
             <span>{t('Create a new account')}</span>
@@ -45,8 +35,7 @@ export default ({ setStatus }: Props) => {
         className="box w-115 default btn-settings"
         onClick={(e) => {
           setStatus('import')
-        }}
-      >
+        }}>
         <div className="flex items-center justify-between font-semibold text-4_5">
           <div className="flex flex-col text-left gap-2_5">
             <span>{t('Import Private Key')}</span>

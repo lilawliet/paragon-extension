@@ -1,7 +1,6 @@
 import { copyToClipboard } from '@/common/utils'
 import CHeader from '@/popup/components/CHeader'
 import { useWallet } from '@/ui/utils'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
@@ -96,8 +95,7 @@ export default () => {
                 className="p-5 font-semibold select-text box default text-4_5 w380 leading-6_5"
                 onClick={(e) => {
                   copy(mnemonic)
-                }}
-              >
+                }}>
                 {mnemonic}
               </div>
             </div>
@@ -111,8 +109,7 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}
-        >
+          }}>
           <div className="flex items-center justify-center text-lg">
             <img src="./images/arrow-left.svg" />
             <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>

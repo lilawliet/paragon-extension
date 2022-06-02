@@ -23,11 +23,6 @@ export interface Chain {
   logo: string
   enum: CHAINS_ENUM
   network: string
-  nativeTokenSymbol: string
-  nativeTokenLogo: string
-  nativeTokenAddress: string
-  scanLink: string
-  nativeTokenDecimals: number
 }
 
 export interface NovoBalance {
@@ -36,18 +31,6 @@ export interface NovoBalance {
   amount: string
   usd_value: string
 }
-
-// export interface TxHistoryItem {
-//   txid: string
-//   time: number
-//   date: string
-//   assets_transferred: {
-//     amount: number
-//     symbol: string
-//   }[]
-//   from_addrs: string[]
-//   to_addrs: string[]
-// }
 
 export interface TxHistoryItem {
   txid: string

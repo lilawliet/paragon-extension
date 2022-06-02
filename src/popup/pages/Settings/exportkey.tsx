@@ -1,5 +1,7 @@
 import { copyToClipboard } from '@/common/utils'
+import { KEYRING_TYPE } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
+import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
@@ -21,6 +23,8 @@ export default () => {
   const [status, setStatus] = useState<Status>('')
   const [error, setError] = useState('')
   const wallet = useWallet()
+  const [accountsList] = useGlobalState('accountsList')
+  const [currentAccount] = useGlobalState('currentAccount')
   const btnClick = async () => {
     try {
       const account = await wallet.getCurrentAccount()
@@ -93,14 +97,17 @@ export default () => {
                 className="grid w-full grid-cols-6 p-5 select-text box default hover text-4_5 leading-6_5"
                 onClick={(e) => {
                   copy(privateKey)
-                }}
-              >
+                }}>
                 <div className="flex items-center">
                   <img src="./images/copy-solid.svg" alt="" />
                 </div>
                 <div className="flex items-center col-span-5 overflow-hidden font-semibold text-soft-white overflow-ellipsis">{privateKey}</div>
               </div>
-              <div className="text-soft-white -mt-2_5">Derivation Path::m/44'/0'/0'/0/0</div>
+              {currentAccount?.type == KEYRING_TYPE.HdKeyring ? (
+                <div className="text-soft-white -mt-2_5">
+                  Derivation Path::m/44'/0'/0'/0/{accountsList.filter((v) => v.type == KEYRING_TYPE.HdKeyring).findIndex((v) => v.address == currentAccount?.address)}
+                </div>
+              ) : null}
             </div>
           )}
         </div>
@@ -112,8 +119,7 @@ export default () => {
           className="box w440"
           onClick={(e) => {
             window.history.go(-1)
-          }}
-        >
+          }}>
           <div className="flex items-center justify-center text-lg">
             <ArrowLeftOutlined />
             <span className="font-semibold leading-4">&nbsp;Back</span>
