@@ -3,8 +3,9 @@ import { useGlobalState } from '@/ui/state/state'
 import { shortAddress } from '@/ui/utils'
 import { ClockCircleFilled } from '@ant-design/icons'
 import moment from 'moment'
+import VirtualList from 'rc-virtual-list'
 import { forwardRef, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
+import { TFunction, useTranslation } from 'react-i18next'
 
 interface HistoryItem {
   address: string
@@ -21,19 +22,21 @@ interface GroupItem {
 interface MyItemProps {
   group: GroupItem
   index: number
+  t: TFunction<"translation", undefined>
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index }, ref) => {
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index, t}, ref) => {
   const [currentAccount] = useGlobalState('currentAccount')
   if (group.index == -1) {
     return (
-      <div key={index} className="flex flex-col items-center gap-10">
-        <span className="nobor text-soft-white px-2 font-semibold cursor-pointer text-base">
-          Display the recent 10, more click to go to the{' '}
-          <a href={`https://novoexplorer.com/address/${currentAccount?.address}`} target="_blank" rel="noreferrer">
-            browser
+      <div className='flex flex-col items-center gap-2_5 mb-2_5'>
+        <span className='text-2xl text-white'>{t('Latest Transactions')}</span>
+        <div className="flex items-center text-base text-white opacity-60 hover:opacity-100">
+          <img src="./images/eye.svg" alt="" />
+          <a className="text-white cursor-pointer hover:text-white" href={`https://novoexplorer.com/address/${currentAccount?.address}`} target="_blank" rel="noreferrer">
+            &nbsp;{t('View on Block Explorer')}
           </a>
-        </span>
+        </div>
       </div>
     )
   }
@@ -119,7 +122,7 @@ const Transaction = () => {
   if (historyGroups.length == 0) {
     virtualListHeight = 0
   } else {
-    historyGroups.push({
+    historyGroups.unshift({
       date: '',
       historyItems: [],
       index: -1
@@ -128,55 +131,37 @@ const Transaction = () => {
 
   return (
     <div className="flex flex-col items-center h-full gap-5 justify-evenly">
-      <div className="mt-5 gap-6">
+      <div className="mt-5">
         <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
           <AccountSelect />
         </div>
       </div>
-      <div className="flex items-center cursor-pointer mt-2_5 ">
-        <span className="text-2xl text-soft-white">Latest Transactions</span>
-      </div>
-      <div className="flex items-center text-white opacity-60 hover:opacity-100">
-        <img src="./images/eye.svg" alt="" />
-        <a
-          className="font-semibold text-white cursor-pointer hover:text-white"
-          href={`https://novoexplorer.com/address/${currentAccount?.address}`}
-          target="_blank"
-          rel="noreferrer">
-          &nbsp;{t('View on Block Explorer')}
-        </a>
-      </div>
-      <div>
+      <div className="grid flex-grow gap-2_5">
         {historyGroups.length == 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-5">
             <ClockCircleFilled className="text-2xl" />
             {t('No Activity')}
           </div>
         ) : null}
-        {}
-        {historyGroups.map((item, index) => (
-          <ForwardMyItem group={item} index={index} key={index} />
-        ))}
+        <VirtualList
+          data={historyGroups}
+          data-id="list"
+          height={virtualListHeight}
+          itemHeight={20}
+          itemKey={(group) => group.date}
+          // disabled={animating}
+          style={{
+            boxSizing: 'border-box'
+          }}
+
+          // onSkipRender={onAppear}
+          // onItemRemove={onAppear}
+        >
+          {(item, index) => <ForwardMyItem group={item} index={index} t={t}/>}
+        </VirtualList>
       </div>
     </div>
   )
 }
-
-// <VirtualList
-// data={historyGroups}
-// data-id="list"
-// height={virtualListHeight}
-// itemHeight={20}
-// itemKey={(group) => group.date}
-// // disabled={animating}
-// style={{
-//   boxSizing: 'border-box'
-// }}
-
-// // onSkipRender={onAppear}
-// // onItemRemove={onAppear}
-// >
-// {(item, index) => <ForwardMyItem group={item} index={index} />}
-// </VirtualList>
 
 export default Transaction
