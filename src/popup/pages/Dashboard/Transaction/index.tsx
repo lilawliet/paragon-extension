@@ -25,6 +25,19 @@ interface MyItemProps {
 }
 
 const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index }, ref) => {
+  const [currentAccount] = useGlobalState('currentAccount')
+  if (group.index == -1) {
+    return (
+      <div key={index} className="flex flex-col items-center gap-10">
+        <span className="nobor text-soft-white px-2 font-semibold text-white cursor-pointer">
+          Display the recent 10, more click to go to the{' '}
+          <a href={`https://novoexplorer.com/address/${currentAccount?.address}`} target="_blank" rel="noreferrer">
+            browser
+          </a>
+        </span>
+      </div>
+    )
+  }
   return (
     <div key={index} className="mt-2_5">
       <div className="pl-2 font-semibold text-soft-white">{group.date}</div>
@@ -106,7 +119,14 @@ const Transaction = () => {
   const historyGroups = _historyGroups
   if (historyGroups.length == 0) {
     virtualListHeight = 0
+  } else {
+    historyGroups.push({
+      date: '',
+      historyItems: [],
+      index: -1
+    })
   }
+
   return (
     <div className="flex flex-col items-center h-full gap-5 justify-evenly">
       <div className="mt-5">
@@ -131,6 +151,7 @@ const Transaction = () => {
           style={{
             boxSizing: 'border-box'
           }}
+
           // onSkipRender={onAppear}
           // onItemRemove={onAppear}
         >
