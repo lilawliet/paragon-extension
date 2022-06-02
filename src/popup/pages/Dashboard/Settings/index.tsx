@@ -203,7 +203,7 @@ export default () => {
     <div className="flex flex-col items-center h-full gap-5justify-evenly">
       <div className="mt-5">
         <div
-          className={`grid items-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${
+          className={`grid items-center justify-center grid-cols-6 p-5 mt-5 h-15_5 box text-white border border-white rounded-lg  hover w380 ${
             editable ? 'bg-primary-active border-opacity-60' : 'bg-soft-black border-opacity-20'
           }`}>
           {editable ? (
@@ -226,8 +226,9 @@ export default () => {
               {name}
             </span>
           )}
-          <div className={`flex items-center justify-center cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
+          <div className={`flex items-center justify-end cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
             <img
+              className='w-4_5 h-4_5'
               src="./images/Name.svg"
               onClick={(e) => {
                 setName('')

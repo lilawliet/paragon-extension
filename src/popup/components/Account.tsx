@@ -24,13 +24,13 @@ const AccountSelect = () => {
         navigate('/settings/account')
       }}
     >
-      <span>
+      <span className='px-1_25'>
         <img src="./images/user-solid.svg" alt="" />
       </span>
       <div className="flex-grow">
         <div style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem', fontWeight: 600 }}>{currentAccount?.alianName}</div>
       </div>
-      <span className="text-white">
+      <span className="text-white px-1_25">
         <img src="./images/chevron-down-solid.png" alt="" />
       </span>
     </div>
