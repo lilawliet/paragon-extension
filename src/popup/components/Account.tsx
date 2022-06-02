@@ -3,15 +3,6 @@ import { useGlobalState } from '@/ui/state/state'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-interface AccountSelectDrawerProps {
-  current?: Account | null
-  accountsList?: Account[]
-  // handleOnChange?(account: Account): void
-  // handleOnCancel(): void
-  // title: string
-  // isLoading?: boolean
-}
-
 const AccountSelect = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()

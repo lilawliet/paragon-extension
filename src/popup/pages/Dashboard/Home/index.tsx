@@ -61,7 +61,7 @@ const Home = () => {
             navigate(`/receive?address=${'quires'}`)
           }}
         >
-          <span className="h-4_8 mr-0_5">
+          <span className="h-4_8 w-4_8 mr-0_5">
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
           &nbsp;{t('Receive')}
@@ -72,7 +72,7 @@ const Home = () => {
             navigate('/send/index')
           }}
         >
-          <span className="h-4_8 mr-0_5">
+          <span className="h-4_8 w-4_8 mr-0_5">
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>
           &nbsp;{t('Send')}
