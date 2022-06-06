@@ -3,7 +3,7 @@ import { createPersistStore } from 'background/utils'
 import compareVersions from 'compare-versions'
 import { EVENTS } from 'consts'
 import cloneDeep from 'lodash/cloneDeep'
-import { browser } from 'webextension-polyfill-ts'
+import browser from '../webapi/browser'
 import { i18n, keyringService, sessionService } from './index'
 import { NovoBalance, TxHistoryItem } from './openapi'
 

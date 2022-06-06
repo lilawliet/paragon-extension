@@ -7,7 +7,7 @@ import CFooter from '@/popup/components/CFooter'
 import CHeader from '@/popup/components/CHeader'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
-import { Layout, Space, Spin } from 'antd'
+import { Layout, message, Space, Spin } from 'antd'
 import { Content, Footer, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -52,17 +52,27 @@ const Dashboard = () => {
         setAccountBalance(_accountBalance)
         const _assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
         setAccountAssets(_assets)
-        wallet.getAddressBalance(currentAccount.address).then((_accountBalance) => {
-          setAccountBalance(_accountBalance)
-          const _assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
-          setAccountAssets(_assets)
-        })
+        wallet
+          .getAddressBalance(currentAccount.address)
+          .then((_accountBalance) => {
+            setAccountBalance(_accountBalance)
+            const _assets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
+            setAccountAssets(_assets)
+          })
+          .catch((e) => {
+            message.error(e.message)
+          })
 
         const _accountHistory = await wallet.getAddressCacheHistory(currentAccount.address)
         setAccountHistory(_accountHistory)
-        wallet.getAddressHistory(currentAccount.address).then((_accountHistory) => {
-          setAccountHistory(_accountHistory)
-        })
+        wallet
+          .getAddressHistory(currentAccount.address)
+          .then((_accountHistory) => {
+            setAccountHistory(_accountHistory)
+          })
+          .catch((e) => {
+            // message.error(e.message)
+          })
 
         setLoading(false)
       }

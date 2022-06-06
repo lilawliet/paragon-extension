@@ -1,5 +1,5 @@
-import { browser } from 'webextension-polyfill-ts'
 import { EventEmitter } from 'events'
+import browser from './browser'
 
 const tabEvent = new EventEmitter()
 

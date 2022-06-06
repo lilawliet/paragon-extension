@@ -3,6 +3,7 @@ import { IS_CHROME, IS_LINUX, KEYRING_TYPE } from 'consts'
 import { ethErrors } from 'eth-rpc-errors'
 import { EthereumProviderError } from 'eth-rpc-errors/dist/classes'
 import Events from 'events'
+import browser from '../webapi/browser'
 import preferenceService from './preference'
 
 interface Approval {
@@ -38,7 +39,7 @@ class NotificationService extends Events {
       const account = preferenceService.getCurrentAccount()!
       if (this.notifiWindowId && winId !== this.notifiWindowId) {
         if (process.env.NODE_ENV === 'production') {
-          if ((IS_CHROME && winId === chrome.windows.WINDOW_ID_NONE && IS_LINUX) || account?.type === KEYRING_TYPE.WalletConnectKeyring) {
+          if ((IS_CHROME && winId === browser.windows.WINDOW_ID_NONE && IS_LINUX) || account?.type === KEYRING_TYPE.WalletConnectKeyring) {
             // Wired issue: When notification popuped, will focus to -1 first then focus on notification
             return
           }

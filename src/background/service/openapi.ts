@@ -1,5 +1,3 @@
-import axios from 'axios'
-import rateLimit from 'axios-rate-limit'
 import { createPersistStore } from 'background/utils'
 import { CHAINS_ENUM, INITIAL_OPENAPI_URL } from 'consts'
 
@@ -50,17 +48,6 @@ enum API_STATUS {
 
 export class OpenApiService {
   store!: OpenApiStore
-
-  request = rateLimit(
-    axios.create({
-      headers: {
-        'X-Client': 'Paragon',
-        'X-Version': process.env.release!
-      }
-    }),
-    { maxRPS }
-  )
-
   setHost = async (host: string) => {
     this.store.host = host
     await this.init()
@@ -86,34 +73,6 @@ export class OpenApiService {
       this.store.host = INITIAL_OPENAPI_URL
     }
 
-    this.request = rateLimit(
-      axios.create({
-        baseURL: this.store.host,
-        headers: {
-          'X-Client': 'Paragon',
-          'X-Version': process.env.release!
-        }
-      }),
-      { maxRPS }
-    )
-    this.request.interceptors.response.use((response) => {
-      const code = response.data?.err_code || response.data?.error_code
-      const msg = response.data?.err_msg || response.data?.error_msg
-
-      if (code && code !== 200) {
-        if (msg) {
-          let err
-          try {
-            err = new Error(JSON.parse(msg))
-          } catch (e) {
-            err = new Error(msg)
-          }
-          throw err
-        }
-        throw new Error(response.data)
-      }
-      return response
-    })
     const getConfig = async () => {
       try {
         this.store.config = await this.getWalletConfig()
@@ -126,12 +85,41 @@ export class OpenApiService {
     getConfig()
   }
 
+  httpGet = async (route: string, params: any) => {
+    let url = this.store.host + route
+    let c = 0
+    for (const id in params) {
+      if (c == 0) {
+        url += '?'
+      } else {
+        url += '&'
+      }
+      url += `${id}=${params[id]}`
+      c++
+    }
+    const headers = new Headers()
+    headers.append('X-Client', 'Paragon')
+    headers.append('X-Version', process.env.release!)
+    const res = await fetch(new Request(url), { method: 'GET', headers, mode: 'cors', cache: 'default' })
+    const data = await res.json()
+    return data
+  }
+
+  httpPost = async (route: string, params: any) => {
+    const url = this.store.host + route
+    const headers = new Headers()
+    headers.append('X-Client', 'Paragon')
+    headers.append('X-Version', process.env.release!)
+    headers.append('Content-Type', 'application/json;charset=utf-8')
+    const res = await fetch(new Request(url), { method: 'POST', headers, mode: 'cors', cache: 'default', body: JSON.stringify(params) })
+    const data = await res.json()
+    return data
+  }
+
   async getWalletConfig(): Promise<{
     exchange_rate: ExchangeRate
   }> {
-    const { status, data } = await this.request.get('/v1/wallet/config', {
-      params: {}
-    })
+    const data = await this.httpGet('/v1/wallet/config', {})
     if (data.status == API_STATUS.FAILED) {
       throw new Error(data.message)
     }
@@ -139,10 +127,8 @@ export class OpenApiService {
   }
 
   async getAddressBalance(address: string): Promise<NovoBalance> {
-    const { status, data } = await this.request.get('/v1/address/balance', {
-      params: {
-        address
-      }
+    const data = await this.httpGet('/v1/address/balance', {
+      address
     })
     if (data.status == API_STATUS.FAILED) {
       throw new Error(data.message)
@@ -151,10 +137,8 @@ export class OpenApiService {
   }
 
   async getAddressUtxo(address: string): Promise<{ txId: string; outputIndex: number; satoshis: number }[]> {
-    const { status, data } = await this.request.get('/v1/address/utxo', {
-      params: {
-        address
-      }
+    const data = await this.httpGet('/v1/address/utxo', {
+      address
     })
     if (data.status == API_STATUS.FAILED) {
       throw new Error(data.message)
@@ -163,10 +147,8 @@ export class OpenApiService {
   }
 
   async getAddressRecentHistory(address: string): Promise<TxHistoryItem[]> {
-    const { status, data } = await this.request.get('/v1/address/recent-history', {
-      params: {
-        address
-      }
+    const data = await this.httpGet('/v1/address/recent-history', {
+      address
     })
     if (data.status == API_STATUS.FAILED) {
       throw new Error(data.message)
@@ -175,7 +157,7 @@ export class OpenApiService {
   }
 
   async pushTx(rawtx: string): Promise<string> {
-    const { data } = await this.request.post('/v1/tx/broadcast', {
+    const data = await this.httpPost('/v1/tx/broadcast', {
       rawtx
     })
     if (data.status == API_STATUS.FAILED) {

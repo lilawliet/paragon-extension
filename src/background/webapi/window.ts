@@ -1,6 +1,6 @@
 import { IS_WINDOWS } from 'consts'
 import { EventEmitter } from 'events'
-import { browser, Windows } from 'webextension-polyfill-ts'
+import browser from './browser'
 
 const event = new EventEmitter()
 
@@ -26,7 +26,7 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
     width
   } = await browser.windows.getCurrent({
     windowTypes: ['normal']
-  } as Windows.GetInfo)
+  } as any)
 
   const top = cTop! + BROWSER_HEADER
   const left = cLeft! + width! - WINDOW_SIZE.width

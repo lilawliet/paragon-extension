@@ -1,3 +1,4 @@
+import browser from '@/background/webapi/browser'
 import '@/common/styles/antd.less'
 import '@/common/styles/rc-virtual-list.less'
 // 全局公用样式
@@ -35,7 +36,7 @@ if (
   window.screenLeft > window.screen.width ||
   window.screenTop > window.screen.height
 ) {
-  chrome.runtime.getPlatformInfo(function (info) {
+  browser.runtime.getPlatformInfo(function (info) {
     if (info.os === 'mac') {
       const fontFaceSheet = new CSSStyleSheet()
       fontFaceSheet.insertRule(`
