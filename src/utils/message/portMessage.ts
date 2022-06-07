@@ -1,10 +1,11 @@
-import { Runtime, browser } from 'webextension-polyfill-ts'
+import browser from '@/background/webapi/browser'
 import Message from './index'
+
 class PortMessage extends Message {
-  port: Runtime.Port | null = null
+  port: any | null = null
   listenCallback: any
 
-  constructor(port?: Runtime.Port) {
+  constructor(port?: any) {
     super()
 
     if (port) {

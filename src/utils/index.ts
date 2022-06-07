@@ -1,6 +1,6 @@
+import browser from '@/background/webapi/browser'
 import { CHAINS } from '@/constant'
 import { keyBy } from 'lodash'
-import { browser } from 'webextension-polyfill-ts'
 import BroadcastChannelMessage from './message/broadcastChannelMessage'
 import PortMessage from './message/portMessage'
 

@@ -63,7 +63,6 @@ export class NovoProvider extends EventEmitter {
     }
     const mapMethod = underline2Camelcase(method)
     const currentAccount = preferenceService.getCurrentAccount()!
-    console.log('request', data)
     if (!providerController[mapMethod]) {
       return
     }

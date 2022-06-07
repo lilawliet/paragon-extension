@@ -22,9 +22,10 @@
     },
     "default_title": "__MSG_appName__"
   },
+
+  "author":"https://paragon.li",
   "background": {
-    "page": "background.html",
-    "persistent": true
+    "service_worker": "background.js"
   },
   "homepage_url":"https://paragon.li",
   "permissions": ["storage","unlimitedStorage", "activeTab","notifications"],
@@ -40,6 +41,9 @@
   ],
   
   "web_accessible_resources": [
-    "pageProvider.js"
+    {
+      "resources": [ "pageProvider.js" ],
+      "matches": ["<all_urls>"]
+    }
   ]
 }

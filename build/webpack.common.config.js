@@ -480,12 +480,12 @@ const config = (env) => {
         chunks: ['ui'],
         filename: 'index.html',
       }),
-      new HtmlWebpackPlugin({
-        inject: true,
-        template: paths.backgroundHtml,
-        chunks: ['background'],
-        filename: 'background.html',
-      }),
+      // new HtmlWebpackPlugin({
+      //   inject: true,
+      //   template: paths.backgroundHtml,
+      //   chunks: ['background'],
+      //   filename: 'background.html',
+      // }),
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
         process: 'process',
@@ -520,18 +520,18 @@ const config = (env) => {
       extensions: ['.js', 'jsx', '.ts', '.tsx'],
     },
     stats: 'minimal',
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          'webextension-polyfill': {
-            minSize: 0,
-            test: /[\\/]node_modules[\\/]webextension-polyfill/,
-            name: 'webextension-polyfill',
-            chunks: 'all',
-          },
-        },
-      },
-    },
+    // optimization: {
+    //   splitChunks: {
+    //     cacheGroups: {
+    //       'webextension-polyfill': {
+    //         minSize: 0,
+    //         test: /[\\/]node_modules[\\/]webextension-polyfill/,
+    //         name: 'webextension-polyfill',
+    //         chunks: 'all',
+    //       },
+    //     },
+    //   },
+    // },
   }
 };
 

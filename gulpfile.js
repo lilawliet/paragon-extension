@@ -45,7 +45,7 @@ function task_prepare() {
 }
 
 function task_merge_manifest() {
-  const baseFile = "_base_v2";
+  const baseFile = "_base_v3";
   return gulp
     .src([`dist/${options.browser}/manifest/${baseFile}.json`, `dist/${options.browser}/manifest/${options.browser}.json`])
     .pipe(jsoncombine('manifest.json', (data,meta) => {
