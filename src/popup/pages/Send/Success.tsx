@@ -1,5 +1,5 @@
-import { copyToClipboard, formatAddr } from '@/common/utils'
-import { EyeOutlined } from '@ant-design/icons'
+import { copyToClipboard } from '@/common/utils'
+import { shortAddress } from '@/ui/utils'
 import { message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -59,10 +59,10 @@ export default ({ transaction, fromAddress, toAddress, toAmount, setStatus }: Pr
       <span className="mt-6 text-2xl">{t('Payment Sent')}</span>
       <span className="text-soft-white">{t('Your transaction has been succesfully sent')}</span>
       <div className="justify-between w-full box nobor text-soft-white mt-2_5">
-        <span>{formatAddr(toAddress, 8)}</span>
+        <span>{shortAddress(toAddress)}</span>
         <div className="flex">
-          <span className="font-semibold text-custom-green">+&nbsp;</span>
-          <span className="font-semibold text-white">{toAmount}</span>&nbsp;Novo
+          <span className="font-semibold text-warn">-&nbsp;</span>
+          <span className="font-semibold text-white">{transaction.changeAmount}</span>&nbsp;Novo
         </div>
       </div>
       <div className="flex items-center text-white opacity-60 hover:opacity-100">

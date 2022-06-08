@@ -1,9 +1,10 @@
 import { CURRENCIES } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
+import { FooterBackButton } from '@/popup/components/FooterBackButton'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
 import { Button, Layout } from 'antd'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { Content, Header } from 'antd/lib/layout/layout'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -37,8 +38,7 @@ export default () => {
               className="box w-115 default"
               onClick={(e) => {
                 onBtnSetCurrency(v.code)
-              }}
-            >
+              }}>
               <div className="flex items-center justify-between text-base font-semibold">
                 <div className="flex-grow text-left">{`${t(v.name)} (${v.code})`}</div>
                 {currency == v.code ? (
@@ -53,21 +53,7 @@ export default () => {
           ))}
         </div>
       </Content>
-      <Footer style={{ height: '5.625rem', backgroundColor: '#1C1919', textAlign: 'center', width: '100%' }}>
-        <Button
-          size="large"
-          type="default"
-          className="box w440"
-          onClick={(e) => {
-            window.history.go(-1)
-          }}
-        >
-          <div className="flex items-center justify-center text-lg">
-            <img src="./images/arrow-left.svg" />
-            <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>
-          </div>
-        </Button>
-      </Footer>
+      <FooterBackButton />
     </Layout>
   )
 }

@@ -1,9 +1,10 @@
 import { COIN_DUST } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
+import { FooterBackButton } from '@/popup/components/FooterBackButton'
 import { useGlobalState } from '@/ui/state/state'
 import { isValidAddress, sleep, useWallet } from '@/ui/utils'
-import { Button, Layout, message } from 'antd'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { Layout, message } from 'antd'
+import { Content, Header } from 'antd/lib/layout/layout'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +17,9 @@ import Success from './Success'
 export interface Transaction {
   rawtx: string
   txid: string
+  changeAmount: number
+  toAddress: string
+  toAmount: number
 }
 
 export type Status = 'create' | 'confirm' | 'sending' | 'success' | 'error'
@@ -34,7 +38,14 @@ const SendIndex = () => {
   const wallet = useWallet()
   const ref = useRef<Transaction>({
     rawtx: '',
-    txid: ''
+    txid: '',
+    changeAmount: 0,
+    toAddress: '',
+    toAmount: 0
+  })
+
+  const refTmp = useRef<{ jobId: number }>({
+    jobId: 0
   })
 
   const [status, setStatus] = useState<Status>('create')
@@ -70,11 +81,24 @@ const SendIndex = () => {
         setError('Invalid amount')
         return
       }
-      const result = await wallet.sendNovo({ to: toAddress, amount: toAmount })
-      setFee(result.fee)
-      setToAmount(result.toAmount)
-      ref.current.rawtx = result.rawtx
+      if (toAddress == ref.current.toAddress && toAmount == ref.current.toAmount) {
+        //Prevent repeated triggering caused by setAmount
+        return
+      }
+
+      const jobId = ++refTmp.current.jobId
+      setTimeout(async () => {
+        if (jobId != refTmp.current.jobId) return
+        const result = await wallet.sendNovo({ to: toAddress, amount: toAmount })
+        setFee(result.fee)
+        setToAmount(result.toAmount)
+        ref.current.rawtx = result.rawtx
+        ref.current.changeAmount = (fromAddress == toAddress ? 0 : toAmount) + result.fee
+        ref.current.toAddress = toAddress
+        ref.current.toAmount = result.toAmount
+      }, 200)
     }
+
     run()
   }, [toAddress + toAmount])
 
@@ -107,34 +131,19 @@ const SendIndex = () => {
         )}
       </Content>
       {status !== 'sending' ? (
-        <Footer
-          style={{
-            height: '5.625rem',
-            backgroundColor: '#1C1919',
-            textAlign: 'center',
-            width: '100%'
-          }}>
-          <Button
-            size="large"
-            type="default"
-            className="box w440"
-            onClick={(e) => {
-              if (status == 'create') {
-                window.history.go(-1)
-              } else if (status == 'confirm') {
-                setStatus('create')
-              } else if (status == 'success') {
-                window.history.go(-1)
-              } else {
-                setStatus('create')
-              }
-            }}>
-            <div className="flex items-center justify-center text-lg">
-              <img src="./images/arrow-left.svg" />
-              <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>
-            </div>
-          </Button>
-        </Footer>
+        <FooterBackButton
+          onClick={(e) => {
+            if (status == 'create') {
+              window.history.go(-1)
+            } else if (status == 'confirm') {
+              setStatus('create')
+            } else if (status == 'success') {
+              window.history.go(-1)
+            } else {
+              setStatus('create')
+            }
+          }}
+        />
       ) : (
         <></>
       )}

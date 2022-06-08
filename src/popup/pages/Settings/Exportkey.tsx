@@ -1,11 +1,11 @@
 import { copyToClipboard } from '@/common/utils'
 import { KEYRING_TYPE } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
+import { FooterBackButton } from '@/popup/components/FooterBackButton'
 import { useGlobalState } from '@/ui/state/state'
 import { useWallet } from '@/ui/utils'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Button, Input, Layout, message } from 'antd'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { Content, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -112,20 +112,7 @@ export default () => {
           )}
         </div>
       </Content>
-      <Footer style={{ height: '5.625rem', backgroundColor: '#1C1919', textAlign: 'center', width: '100%' }}>
-        <Button
-          size="large"
-          type="default"
-          className="box w440"
-          onClick={(e) => {
-            window.history.go(-1)
-          }}>
-          <div className="flex items-center justify-center text-lg">
-            <ArrowLeftOutlined />
-            <span className="font-semibold leading-4">&nbsp;Back</span>
-          </div>
-        </Button>
-      </Footer>
+      <FooterBackButton />
     </Layout>
   )
 }

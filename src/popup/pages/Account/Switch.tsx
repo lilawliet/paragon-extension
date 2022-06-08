@@ -1,8 +1,7 @@
 import { Account } from '@/background/service/preference'
-import { formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
-import { useWallet } from '@/ui/utils'
+import { shortAddress, useWallet } from '@/ui/utils'
 import { Button } from 'antd'
 import VirtualList from 'rc-virtual-list'
 import { forwardRef, useEffect, useRef, useState } from 'react'
@@ -40,7 +39,7 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ t, index, ac
       onClick={(e) => {
         setStatus(oper)
       }}>
-      <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
+      <div className="flex items-center justify-center text-lg font-semibold">{t('Add New Account')}</div>
     </Button>
   ) : (
     <Button
@@ -53,9 +52,9 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ t, index, ac
       <div className="flex items-center justify-between text-base font-semibold">
         <div className="flex flex-col flex-grow text-left">
           <span>{account.alianName} </span>
-          <span className="font-normal opacity-60">({formatAddr(account.address, 8)})</span>
+          <span className="font-normal opacity-60">({shortAddress(account.address)})</span>
         </div>
-        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5">IMPORTED</span> : <></>}
+        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-1.5">IMPORTED</span> : <></>}
         {currency == index ? (
           <span className="w-4 ml-2_5">
             <img src="./images/check.svg" alt="" />
