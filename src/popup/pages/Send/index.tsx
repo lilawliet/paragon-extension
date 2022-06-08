@@ -16,6 +16,7 @@ import Success from './Success'
 export interface Transaction {
   rawtx: string
   txid: string
+  changeAmount: number
 }
 
 export type Status = 'create' | 'confirm' | 'sending' | 'success' | 'error'
@@ -34,7 +35,8 @@ const SendIndex = () => {
   const wallet = useWallet()
   const ref = useRef<Transaction>({
     rawtx: '',
-    txid: ''
+    txid: '',
+    changeAmount: 0
   })
 
   const [status, setStatus] = useState<Status>('create')
@@ -74,6 +76,7 @@ const SendIndex = () => {
       setFee(result.fee)
       setToAmount(result.toAmount)
       ref.current.rawtx = result.rawtx
+      ref.current.changeAmount = (fromAddress == toAddress ? 0 : toAmount) + result.fee
     }
     run()
   }, [toAddress + toAmount])
