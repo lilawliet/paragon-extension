@@ -1,9 +1,8 @@
-import { formatAddr } from '@/common/utils'
 import { KEYRING_CLASS } from '@/constant'
 import CHeader from '@/popup/components/CHeader'
 import { FooterBackButton } from '@/popup/components/FooterBackButton'
 import { useGlobalState } from '@/ui/state/state'
-import { useWallet } from '@/ui/utils'
+import { shortAddress, useWallet } from '@/ui/utils'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import Button from 'antd/lib/button'
@@ -50,7 +49,7 @@ export default () => {
           <img src="./images/Delete.svg" alt="" />
           <span className="mt-6 text-2xl">{t('Remove Account')}</span>
           <span className="text-2xl text-soft-white">
-            {formatAddr(currentAccount?.address ?? '', 8)} {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span>Imported</span> : <></>}
+            {shortAddress(currentAccount?.address || '')} {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span>Imported</span> : <></>}
           </span>
           <span className="text-base text-center text-error">
             {t('This is an imported account')}. {t('You will not be able to recover this account with your Secret Recovery Phrase')}.{t('This action is not reversible')}.

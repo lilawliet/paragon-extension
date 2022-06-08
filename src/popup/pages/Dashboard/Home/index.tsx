@@ -1,7 +1,8 @@
-import { copyToClipboard, formatAddr } from '@/common/utils'
+import { copyToClipboard } from '@/common/utils'
 import { CURRENCIES, KEYRING_CLASS } from '@/constant'
 import AccountSelect from '@/popup/components/Account'
 import { useGlobalState } from '@/ui/state/state'
+import { shortAddress } from '@/ui/utils'
 import { message, Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -47,7 +48,7 @@ const Home = () => {
         onClick={(e) => {
           copy(currentAccount?.address ?? '')
         }}>
-        <span className="text-2xl text-soft-white">{formatAddr(currentAccount?.address ?? '', 5)}</span>
+        <span className="text-2xl text-soft-white">{shortAddress(currentAccount?.address)}</span>
         {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
       </div>
       <div className="flex items-center p-10 font-semibold text-11">

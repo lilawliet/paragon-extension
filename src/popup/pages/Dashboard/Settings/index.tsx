@@ -1,7 +1,7 @@
-import { copyToClipboard, formatAddr } from '@/common/utils'
+import { copyToClipboard } from '@/common/utils'
 import { CURRENCIES, KEYRING_TYPE, LANGS } from '@/constant'
 import { useGlobalState } from '@/ui/state/state'
-import { useWallet } from '@/ui/utils'
+import { shortAddress, useWallet } from '@/ui/utils'
 import { RightOutlined } from '@ant-design/icons'
 import { Button, Input, message } from 'antd'
 import { t } from 'i18next'
@@ -228,7 +228,7 @@ export default () => {
           )}
           <div className={`flex items-center justify-end cursor-pointer hover:opacity-100 ${editable ? 'opacity-100' : 'opacity-60'}`}>
             <img
-              className='w-4_5 h-4_5'
+              className="w-4_5 h-4_5"
               src="./images/Name.svg"
               onClick={(e) => {
                 setName('')
@@ -245,7 +245,7 @@ export default () => {
           //   copy(currentAccount?.address ?? '')
           // }}
         >
-          {formatAddr(currentAccount?.address ?? '', 5)}
+          {shortAddress(currentAccount?.address || '')}
         </div>
       </div>
       <div className="h-121_25 mt-3_75">
