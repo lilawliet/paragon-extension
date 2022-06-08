@@ -24,8 +24,8 @@ export default () => {
   useEffect(() => {
     setDisabled(true)
     if (password) {
-      if (!/^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)[0-9A-Za-z]{6,}$/.test(password)) {
-        message.warning(t('at least six characters and must contain uppercase and lowercase letters and digits'))
+      if (password.length < 6) {
+        message.warning(t('at least six characters'))
         setStatus1('error')
         return
       }
