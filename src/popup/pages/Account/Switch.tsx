@@ -54,7 +54,7 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ t, index, ac
           <span>{account.alianName} </span>
           <span className="font-normal opacity-60">({shortAddress(account.address)})</span>
         </div>
-        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5">IMPORTED</span> : <></>}
+        {account?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-1.5">IMPORTED</span> : <></>}
         {currency == index ? (
           <span className="w-4 ml-2_5">
             <img src="./images/check.svg" alt="" />

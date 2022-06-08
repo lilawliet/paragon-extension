@@ -49,7 +49,7 @@ const Home = () => {
           copy(currentAccount?.address ?? '')
         }}>
         <span className="text-2xl text-soft-white">{shortAddress(currentAccount?.address)}</span>
-        {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-2_5 ml-2_5">IMPORTED</span> : <></>}
+        {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-1.5 ml-2_5">IMPORTED</span> : <></>}
       </div>
       <div className="flex items-center p-10 font-semibold text-11">
         <Statistic className="text-white" value={getCurrencyValueString(accountBalance?.usd_value)} valueStyle={{ fontSize: '2.75rem' }} />
