@@ -1,8 +1,9 @@
 import { copyToClipboard } from '@/common/utils'
 import CHeader from '@/popup/components/CHeader'
+import { FooterBackButton } from '@/popup/components/FooterBackButton'
 import { useWallet } from '@/ui/utils'
 import { Button, Input, Layout, message } from 'antd'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { Content, Header } from 'antd/lib/layout/layout'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -102,20 +103,7 @@ export default () => {
           )}
         </div>
       </Content>
-      <Footer style={{ height: '5.625rem', backgroundColor: '#1C1919', textAlign: 'center', width: '100%' }}>
-        <Button
-          size="large"
-          type="default"
-          className="box w440"
-          onClick={(e) => {
-            window.history.go(-1)
-          }}>
-          <div className="flex items-center justify-center text-lg">
-            <img src="./images/arrow-left.svg" />
-            <span className="font-semibold leading-4_5">&nbsp;{t('Back')}</span>
-          </div>
-        </Button>
-      </Footer>
+      <FooterBackButton />
     </Layout>
   )
 }

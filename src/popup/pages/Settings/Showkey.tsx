@@ -1,8 +1,8 @@
 import { copyToClipboard } from '@/common/utils'
 import CHeader from '@/popup/components/CHeader'
-import { ArrowLeftOutlined } from '@ant-design/icons'
-import { Button, Layout, message } from 'antd'
-import { Content, Footer, Header } from 'antd/lib/layout/layout'
+import { FooterBackButton } from '@/popup/components/FooterBackButton'
+import { Layout, message } from 'antd'
+import { Content, Header } from 'antd/lib/layout/layout'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -34,8 +34,7 @@ export default () => {
             className="grid w-full grid-cols-6 p-5 box default mt-1_25"
             onClick={(e) => {
               copy('address')
-            }}
-          >
+            }}>
             <div className="h-5_5">
               <img src="./images/copy-solid.png" alt="" />
             </div>
@@ -44,21 +43,7 @@ export default () => {
           <div className="text-soft-white">Derivation Path::m/44'/0'/0'/0/0</div>
         </div>
       </Content>
-      <Footer style={{ height: '5.625rem', backgroundColor: '#1C1919', textAlign: 'center', width: '100%' }}>
-        <Button
-          size="large"
-          type="default"
-          className="box w440"
-          onClick={(e) => {
-            window.history.go(-1)
-          }}
-        >
-          <div className="flex items-center justify-center text-lg">
-            <ArrowLeftOutlined />
-            <span className="font-semibold leading-4">&nbsp;Back</span>
-          </div>
-        </Button>
-      </Footer>
+      <FooterBackButton />
     </Layout>
   )
 }

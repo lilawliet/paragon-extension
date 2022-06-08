@@ -40,7 +40,7 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ t, index, ac
       onClick={(e) => {
         setStatus(oper)
       }}>
-      <div className="flex items-center justify-center text-lg">{t('Add New Account')}</div>
+      <div className="flex items-center justify-center text-lg font-semibold">{t('Add New Account')}</div>
     </Button>
   ) : (
     <Button

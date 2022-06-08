@@ -74,9 +74,8 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           verify()
-        }}
-      >
-        <div className="flex items-center justify-center text-lg">{t('Import Private Key')}</div>
+        }}>
+        <div className="flex items-center justify-center text-lg font-semibold">{t('Import Private Key')}</div>
       </Button>
     </div>
   )

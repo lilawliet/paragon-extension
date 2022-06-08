@@ -59,9 +59,8 @@ export default ({ setStatus }: Props) => {
         className="box w380"
         onClick={(e) => {
           handleOnClick()
-        }}
-      >
-        <div className="flex items-center justify-center text-lg">{t('Create Account')}</div>
+        }}>
+        <div className="flex items-center justify-center text-lg font-semibold">{t('Create Account')}</div>
       </Button>
     </div>
   )
