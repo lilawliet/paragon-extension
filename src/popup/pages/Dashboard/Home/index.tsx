@@ -77,14 +77,14 @@ const Home = () => {
       </div>
       <div className="mt-2">
         {accountAssets?.map((asset, index) => (
-          <div className="box nobor w440" key={index}>
-            <div className="w-10 h-10">
+          <div className="box nobor w440" key={index} style={{ backgroundColor: '#231f1f' }}>
+            <div style={{ width: '3.2rem', height: '3.2rem' }}>
               <img src={`./images/${asset.name}.svg`} alt="" />
             </div>
-            <div className="flex flex-col flex-grow px-2">
-              <div className="font-semibold">{asset.name}</div>
-              <div className="text-base text-soft-white">
-                {Number(asset.amount)?.toLocaleString('en', { minimumFractionDigits: 4 })} {asset.symbol}
+            <div className="flex flex-col flex-grow" style={{ paddingLeft: '1.125rem', paddingRight: '1.125rem' }}>
+              <div className="font-semibold">{asset.symbol}</div>
+              <div className="text-soft-white" style={{ fontSize: '1.125rem' }}>
+                {Number(asset.amount)?.toLocaleString('en', { minimumFractionDigits: 4 })}
               </div>
             </div>
             <div className="font-semibold">{getCurrencyValueString(asset.value)}</div>
