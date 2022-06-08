@@ -18,6 +18,8 @@ export interface Transaction {
   rawtx: string
   txid: string
   changeAmount: number
+  toAddress: string
+  toAmount: number
 }
 
 export type Status = 'create' | 'confirm' | 'sending' | 'success' | 'error'
@@ -37,7 +39,13 @@ const SendIndex = () => {
   const ref = useRef<Transaction>({
     rawtx: '',
     txid: '',
-    changeAmount: 0
+    changeAmount: 0,
+    toAddress: '',
+    toAmount: 0
+  })
+
+  const refTmp = useRef<{ jobId: number }>({
+    jobId: 0
   })
 
   const [status, setStatus] = useState<Status>('create')
@@ -73,12 +81,24 @@ const SendIndex = () => {
         setError('Invalid amount')
         return
       }
-      const result = await wallet.sendNovo({ to: toAddress, amount: toAmount })
-      setFee(result.fee)
-      setToAmount(result.toAmount)
-      ref.current.rawtx = result.rawtx
-      ref.current.changeAmount = (fromAddress == toAddress ? 0 : toAmount) + result.fee
+      if (toAddress == ref.current.toAddress && toAmount == ref.current.toAmount) {
+        //Prevent repeated triggering caused by setAmount
+        return
+      }
+
+      const jobId = ++refTmp.current.jobId
+      setTimeout(async () => {
+        if (jobId != refTmp.current.jobId) return
+        const result = await wallet.sendNovo({ to: toAddress, amount: toAmount })
+        setFee(result.fee)
+        setToAmount(result.toAmount)
+        ref.current.rawtx = result.rawtx
+        ref.current.changeAmount = (fromAddress == toAddress ? 0 : toAmount) + result.fee
+        ref.current.toAddress = toAddress
+        ref.current.toAmount = result.toAmount
+      }, 200)
     }
+
     run()
   }, [toAddress + toAmount])
 
