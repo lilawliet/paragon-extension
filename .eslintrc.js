@@ -32,7 +32,7 @@ module.exports = {
      */
 
     "quotes": [2, "single"], 
-    "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // do not disable the console
+    // "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // do not disable the console
     "no-debugger": process.env.NODE_ENV === 'production' ? 2 : 0, // disable debugger
     "semi": 0,
     "no-control-regex": 2, 
