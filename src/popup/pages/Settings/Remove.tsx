@@ -86,7 +86,7 @@ function AlertPanel({ visible, onCancel }) {
                 await wallet.removeAddress(currentAccount?.address || '', currentAccount?.type || '')
                 navigate('/dashboard')
               }}>
-              &nbsp;{t('Yes, Remove')}
+              &nbsp;{t('YesRemove')}
             </div>
           </div>
         </div>

@@ -20,7 +20,8 @@ var knownOptions = {
 var supported_envs = ['dev', 'pro']
 var supported_browsers = ['chrome', 'firefox', 'edge', 'brave']
 var brandName = 'paragon'
-var version = packageConfig.version
+var version = packageConfig.version 
+var validVersion = version.split('-beta')[0]
 var options = {
   env: knownOptions.default.env,
   browser: knownOptions.default.browser
@@ -50,7 +51,7 @@ function task_merge_manifest() {
     .src([`dist/${options.browser}/manifest/${baseFile}.json`, `dist/${options.browser}/manifest/${options.browser}.json`])
     .pipe(jsoncombine('manifest.json', (data,meta) => {
       const result = Object.assign({}, data[baseFile], data[options.browser])
-      result.version = packageConfig.version;
+      result.version = validVersion;
       return Buffer.from(JSON.stringify(result));
     }))
     .pipe(gulp.dest(`dist/${options.browser}`))
@@ -65,7 +66,7 @@ function task_clean_tmps() {
 function task_webpack(cb) {
   webpack(
     webpackConfigFunc({
-      version:packageConfig.version,
+      version:validVersion,
       config: options.env,
       browser: options.browser
     }),

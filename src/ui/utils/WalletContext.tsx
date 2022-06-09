@@ -21,6 +21,7 @@ export type WalletController = {
   isUnlocked(): Promise<boolean>
   lockWallet(): Promise<void>
   setPopupOpen(isOpen: boolean): void
+  isReady(): Promise<boolean>
 
   openIndexPage(): Promise<number>
   hasPageStateCache(): boolean

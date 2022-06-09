@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getUiType, useApproval, useWallet } from 'ui/utils'
-import Welcome from './Welcome'
 
 const SortHat = () => {
   const navigate = useNavigate()
@@ -67,11 +66,23 @@ const SortHat = () => {
     }
   }
 
+  const init = async () => {
+    const ready = await wallet.isReady()
+
+    if (ready) {
+      loadView()
+    } else {
+      setTimeout(() => {
+        init()
+      }, 1000)
+    }
+  }
+
   useEffect(() => {
-    loadView()
+    init()
   }, [])
 
-  return <Welcome />
+  return <div></div>
 }
 
 export default SortHat
