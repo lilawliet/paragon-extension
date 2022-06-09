@@ -51,8 +51,8 @@ const CreatePassword = () => {
     setDisabled(true)
 
     if (password) {
-      if (password.length < 6) {
-        message.warning(t('at least six characters'))
+      if (password.length < 5) {
+        message.warning(t('Password must contain at least 5 characters'))
         setStatus1('error')
         return
       }
