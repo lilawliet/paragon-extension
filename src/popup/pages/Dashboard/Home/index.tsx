@@ -1,12 +1,11 @@
-import { copyToClipboard } from '@/common/utils'
-import { CURRENCIES, KEYRING_CLASS } from '@/constant'
-import AccountSelect from '@/popup/components/Account'
+import { CURRENCIES } from '@/constant'
+import AccountSelect from '@/popup/components/AccountSelect'
+import { AddressBar } from '@/popup/components/AddressBar'
 import { useGlobalState } from '@/ui/state/state'
-import { shortAddress } from '@/ui/utils'
-import { message, Statistic } from 'antd'
+import { Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
+import './index.less'
 const Home = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -16,15 +15,6 @@ const Home = () => {
   const [currency] = useGlobalState('currency')
   const [exchangeRate] = useGlobalState('exchangeRate')
   const [accountBalance] = useGlobalState('accountBalance')
-
-  function copy(str: string) {
-    copyToClipboard(str).then(() => {
-      message.success({
-        duration: 3,
-        content: t('copied')
-      })
-    })
-  }
 
   const getCurrencyValueString = (usd_value) => {
     let value = 0
@@ -40,40 +30,34 @@ const Home = () => {
   }
   return (
     <div className="flex flex-col items-center gap-5 mt-5 justify-evenly">
-      <div className="flex items-center px-2 h-13 box soft-black bg-opacity-20 w340 hover">
+      <div>
         <AccountSelect />
       </div>
-      <div
-        className="flex items-center cursor-pointer mt-2_5"
-        onClick={(e) => {
-          copy(currentAccount?.address ?? '')
-        }}>
-        <span className="text-2xl text-soft-white">{shortAddress(currentAccount?.address)}</span>
-        {currentAccount?.type == KEYRING_CLASS.PRIVATE_KEY ? <span className="text-xs rounded bg-primary-active p-1.5 ml-2_5">IMPORTED</span> : <></>}
-      </div>
-      <div className="flex items-center p-10 font-semibold text-11">
+      <AddressBar />
+      <div className="flex items-center p-8 font-semibold text-11">
         <Statistic className="text-white" value={getCurrencyValueString(accountBalance?.usd_value)} valueStyle={{ fontSize: '2.75rem' }} />
       </div>
-      <div className="grid grid-cols-2 gap-4 leading-6_5 w-5/8">
+
+      <div className="operator-container">
         <div
-          className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
+          className="operator-button"
           onClick={(e) => {
             navigate(`/receive?address=${'quires'}`)
           }}>
-          <span className="h-4_8 w-4_8 mr-0_5">
+          <span>
             <img src="./images/qrcode-solid.svg" alt="" />
           </span>
-          &nbsp;{t('Receive')}
+          <span>{t('Receive')}</span>
         </div>
         <div
-          className="cursor-pointer box unit bg-soft-black hover:border-white hover:border-opacity-40 hover:bg-primary-active"
+          className="operator-button"
           onClick={(e) => {
             navigate('/send/index')
           }}>
-          <span className="h-4_8 w-4_8 mr-0_5">
+          <span>
             <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
           </span>
-          &nbsp;{t('Send')}
+          <span>{t('Send')}</span>
         </div>
       </div>
       <div className="mt-2">

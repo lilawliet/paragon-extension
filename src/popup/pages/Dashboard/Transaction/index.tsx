@@ -1,4 +1,4 @@
-import AccountSelect from '@/popup/components/Account'
+import AccountSelect from '@/popup/components/AccountSelect'
 import { useGlobalState } from '@/ui/state/state'
 import { shortAddress } from '@/ui/utils'
 import { ClockCircleFilled } from '@ant-design/icons'
@@ -25,12 +25,12 @@ interface MyItemProps {
   t: TFunction<'translation', undefined>
 }
 
-const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index, t}, ref) => {
+const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index, t }, ref) => {
   const [currentAccount] = useGlobalState('currentAccount')
   if (group.index == -1) {
     return (
-      <div className='flex flex-col items-center gap-2_5 mb-2_5'>
-        <span className='text-2xl text-white'>{t('Latest Transactions')}</span>
+      <div className="flex flex-col items-center gap-2_5 mb-2_5">
+        <span className="text-2xl text-white">{t('Latest Transactions')}</span>
         <div className="flex items-center text-base text-white opacity-60 hover:opacity-100">
           <img src="./images/eye.svg" alt="" />
           <a className="text-white cursor-pointer hover:text-white" href={`https://novoexplorer.com/address/${currentAccount?.address}`} target="_blank" rel="noreferrer">
@@ -132,9 +132,7 @@ const Transaction = () => {
   return (
     <div className="flex flex-col items-center h-full gap-5 justify-evenly">
       <div className="mt-5">
-        <div className="flex items-center px-2 h-13 box soft-black hover bg-opacity-20 w340">
-          <AccountSelect />
-        </div>
+        <AccountSelect />
       </div>
       <div className="grid flex-grow gap-2_5">
         {historyGroups.length == 0 ? (
@@ -157,7 +155,7 @@ const Transaction = () => {
           // onSkipRender={onAppear}
           // onItemRemove={onAppear}
         >
-          {(item, index) => <ForwardMyItem group={item} index={index} t={t}/>}
+          {(item, index) => <ForwardMyItem group={item} index={index} t={t} />}
         </VirtualList>
       </div>
     </div>

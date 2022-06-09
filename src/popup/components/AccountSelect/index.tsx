@@ -1,8 +1,7 @@
-import { Account } from '@/background/service/preference'
 import { useGlobalState } from '@/ui/state/state'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
+import './index.less'
 const AccountSelect = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -10,18 +9,17 @@ const AccountSelect = () => {
 
   return (
     <div
-      className="flex items-center w-full cursor-pointer px-1_25"
+      className="account-select-container"
       onClick={(e) => {
         navigate('/settings/account')
-      }}
-    >
-      <span className='px-1_25'>
+      }}>
+      <span className="icon-profile">
         <img src="./images/user-solid.svg" alt="" />
       </span>
-      <div className="flex-grow">
+      <div className="account">
         <div style={{ width: '100%', textAlign: 'center', lineHeight: '2.5rem', fontWeight: 600 }}>{currentAccount?.alianName}</div>
       </div>
-      <span className="text-white px-1_25">
+      <span className="icon-drop">
         <img src="./images/chevron-down-solid.png" alt="" />
       </span>
     </div>
