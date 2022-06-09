@@ -1,32 +1,18 @@
-import browser from '@/background/webapi/browser'
-import '@/common/styles/antd.less'
-import '@/common/styles/rc-virtual-list.less'
-// 全局公用样式
-import '@/common/styles/tailwind.less'
-import eventBus from '@/eventBus'
-import Popup from '@/popup'
-import { Message } from '@/utils'
-import en from 'antd/es/locale/en_US'
-import { EVENTS } from 'consts'
-import ReactDOM from 'react-dom/client'
-import i18n, { addResourceBundle } from 'src/i18n'
-import { WalletProvider } from './utils'
+import browser from '@/background/webapi/browser';
+import { EVENTS } from '@/shared/constant';
+import eventBus from '@/shared/eventBus';
+import { Message } from '@/shared/utils';
+import Popup from '@/ui/pages/Popup';
+import '@/ui/styles/antd.less';
+import '@/ui/styles/rc-virtual-list.less';
+import '@/ui/styles/tailwind.less';
+import i18n, { addResourceBundle } from '@/ui/utils/i18n';
+import en from 'antd/es/locale/en_US';
+import ReactDOM from 'react-dom/client';
+import { WalletProvider } from './utils';
 const antdConfig = {
   locale: en
-}
-
-// if (process.env.NODE_ENV === 'production') {
-//   Sentry.init({
-//     dsn: 'https://610efdad84c14c2c8e76192ac365eb7b@o1271596.ingest.sentry.io/6464056',
-//     integrations: [new Integrations.BrowserTracing()],
-//     release: process.env.release,
-
-//     // Set tracesSampleRate to 1.0 to capture 100%
-//     // of transactions for performance monitoring.
-//     // We recommend adjusting this value in production
-//     tracesSampleRate: 1.0
-//   })
-// }
+};
 
 // For fix chrome extension render problem in external screen
 if (
@@ -38,7 +24,7 @@ if (
 ) {
   browser.runtime.getPlatformInfo(function (info) {
     if (info.os === 'mac') {
-      const fontFaceSheet = new CSSStyleSheet()
+      const fontFaceSheet = new CSSStyleSheet();
       fontFaceSheet.insertRule(`
         @keyframes redraw {
           0% {
@@ -48,22 +34,22 @@ if (
             opacity: .99;
           }
         }
-      `)
+      `);
       fontFaceSheet.insertRule(`
         html {
           animation: redraw 1s linear infinite;
         }
-      `)
-      ;(document as any).adoptedStyleSheets = [...(document as any).adoptedStyleSheets, fontFaceSheet]
+      `);
+      (document as any).adoptedStyleSheets = [...(document as any).adoptedStyleSheets, fontFaceSheet];
     }
-  })
+  });
 }
 
-const { PortMessage } = Message
+const { PortMessage } = Message;
 
-const portMessageChannel = new PortMessage()
+const portMessageChannel = new PortMessage();
 
-portMessageChannel.connect('popup')
+portMessageChannel.connect('popup');
 
 const wallet: Record<string, any> = new Proxy(
   {},
@@ -80,49 +66,49 @@ const wallet: Record<string, any> = new Proxy(
                     type: 'openapi',
                     method: key,
                     params
-                  })
-                }
+                  });
+                };
               }
             }
-          )
-          break
+          );
+          break;
         default:
           return function (...params: any) {
             return portMessageChannel.request({
               type: 'controller',
               method: key,
               params
-            })
-          }
+            });
+          };
       }
     }
   }
-)
+);
 
 portMessageChannel.listen((data) => {
   if (data.type === 'broadcast') {
-    eventBus.emit(data.method, data.params)
+    eventBus.emit(data.method, data.params);
   }
-})
+});
 
 eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
   portMessageChannel.request({
     type: 'broadcast',
     method: data.method,
     params: data.data
-  })
-})
+  });
+});
 
 wallet.getLocale().then((locale) => {
   addResourceBundle(locale).then(() => {
-    i18n.changeLanguage(locale)
+    i18n.changeLanguage(locale);
     // ReactDOM.render(<Views wallet={wallet} />, document.getElementById('root'));
-    const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+    const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
     root.render(
       <WalletProvider {...antdConfig} wallet={wallet as any}>
         <Popup />
       </WalletProvider>
-    )
-  })
-})
+    );
+  });
+});

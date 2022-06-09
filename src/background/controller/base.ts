@@ -21,4 +21,4 @@ class BaseController {
   // }
 }
 
-export default BaseController
+export default BaseController;

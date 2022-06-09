@@ -8,12 +8,7 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "utils": ["./src/utils"],
       "@/*": ["./src/*"],
-      "background/*": ["./src/background/*"],
-      "consts": ["./src/constant/index"],
-      "consts/*": ["./src/constant/*"],
-      "ui/*": ["./src/ui/*"],
     },
     "noImplicitAny": false,
     "downlevelIteration": true,

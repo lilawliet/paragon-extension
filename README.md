@@ -14,3 +14,7 @@ yarn
 ```
 yarn build:firefox  
 ```
+
+## Thanks 
+
+Thanks for contributions from MetaMask team to browser extension wallet community, Paragon use (or fork) them to make paragon better.

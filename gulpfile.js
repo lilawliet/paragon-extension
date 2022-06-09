@@ -43,7 +43,7 @@ function task_clean() {
 }
 
 function task_prepare() {
-  return gulp.src('_raw/**/*').pipe(gulp.dest(`dist/${options.browser}`))
+  return gulp.src('build/_raw/**/*').pipe(gulp.dest(`dist/${options.browser}`))
 }
 
 function task_merge_manifest() {

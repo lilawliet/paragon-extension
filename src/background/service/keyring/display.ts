@@ -1,50 +1,50 @@
-import KeyringService, { Keyring } from './index'
+import KeyringService, { Keyring } from './index';
 
 class DisplayKeyring {
-  accounts: string[] = []
-  type = ''
+  accounts: string[] = [];
+  type = '';
 
   constructor(keyring: Keyring) {
-    this.accounts = keyring.accounts || []
-    this.type = keyring.type
+    this.accounts = keyring.accounts || [];
+    this.type = keyring.type;
   }
 
   unlock = async (): Promise<void> => {
-    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
-    if (keyring.unlock) await keyring.unlock()
-  }
+    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type);
+    if (keyring.unlock) await keyring.unlock();
+  };
 
   getFirstPage = async () => {
-    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
+    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type);
     if (keyring.getFirstPage) {
-      return await keyring.getFirstPage()
+      return await keyring.getFirstPage();
     } else {
-      return []
+      return [];
     }
-  }
+  };
 
   getNextPage = async () => {
-    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
+    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type);
     if (keyring.getNextPage) {
-      return await keyring.getNextPage()
+      return await keyring.getNextPage();
     } else {
-      return []
+      return [];
     }
-  }
+  };
 
   getAccounts = async () => {
-    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
-    return await keyring.getAccounts()
-  }
+    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type);
+    return await keyring.getAccounts();
+  };
 
   activeAccounts = async (indexes: number[]): Promise<string[]> => {
-    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type)
+    const keyring = await KeyringService.getKeyringForAccount(this.accounts[0], this.type);
     if (keyring.activeAccounts) {
-      return keyring.activeAccounts(indexes)
+      return keyring.activeAccounts(indexes);
     } else {
-      return []
+      return [];
     }
-  }
+  };
 }
 
-export default DisplayKeyring
+export default DisplayKeyring;

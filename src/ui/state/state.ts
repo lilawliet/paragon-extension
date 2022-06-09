@@ -1,21 +1,20 @@
-import { AccountAsset } from '@/background/controller/wallet'
-import { ExchangeRate, NovoBalance, TxHistoryItem } from '@/background/service/openapi'
-import { Account } from '@/background/service/preference'
-import { COIN_NAME, COIN_SYMBOL } from '@/constant'
-import { createGlobalState, createStore } from 'react-hooks-global-state'
-import { WalletController } from '../utils/WalletContext'
+import { AccountAsset } from '@/background/controller/wallet';
+import { ExchangeRate, NovoBalance, TxHistoryItem } from '@/background/service/openapi';
+import { Account } from '@/background/service/preference';
+import { createGlobalState } from 'react-hooks-global-state';
 
 export type GlobalModelState = {
-  newAccountMode: 'create' | 'import'
-  accountsList: Account[]
-  currentAccount?: Account
-  accountBalance: NovoBalance
-  accountAssets: AccountAsset[]
-  accountHistory: TxHistoryItem[]
-  currency: string
-  exchangeRate: ExchangeRate
-  locale: string
-}
+  newAccountMode: 'create' | 'import';
+  accountsList: Account[];
+  currentAccount?: Account;
+  accountBalance: NovoBalance;
+  accountAssets: AccountAsset[];
+  accountHistory: TxHistoryItem[];
+  currency: string;
+  exchangeRate: ExchangeRate;
+  locale: string;
+  tab: 'home' | 'history' | 'settings';
+};
 
 // app state
 const initialState: GlobalModelState = {
@@ -38,43 +37,8 @@ const initialState: GlobalModelState = {
     CHF: 1,
     CAD: 1
   },
-  locale: 'English'
-}
+  locale: 'English',
+  tab: 'home'
+};
 
-export const { useGlobalState, getGlobalState, setGlobalState } = createGlobalState(initialState)
-
-// const reducer = (state, action) => {
-//   switch( action.type) {
-//     case 'initAccounts': return async () => {
-//       state.accountsList =  await action.wallet.getAccounts()
-//       if (state.accountsList.length == 0) {
-//         return
-//       }
-//       state.currentAccount = await action.wallet.getCurrentAccount()
-//       return state
-//     }
-//     case 'changeCurrent': return async () => {
-//       if (state.currentAccount) {
-//         state.accountHistory = []
-//         state.currency = await action.wallet.getCurrency()
-//         state.exchangeRate = await action.wallet.getExchangeRate()
-//         state.locale = await action.wallet.getLocale()
-//         state.accountBalance = await action.wallet.getAddressCacheBalance(state.currentAccount.address)
-//         state.accountAssets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: state.accountBalance.amount, value: state.accountBalance.usd_value }]
-//         action.wallet.getAddressBalance(state.currentAccount.address).then((_accountBalance) => {
-//           state.ccountBalance = _accountBalance
-//           state.accountAssets = [{ name: COIN_NAME, symbol: COIN_SYMBOL, amount: _accountBalance.amount, value: _accountBalance.usd_value }]
-//         })
-
-//         state.accountHistory = await action.wallet.getAddressCacheHistory(state.currentAccount.address)
-//         action.wallet.getAddressHistory(state.currentAccount.address).then((_accountHistory) => {
-//           state.accountHistory = _accountHistory
-//         })
-//       }
-//       return state
-//   }
-//     default: return state
-//   }
-// }
-
-// export const { dispatch: globalDispath, useStoreState: useGlobalStoreState } = createStore(reducer, initialState)
+export const { useGlobalState, getGlobalState, setGlobalState } = createGlobalState(initialState);

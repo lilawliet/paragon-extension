@@ -1,7 +1,7 @@
 const { Client } = require("@notionhq/client");
 const fs = require("fs")
-const token = "secret_YeRe1CA0qeoZH0Kpv3aX5wpSm4xe2EQgetdFUE7T9Du";
-const database_id = "d4e4d6a2b41349a394dfd766566ebf8b";
+const {notionKey } = require('../.key.config.js')
+const {token,database_id } = notionKey;
 let notion = new Client({ auth: token });
 const Languages = [
     { name: "English", symbol: "en",messages:{} },
@@ -37,8 +37,8 @@ let run = async () => {
         })
     })
     Languages.forEach(lang => {
-        fs.mkdirSync(`./_raw/_locales/${lang.symbol}/`,{recursive:true})
-        fs.writeFileSync(`./_raw/_locales/${lang.symbol}/messages.json`,JSON.stringify(lang.messages))
+        fs.mkdirSync(`./build/_raw/_locales/${lang.symbol}/`,{recursive:true})
+        fs.writeFileSync(`./build/_raw/_locales/${lang.symbol}/messages.json`,JSON.stringify(lang.messages))
     })
 }
 run();

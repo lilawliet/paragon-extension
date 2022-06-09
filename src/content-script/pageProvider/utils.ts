@@ -1,15 +1,15 @@
 const domReadyCall = (callback) => {
   if (document.readyState === 'complete') {
-    callback()
+    callback();
   } else {
     const domContentLoadedHandler = () => {
-      callback()
-      document.removeEventListener('DOMContentLoaded', domContentLoadedHandler)
-    }
-    document.addEventListener('DOMContentLoaded', domContentLoadedHandler)
+      callback();
+      document.removeEventListener('DOMContentLoaded', domContentLoadedHandler);
+    };
+    document.addEventListener('DOMContentLoaded', domContentLoadedHandler);
   }
-}
+};
 
-const $ = document.querySelector.bind(document)
+const $ = document.querySelector.bind(document);
 
-export { domReadyCall, $ }
+export { domReadyCall, $ };
