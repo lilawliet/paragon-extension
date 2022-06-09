@@ -2,19 +2,14 @@
 
 Paragon is a browser extension wallet that makes it safe & easy for you to store, send and receive NOVO. 
 
-## Install 
+## Building locally 
 
-```
-
-yarn 
-```
-
-## Build 
-
-```
-yarn build:firefox  
-```
+* Install [Node.js](https://nodejs.org) version 14 
+* Install [Yarn](https://yarnpkg.com/en/docs/install)
+* Install dependencies: `yarn`
+* Build the project to the `./dist/` folder with `yarn build:firefox`
+  
 
 ## Thanks 
 
-Thanks for contributions from MetaMask team to browser extension wallet community, Paragon use (or fork) them to make paragon better.
+Thanks to the MetaMask team for their contributions to the browser extension wallet community, Paragon uses (or forks) them to make paragon even better.
