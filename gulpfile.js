@@ -17,6 +17,7 @@ var knownOptions = {
     browser: 'chrome'
   }
 }
+
 var supported_envs = ['dev', 'pro']
 var supported_browsers = ['chrome', 'firefox', 'edge', 'brave']
 var brandName = 'paragon'
@@ -46,7 +47,10 @@ function task_prepare() {
 }
 
 function task_merge_manifest() {
-  const baseFile = "_base_v3";
+  let baseFile = "_base_v3";
+  if (options.browser == "firefox") {
+    baseFile = "_base_v2"
+  }
   return gulp
     .src([`dist/${options.browser}/manifest/${baseFile}.json`, `dist/${options.browser}/manifest/${options.browser}.json`])
     .pipe(jsoncombine('manifest.json', (data,meta) => {

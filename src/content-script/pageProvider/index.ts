@@ -1,12 +1,13 @@
 // this script is injected into webpage's context
 import BroadcastChannelMessage from '@/utils/message/broadcastChannelMessage'
+import { nanoid } from '@reduxjs/toolkit'
 import { ethErrors, serializeError } from 'eth-rpc-errors'
 import { EventEmitter } from 'events'
 import PushEventHandlers from './pushEventHandlers'
 import ReadyPromise from './readyPromise'
 import { $, domReadyCall } from './utils'
 
-declare const channelName
+const channelName = nanoid()
 
 const log = (event, ...args) => {
   if (process.env.NODE_ENV !== 'production') {

@@ -480,12 +480,12 @@ const config = (env) => {
         chunks: ['ui'],
         filename: 'index.html',
       }),
-      // new HtmlWebpackPlugin({
-      //   inject: true,
-      //   template: paths.backgroundHtml,
-      //   chunks: ['background'],
-      //   filename: 'background.html',
-      // }),
+      new HtmlWebpackPlugin({
+        inject: true,
+        template: paths.backgroundHtml,
+        chunks: ['background'],
+        filename: 'background.html',
+      }),
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
         process: 'process',

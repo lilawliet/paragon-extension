@@ -16,7 +16,7 @@ export const AddressBar: React.FC<{ onClick?: MouseEventHandler<HTMLElement> }> 
       {isCopied ? (
         <div className="container-copied">
           <div className="container2">
-            <FontAwesomeIcon className="copy-icon" icon={faCheck} />
+            <FontAwesomeIcon className="check-icon" icon={faCheck} />
             <span>{t('copied')}</span>
           </div>
         </div>
@@ -28,7 +28,7 @@ export const AddressBar: React.FC<{ onClick?: MouseEventHandler<HTMLElement> }> 
               setIsCopied(true)
               setTimeout(() => {
                 setIsCopied(false)
-              }, 1000)
+              }, 10000)
             })
           }}>
           <div className="container2">
