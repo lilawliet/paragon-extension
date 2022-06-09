@@ -2,6 +2,8 @@ import { CURRENCIES } from '@/constant'
 import AccountSelect from '@/popup/components/AccountSelect'
 import { AddressBar } from '@/popup/components/AddressBar'
 import { useGlobalState } from '@/ui/state/state'
+import { faArrowRightArrowLeft, faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Statistic } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -45,7 +47,7 @@ const Home = () => {
             navigate(`/receive?address=${'quires'}`)
           }}>
           <span>
-            <img src="./images/qrcode-solid.svg" alt="" />
+            <FontAwesomeIcon icon={faQrcode} style={{ height: '1.1rem' }} />
           </span>
           <span>{t('Receive')}</span>
         </div>
@@ -55,7 +57,7 @@ const Home = () => {
             navigate('/send/index')
           }}>
           <span>
-            <img src="./images/arrow-right-arrow-left-solid.svg" alt="" />
+            <FontAwesomeIcon icon={faArrowRightArrowLeft} style={{ height: '1.1rem' }} />
           </span>
           <span>{t('Send')}</span>
         </div>
